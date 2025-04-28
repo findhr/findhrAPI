@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+
+<html class="writer-html5" data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>findhr.xai.factual.ranking_shap — findhrAPI 1.0.0 documentation</title>
+<link href="../_static/pygments.css?v=b86133f3" rel="stylesheet" type="text/css"/>
+<link href="../_static/css/theme.css?v=e59714d7" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-codeautolink.css?v=b2176991" rel="stylesheet" type="text/css"/>
+<script src="../_static/jquery.js?v=5d32c60e"></script>
+<script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+<script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+<script src="../_static/doctools.js?v=9a2dae69"></script>
+<script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+<script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+<script src="../_static/js/theme.js"></script>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+<link href="findhr.xai.counterfactual.dice_ml.html" rel="next" title="findhr.xai.counterfactual.dice_ml"/>
+<link href="findhr.xai.factual.examples_factual.html" rel="prev" title="findhr.xai.factual.examples_factual"/>
+</head>
+<body class="wy-body-for-nav">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../index.html">
+            findhrAPI
+          </a>
+<div role="search">
+<form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
+<input aria-label="Search docs" name="q" placeholder="Search docs" type="text"/>
+<input name="check_keywords" type="hidden" value="yes"/>
+<input name="area" type="hidden" value="default"/>
+</form>
+</div>
+</div><div aria-label="Navigation menu" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../input_data_format.html">Input Data Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../preprocess.html">Feature Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fairness.html">Fairness Intervention for Fair Rankings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Fairness Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../xai.html">eXplainable AI (XAI)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#preprocess-api">Preprocess API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#fair-interventions-api">Fair Interventions API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#fairness-monitoring-api">Fairness Monitoring API</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#explainability-api">Explainability API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.factual.examples_factual.html">findhr.xai.factual.examples_factual</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">findhr.xai.factual.ranking_shap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.html">findhr.xai.counterfactual.dice_ml</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.data_interfaces.base_data_interface.html">findhr.xai.counterfactual.dice_ml.data_interfaces.base_data_interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.data_interfaces.public_data_interface_mod.html">findhr.xai.counterfactual.dice_ml.data_interfaces.public_data_interface_mod</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.data_interfaces.labelencoder.html">findhr.xai.counterfactual.dice_ml.data_interfaces.labelencoder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_genetic.html">findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_genetic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.html">findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.model_interfaces.base_model.html">findhr.xai.counterfactual.dice_ml.model_interfaces.base_model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.model_interfaces.lgbmranker_model.html">findhr.xai.counterfactual.dice_ml.model_interfaces.lgbmranker_model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.model_interfaces.lgbmranker_pipeline_model.html">findhr.xai.counterfactual.dice_ml.model_interfaces.lgbmranker_pipeline_model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.data.html">findhr.xai.counterfactual.dice_ml.data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.dice.html">findhr.xai.counterfactual.dice_ml.dice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.counterfactual_explanations.html">findhr.xai.counterfactual.dice_ml.counterfactual_explanations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.diverse_counterfactuals.html">findhr.xai.counterfactual.dice_ml.diverse_counterfactuals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.model.html">findhr.xai.counterfactual.dice_ml.model</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift"><nav aria-label="Mobile navigation menu" class="wy-nav-top">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../index.html">findhrAPI</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="Page navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a aria-label="Home" class="icon icon-home" href="../index.html"></a></li>
+<li class="breadcrumb-item"><a href="../api.html">API</a></li>
+<li class="breadcrumb-item active">findhr.xai.factual.ranking_shap</li>
+<li class="wy-breadcrumbs-aside">
+<a href="../_sources/generated/findhr.xai.factual.ranking_shap.rst" rel="nofollow"> View page source</a>
+</li>
+</ul>
+<hr/>
+</div>
+<div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+<div itemprop="articleBody">
+<section id="module-findhr.xai.factual.ranking_shap">
+<span id="findhr-xai-factual-ranking-shap"></span><h1>findhr.xai.factual.ranking_shap<a class="headerlink" href="#module-findhr.xai.factual.ranking_shap" title="Link to this heading"></a></h1>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">new_model_predict_val</span></code>(array, ...[, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">placeholder_predict</span></code>(array)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#findhr.xai.factual.ranking_shap.RankingShap" title="findhr.xai.factual.ranking_shap.RankingShap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RankingShap</span></code></a>(permutation_sampler, ...[, ...])</p></td>
+<td><p>This class implements the RankingShap method for feature attribution in ranking problems.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="findhr.xai.factual.ranking_shap.RankingShap">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">findhr.xai.factual.ranking_shap.</span></span><span class="sig-name descname"><span class="pre">RankingShap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">permutation_sampler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">background_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">original_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">explanation_size=3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name=''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nsample_permutations='auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank_similarity_coefficient=&lt;function</span> <span class="pre">RankingShap.&lt;lambda&gt;&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.xai.factual.ranking_shap.RankingShap" title="Link to this definition"></a></dt>
+<dd><p>This class implements the RankingShap method for feature attribution in ranking problems.
+It uses the SHAP library to compute Shapley values for feature importance.</p>
+<section id="parameters">
+<h2>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>permutation_sampler<span class="classifier">str</span></dt><dd><p>The type of permutation sampler to use. Options are “kernel” or “sampling”.</p>
+</dd>
+<dt>background_data<span class="classifier">np.ndarray</span></dt><dd><p>The background data used for computing Shapley values.</p>
+</dd>
+<dt>original_model<span class="classifier">callable</span></dt><dd><p>The original model used for predictions.</p>
+</dd>
+<dt>explanation_size<span class="classifier">int, optional</span></dt><dd><p>The number of features to include in the explanation. Default is 3.</p>
+</dd>
+<dt>name<span class="classifier">str, optional</span></dt><dd><p>The name of the explainer. Default is an empty string.</p>
+</dd>
+<dt>nsample_permutations<span class="classifier">int or str, optional</span></dt><dd><p>The number of permutations to sample. Default is “auto”.</p>
+</dd>
+<dt>rank_similarity_coefficient<span class="classifier">callable, optional</span></dt><dd><p>The function used to compute the rank similarity coefficient. Default is Kendall’s tau.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.xai.factual.ranking_shap.RankingShap.get_query_explanation">
+<span class="sig-name descname"><span class="pre">get_query_explanation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_features</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.xai.factual.ranking_shap.RankingShap.get_query_explanation" title="Link to this definition"></a></dt>
+<dd><p>Get the explanation for a specific query.</p>
+<section id="id1">
+<h3>Parameters:<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>query_features<span class="classifier">np.ndarray</span></dt><dd><p>The feature vector for the query.</p>
+</dd>
+<dt>query_id<span class="classifier">str, optional</span></dt><dd><p>The ID of the query. Default is an empty string.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h3>Returns:<a class="headerlink" href="#returns" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>dict</dt><dd><p>A dictionary containing the feature importance scores.</p>
+</dd>
+</dl>
+</section>
+</dd></dl>
+</section>
+</dd></dl>
+</section>
+</div>
+</div>
+<footer><div aria-label="Footer" class="rst-footer-buttons" role="navigation">
+<a accesskey="p" class="btn btn-neutral float-left" href="findhr.xai.factual.examples_factual.html" rel="prev" title="findhr.xai.factual.examples_factual"><span aria-hidden="true" class="fa fa-arrow-circle-left"></span> Previous</a>
+<a accesskey="n" class="btn btn-neutral float-right" href="findhr.xai.counterfactual.dice_ml.html" rel="next" title="findhr.xai.counterfactual.dice_ml">Next <span aria-hidden="true" class="fa fa-arrow-circle-right"></span></a>
+</div>
+<hr/>
+<div role="contentinfo">
+<p>© Copyright 2024, findhr project.</p>
+</div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+</div>
+</div>
+</section>
+</div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+</body>
+</html>

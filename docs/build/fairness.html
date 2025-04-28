@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+
+<html class="writer-html5" data-content_root="./" lang="en">
+<head>
+<meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Fairness Intervention for Fair Rankings — findhrAPI 1.0.0 documentation</title>
+<link href="_static/pygments.css?v=b86133f3" rel="stylesheet" type="text/css"/>
+<link href="_static/css/theme.css?v=e59714d7" rel="stylesheet" type="text/css"/>
+<link href="_static/sphinx-codeautolink.css?v=b2176991" rel="stylesheet" type="text/css"/>
+<script src="_static/jquery.js?v=5d32c60e"></script>
+<script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+<script src="_static/documentation_options.js?v=f9c1cefe"></script>
+<script src="_static/doctools.js?v=9a2dae69"></script>
+<script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+<script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+<script src="_static/js/theme.js"></script>
+<link href="genindex.html" rel="index" title="Index"/>
+<link href="search.html" rel="search" title="Search"/>
+<link href="monitoring.html" rel="next" title="Fairness Monitoring"/>
+<link href="preprocess.html" rel="prev" title="Feature Preprocessing"/>
+</head>
+<body class="wy-body-for-nav">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="index.html">
+            findhrAPI
+          </a>
+<div role="search">
+<form action="search.html" class="wy-form" id="rtd-search-form" method="get">
+<input aria-label="Search docs" name="q" placeholder="Search docs" type="text"/>
+<input name="check_keywords" type="hidden" value="yes"/>
+<input name="area" type="hidden" value="default"/>
+</form>
+</div>
+</div><div aria-label="Navigation menu" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input_data_format.html">Input Data Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preprocess.html">Feature Preprocessing</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Fairness Intervention for Fair Rankings</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#run-example">Run Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="monitoring.html">Fairness Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xai.html">eXplainable AI (XAI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift"><nav aria-label="Mobile navigation menu" class="wy-nav-top">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="index.html">findhrAPI</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="Page navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a aria-label="Home" class="icon icon-home" href="index.html"></a></li>
+<li class="breadcrumb-item active">Fairness Intervention for Fair Rankings</li>
+<li class="wy-breadcrumbs-aside">
+<a href="_sources/fairness.rst" rel="nofollow"> View page source</a>
+</li>
+</ul>
+<hr/>
+</div>
+<div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+<div itemprop="articleBody">
+<section id="fairness-intervention-for-fair-rankings">
+<h1>Fairness Intervention for Fair Rankings<a class="headerlink" href="#fairness-intervention-for-fair-rankings" title="Link to this heading"></a></h1>
+<p>The European General Data Protection Regulation (GDPR) prohibits the processing of certain categories of sensitive information, except for age and gender. Even if one has access to the sensitive information of the candidates, it is possible that not all candidates feel comfortable disclosing this information with the platform. Having limited access to the sensitive information of the candidates makes the use of existing fairness interventions hard to use in practice.</p>
+<p>Considering the limited access to sensitive information pre-processing fairness interventions are more suitable to be used in practice when trying to ensure the fair ranking of candidates within a recruitment system. Pre-processing methods can be trained offline on a training set containing sensitive information, which was acquired in compliance with the GDPR, while during inference time, the pre-processing method can be applied without needing access to sensitive information.</p>
+<p>The Software Module developed as part of this deliverable supports three state of the art pre-processing fairness intervention methods. Below is a brief description of each method:</p>
+<ol class="arabic simple">
+<li><p>LFR [3]: aims at achieving both group and individual fairness by creating representations that obfuscate information about the protected groups, while also ensuring a good encoding of useful information (which aims at preserving the utility of the ranking).</p></li>
+<li><p>iFair [2]: aims at achieving individual fairness by creating representations that encourage similar outcomes for similar individuals regardless of the sensitive attributes, while also ensuring a good encoding of useful information (which aims at preserving the utility of the ranking).</p></li>
+<li><p>gFair: an adaptation of iFair. aims at achieving group fairness by creating representations that encourage similar outcomes between similar individuals of different groups, regardless of the sensitive attributes. Moreover, it aims at preserving the in-group fairness as well as preserving the usefulness of the representations for the ranking task.</p></li>
+</ol>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 7.4%"/>
+<col style="width: 14.8%"/>
+<col style="width: 18.5%"/>
+<col style="width: 25.9%"/>
+<col style="width: 33.3%"/>
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Fairness Notion</p></th>
+<th class="head"><p>Compound Loss</p></th>
+<th class="head"><p>Hyperparameters</p></th>
+<th class="head"><p>Hyperparameter Effects</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>LFR</p></td>
+<td><p>Group Fairness</p></td>
+<td><p>L = Ax * Lx + Ay * Ly + Az * Lz</p></td>
+<td><p>Lx: reconstruction loss; Ly: utility loss; Lz: group fairness loss; Ax, Ay, Az: weights</p></td>
+<td><p>Increase Ax to preserve original structure (may reduce fairness); Increase Ay to improve utility; Increase Az to enhance group fairness constraints</p></td>
+</tr>
+<tr class="row-odd"><td><p>iFair</p></td>
+<td><p>Individual Fairness</p></td>
+<td><p>L = Ax * Lx + Az * Lz</p></td>
+<td><p>Lx: reconstruction loss; Lz: individual fairness loss; Ax, Az: weights</p></td>
+<td><p>Increase Ax to preserve original structure; Increase Az to enhance individual fairness constraints</p></td>
+</tr>
+<tr class="row-even"><td><p>gFair</p></td>
+<td><p>Group Fairness</p></td>
+<td><p>L = Ax * Lx + Aigf * Ligf + Az * Lz</p></td>
+<td><p>Lx: reconstruction loss; Ligf: in-group fairness loss; Lz: group fairness loss; Ax, Aigf, Az: weights</p></td>
+<td><p>Increase Ax to preserve original structure; Increase Aigf for in-group fairness; Increase Az to enhance group fairness</p></td>
+</tr>
+</tbody>
+</table>
+<p>All methods support non-binary groups.</p>
+<p>LFR and gFair support different type of optimisation for achieving group fairness for multiple groups or intersectional groups:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20.0%"/>
+<col style="width: 25.0%"/>
+<col style="width: 55.0%"/>
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Optimization Type</p></th>
+<th class="head"><p>Comparison Strategy</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Independent</p></td>
+<td><p>Per sensitive attribute</p></td>
+<td><p>Each sensitive attribute is optimized independently, without considering interactions between them.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pairwise</p></td>
+<td><p>All intersectional pairs</p></td>
+<td><p>Considers all unique comparisons between intersectional sub-groups during optimization. Captures interactions but is computationally expensive.</p></td>
+</tr>
+<tr class="row-even"><td><p>Dynamic</p></td>
+<td><p>Max-gap optimisation</p></td>
+<td><p>In each iteration, computes fairness loss based only on the sub-group pair with the largest disparity. Reduces optimization complexity, though all comparisons are still evaluated to identify the max gap.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Control (A or D)</p></td>
+<td><p>All vs control group</p></td>
+<td><p>Compares all sub-groups to a single control group. Control A: reduces disparities with the advantaged group but may reinforce it as the norm. Control D: highlights disparities relative to the disadvantaged group.</p></td>
+</tr>
+<tr class="row-even"><td><p>Extremes</p></td>
+<td><p>Most advantaged vs least</p></td>
+<td><p>Only compares the most privileged and the most disadvantaged sub-groups. Simplifies the problem and highlights the largest disparity, potentially benefiting intermediate groups.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Using the pre-processing fairness interventions to generate a fair ranking:</p>
+<ol class="arabic simple">
+<li><p>Option 1: Re-rank the candidates based on the fair score generated by the Fairness Intervention Model.</p></li>
+<li><p>Option 2: Use the fair data representation of the candidates to train a Ranking Model. The pre-processing fairness interventions can be applied on the data representing the candidates to create fairer representations independent of the ranking model.</p></li>
+</ol>
+<section id="run-example">
+<h2>Run Example<a class="headerlink" href="#run-example" title="Link to this heading"></a></h2>
+<p>Running example can be found in the notebook provided Example_FairPreprocessingRanking.ipynb. The output of running the notebook can be found under ./data/fairness_output.
+If you don’t want to use the scikit pipeline tu run the fairness pre-processing interventions you can do the following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fair_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df_all_train</span><span class="p">)</span>
+<span class="n">df_all_fair_test</span> <span class="o">=</span> <span class="n">fair_model</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">df_all_test</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<p>[1]
+Rus, Clara, Maarten de Rijke, and Andrew Yates. “A Study of Pre-processing Fairness Intervention
+Methods for Ranking People.” (2024).</p>
+<p>[2]
+Preethi Lahoti, Krishna P Gummadi, and Gerhard Weikum. 2019. ifair: Learning individually fair data representations for algorithmic decision
+making. In 2019 IEEE 35th International Conference on Data Engineering (ICDE). IEEE, 1334–1345.</p>
+<p>[3]
+Zemel, Rich, et al. “Learning fair representations.” International conference on machine learning. PMLR, 2013.</p>
+</section>
+</section>
+</div>
+</div>
+<footer><div aria-label="Footer" class="rst-footer-buttons" role="navigation">
+<a accesskey="p" class="btn btn-neutral float-left" href="preprocess.html" rel="prev" title="Feature Preprocessing"><span aria-hidden="true" class="fa fa-arrow-circle-left"></span> Previous</a>
+<a accesskey="n" class="btn btn-neutral float-right" href="monitoring.html" rel="next" title="Fairness Monitoring">Next <span aria-hidden="true" class="fa fa-arrow-circle-right"></span></a>
+</div>
+<hr/>
+<div role="contentinfo">
+<p>© Copyright 2024, findhr project.</p>
+</div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+</div>
+</div>
+</section>
+</div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+"""
+Learning fair representations is a pre-processing technique that finds a
+    latent representation which encodes the data well but obfuscates information
+    about protected attributes [2]_.
+References:
+    .. [2] R. Zemel, Y. Wu, K. Swersky, T. Pitassi, and C. Dwork, "Learning
+           Fair Representations." International Conference on Machine Learning,
+           2013.
+Based on code from https://github.com/zjelveh/learning-fair-representations
+"""
+
+import numpy as np
+import pandas as pd
+import os
+from findhr.fairness.modules.LFR.helpers import train, transform
+from findhr.fairness.utils.utils import save_model_data, load_model_data
+from findhr.fairness.fairness_method import PreprocessingFairnessIntervention
+
+
+class LFR(PreprocessingFairnessIntervention):
+    """
+    Class for applying the LFR pre-processing fairness intervention.
+
+    Attributes
+    ----------
+    query_col : str
+        name of column representing the query (e.g. job title, job category)
+    sensitive_col :  list[str]
+        column containing the sensitive attributes
+    feature_cols : list[str]
+        list of columns representing the features to be transformed
+    score_col : str
+        name of column representing the score given by the system
+    k : int
+        number of prototypes
+    A_x : float
+        hyperparameter for Lx, the data loss that should optimize for keeping the new representations as close
+        as possible to the original ones
+    A_y : float
+        hyperparameter for Ly, the utility loss that should ensure that representations are still useful
+        (the utility loss accounts only for binary relevance values)
+    A_z : float
+        hyperparameter for Lz, the group fairness loss
+    optimisation_type : dict
+        defines the type of optimisation in the form {optimisation type: group_values}
+        accepted values:
+        - independent: independent optimisation between the defined sensitive columns
+        - intersectional: constructs an intersectional column from the defined sensitive columns
+        (pairwise): pairwise comparison between all intersectional groups
+        (control): compares each intersectional group with the defined group_values
+        (extremes): compares only the defined group_values
+        default value: independent
+    model_occ : bool
+        True if for optimizing for each query_col separately, false otherwise
+    group_weights : dict
+        dictionary of weights for each group considered in the optimisation
+    biggest_gap : bool
+        True to consider during the optimisation only the biggest gap between groups instead of the pairwise sum of the gaps
+    pos_th : int
+        score threshold for assigning the positive and negative labels for Ly - loss for ensuring the representation from the positive and negative class are far from each other
+    maxfun : int
+        maxinum number of function evaluations.
+    maxiter : int
+        maximum number of iterations.
+    nb_restarts : int
+        number of repetitions
+    verbose : bool
+        True to print to console the logs
+    print_interval : int
+        print/save logs at specified interval
+    out_path : str
+        path to save the model, logs and fair data representation
+    file_name : str
+        file_name to save the transformed data
+    seed : int
+        set seed
+    """
+
+    def __init__(self, query_col, sensitive_col, feature_cols, score_col, k, A_x, A_y, A_z, optimisation_type={"independent": "all"},
+                 model_occ=False, group_weights=None, biggest_gap=False, pos_th=None,
+                 maxfun=1000, maxiter=1000, nb_restarts=3, verbose=False, print_interval=100, out_path=None, file_name=None, seed=42):
+        """
+        Initialize the LFR model with the params and creates a configuration dict.
+        """
+        configs = {key: value for key, value in locals().items() if key != "self"}
+        configs["name"] = "LFR"
+        super().__init__(configs)
+
+    def fit(self, data, y=None):
+        """
+        Trains the pre-processing fairness intervention model on data.
+
+        Parameters
+        ----------
+        data : pandas.DataFrame
+            dataframe to be used for training;
+            it needs to contain the sensitive information
+
+        """
+        if self.configs["model_occ"]:
+            qids = data[self.configs["query_col"]].unique()
+        else:
+            qids = ["all"]
+
+        if self.is_start_train():
+            if self.configs["seed"] is not None:
+                np.random.seed(self.configs["seed"])
+
+            for qid in qids:
+                if self.configs["model_occ"]:
+                    data_qid = data[data[self.configs["query_col"]] == qid]
+                else:
+                    data_qid = data
+
+                self.opt_params[qid] = train(data_qid, self.configs, self.model_path)
+
+                if self.configs["out_path"] is not None:
+                    save_model_data(self, os.path.join(self.model_path), qid)
+
+    def transform(self, data):
+        """
+        Using the pre-processing fairness model it generates the fair data representation for data.
+
+        Parameters
+        ----------
+        data : pandas.DataFrame
+           dataframe for which to generate the fair data representation;
+           it does not need to contain the sensitive information
+
+        Returns
+        -------
+        data_fair: pandas.DataFrame
+          dataframe containing the fair transformed data representation as col_name + "_fair"
+        """
+
+        if self.configs["model_occ"]:
+            qids = data[self.configs["query_col"]].unique()
+        else:
+            qids = ["all"]
+
+        if self.is_transform():
+            data_fair = []
+            for qid in qids:
+                # init opt_params if None from model_path
+                if self.opt_params == {} or self.opt_params is None:
+                    self.opt_params[qid] = load_model_data(self.model_path, qid)
+
+                if self.configs["model_occ"]:
+                    data_qid = data[data[self.configs["query_col"]] == qid]
+                else:
+                    data_qid = data
+
+                X_fair_qid = transform(data_qid, self.opt_params[qid], self.configs)
+                data_fair.append(X_fair_qid)
+            data_fair = pd.concat(data_fair)
+            if self.configs["out_path"] is not None and self.configs["file_name"] is not None:
+                fair_data_file = os.path.join(self.fair_data_path, f'fair_{self.configs["file_name"]}_data.csv')
+                data_fair.to_csv(fair_data_file)
+        else:
+            if self.configs["out_path"] is not None and self.configs["file_name"] is not None:
+                fair_data_file = os.path.join(self.fair_data_path, f'fair_{self.configs["file_name"]}_data.csv')
+                data_fair = pd.read_csv(fair_data_file)
+        return data_fair

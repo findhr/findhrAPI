@@ -1,0 +1,145 @@
+{
+  "api": [],
+  "example_notebooks": [],
+  "fairness": [
+    {
+      "source": "fair_model.fit(df_all_train)\ndf_all_fair_test = fair_model.transform(df_all_test)",
+      "names": [],
+      "example": {
+        "document": "fairness",
+        "ref_id": "run-example",
+        "headings": [
+          "Fairness Intervention for Fair Rankings",
+          "Run Example"
+        ]
+      },
+      "doc_lineno": 52
+    }
+  ],
+  "generated/findhr.fairness.fairness_method": [],
+  "generated/findhr.fairness.fairness_method_LFR": [],
+  "generated/findhr.fairness.fairness_method_gFair": [],
+  "generated/findhr.fairness.fairness_method_iFair": [],
+  "generated/findhr.monitoring.monitoring": [],
+  "generated/findhr.preprocess.example_mappings": [
+    {
+      "source": "Parameters:\n----------",
+      "names": [],
+      "example": {
+        "document": "generated/findhr.preprocess.example_mappings",
+        "ref_id": "parameters",
+        "headings": [
+          "findhr.preprocess.example_mappings",
+          "Parameters:"
+        ]
+      },
+      "doc_lineno": null
+    },
+    {
+      "source": "Parameters:\n----------",
+      "names": [],
+      "example": {
+        "document": "generated/findhr.preprocess.example_mappings",
+        "ref_id": "id1",
+        "headings": [
+          "findhr.preprocess.example_mappings",
+          "Parameters:"
+        ]
+      },
+      "doc_lineno": null
+    }
+  ],
+  "generated/findhr.preprocess.mapping": [],
+  "generated/findhr.preprocess.metadata": [],
+  "generated/findhr.xai.counterfactual.dice_ml": [],
+  "generated/findhr.xai.counterfactual.dice_ml.constants": [],
+  "generated/findhr.xai.counterfactual.dice_ml.counterfactual_explanations": [],
+  "generated/findhr.xai.counterfactual.dice_ml.data": [],
+  "generated/findhr.xai.counterfactual.dice_ml.data_interfaces.base_data_interface": [],
+  "generated/findhr.xai.counterfactual.dice_ml.data_interfaces.labelencoder": [
+    {
+      "source": ">>> from sklearn.preprocessing import LabelEncoder\n>>> le = LabelEncoder()\n>>> le.fit([1, 2, 2, 6])\nLabelEncoder()\n>>> le.classes_\narray([1, 2, 6])\n>>> le.transform([1, 1, 2, 6])\narray([0, 0, 1, 2]...)\n>>> le.inverse_transform([0, 0, 1, 2])\narray([1, 1, 2, 6])",
+      "names": [],
+      "example": {
+        "document": "generated/findhr.xai.counterfactual.dice_ml.data_interfaces.labelencoder",
+        "ref_id": "module-findhr.xai.counterfactual.dice_ml.data_interfaces.labelencoder",
+        "headings": [
+          "findhr.xai.counterfactual.dice_ml.data_interfaces.labelencoder"
+        ]
+      },
+      "doc_lineno": 49
+    },
+    {
+      "source": ">>> le = LabelEncoder()\n>>> le.fit([\"paris\", \"paris\", \"tokyo\", \"amsterdam\"])\nLabelEncoder()\n>>> list(le.classes_)\n[np.str_('amsterdam'), np.str_('paris'), np.str_('tokyo')]\n>>> le.transform([\"tokyo\", \"tokyo\", \"paris\"])\narray([2, 2, 1]...)\n>>> list(le.inverse_transform([2, 2, 1]))\n[np.str_('tokyo'), np.str_('tokyo'), np.str_('paris')]",
+      "names": [],
+      "example": {
+        "document": "generated/findhr.xai.counterfactual.dice_ml.data_interfaces.labelencoder",
+        "ref_id": "module-findhr.xai.counterfactual.dice_ml.data_interfaces.labelencoder",
+        "headings": [
+          "findhr.xai.counterfactual.dice_ml.data_interfaces.labelencoder"
+        ]
+      },
+      "doc_lineno": 62
+    }
+  ],
+  "generated/findhr.xai.counterfactual.dice_ml.data_interfaces.public_data_interface_mod": [],
+  "generated/findhr.xai.counterfactual.dice_ml.dice": [],
+  "generated/findhr.xai.counterfactual.dice_ml.diverse_counterfactuals": [],
+  "generated/findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_genetic": [],
+  "generated/findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random": [],
+  "generated/findhr.xai.counterfactual.dice_ml.model": [],
+  "generated/findhr.xai.counterfactual.dice_ml.model_interfaces.base_model": [],
+  "generated/findhr.xai.counterfactual.dice_ml.model_interfaces.lgbmranker_model": [],
+  "generated/findhr.xai.counterfactual.dice_ml.model_interfaces.lgbmranker_pipeline_model": [],
+  "generated/findhr.xai.factual": [],
+  "generated/findhr.xai.factual.examples_factual": [],
+  "generated/findhr.xai.factual.ranking_shap": [
+    {
+      "source": "Parameters:\n----------",
+      "names": [],
+      "example": {
+        "document": "generated/findhr.xai.factual.ranking_shap",
+        "ref_id": "parameters",
+        "headings": [
+          "findhr.xai.factual.ranking_shap",
+          "Parameters:"
+        ]
+      },
+      "doc_lineno": null
+    },
+    {
+      "source": "Parameters:\n----------",
+      "names": [],
+      "example": {
+        "document": "generated/findhr.xai.factual.ranking_shap",
+        "ref_id": "id1",
+        "headings": [
+          "findhr.xai.factual.ranking_shap",
+          "Parameters:",
+          "Parameters:"
+        ]
+      },
+      "doc_lineno": null
+    },
+    {
+      "source": "Returns:\n-------",
+      "names": [],
+      "example": {
+        "document": "generated/findhr.xai.factual.ranking_shap",
+        "ref_id": "returns",
+        "headings": [
+          "findhr.xai.factual.ranking_shap",
+          "Parameters:",
+          "Returns:"
+        ]
+      },
+      "doc_lineno": null
+    }
+  ],
+  "index": [],
+  "input_data_format": [],
+  "monitoring": [],
+  "preprocess": [],
+  "usage": [],
+  "xai": []
+}

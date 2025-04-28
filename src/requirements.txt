@@ -1,0 +1,16 @@
+jsonschema>=4.21.1
+jupyter==1.0.0
+lightgbm==4.4.0
+matplotlib
+numpy>=1.26.4
+pandas>=2.2.2
+scikit_learn>=1.4.2
+scipy>=1.13.0
+setuptools>=68.2.2
+shap>=0.45.0
+raiutils==0.4.2
+cryptography==44.0.1
+mpyc==0.10
+Flask==3.1.0
+flask-cors==5.0.1
+interpret

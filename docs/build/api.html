@@ -1,0 +1,255 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API &mdash; findhrAPI 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx-codeautolink.css?v=b2176991" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=f9c1cefe"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="findhr.preprocess.metadata" href="generated/findhr.preprocess.metadata.html" />
+    <link rel="prev" title="eXplainable AI (XAI)" href="xai.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            findhrAPI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input_data_format.html">Input Data Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preprocess.html">Feature Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fairness.html">Fairness Intervention for Fair Rankings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="monitoring.html">Fairness Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xai.html">eXplainable AI (XAI)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#preprocess-api">Preprocess API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/findhr.preprocess.metadata.html">findhr.preprocess.metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/findhr.preprocess.mapping.html">findhr.preprocess.mapping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/findhr.preprocess.example_mappings.html">findhr.preprocess.example_mappings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#fair-interventions-api">Fair Interventions API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/findhr.fairness.fairness_method.html">findhr.fairness.fairness_method</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/findhr.fairness.fairness_method_LFR.html">findhr.fairness.fairness_method_LFR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/findhr.fairness.fairness_method_iFair.html">findhr.fairness.fairness_method_iFair</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/findhr.fairness.fairness_method_gFair.html">findhr.fairness.fairness_method_gFair</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#fairness-monitoring-api">Fairness Monitoring API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/findhr.monitoring.monitoring.html">findhr.monitoring.monitoring</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#explainability-api">Explainability API</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="generated/findhr.xai.factual.examples_factual.html">findhr.xai.factual.examples_factual</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/findhr.xai.factual.ranking_shap.html">findhr.xai.factual.ranking_shap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.html">findhr.xai.counterfactual.dice_ml</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.data_interfaces.base_data_interface.html">findhr.xai.counterfactual.dice_ml.data_interfaces.base_data_interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.data_interfaces.public_data_interface_mod.html">findhr.xai.counterfactual.dice_ml.data_interfaces.public_data_interface_mod</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.data_interfaces.labelencoder.html">findhr.xai.counterfactual.dice_ml.data_interfaces.labelencoder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_genetic.html">findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_genetic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.html">findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.model_interfaces.base_model.html">findhr.xai.counterfactual.dice_ml.model_interfaces.base_model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.model_interfaces.lgbmranker_model.html">findhr.xai.counterfactual.dice_ml.model_interfaces.lgbmranker_model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.model_interfaces.lgbmranker_pipeline_model.html">findhr.xai.counterfactual.dice_ml.model_interfaces.lgbmranker_pipeline_model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.data.html">findhr.xai.counterfactual.dice_ml.data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.dice.html">findhr.xai.counterfactual.dice_ml.dice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.counterfactual_explanations.html">findhr.xai.counterfactual.dice_ml.counterfactual_explanations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.diverse_counterfactuals.html">findhr.xai.counterfactual.dice_ml.diverse_counterfactuals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.model.html">findhr.xai.counterfactual.dice_ml.model</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">findhrAPI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.rst" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="api">
+<h1>API<a class="headerlink" href="#api" title="Link to this heading"></a></h1>
+<section id="preprocess-api">
+<span id="preprocess"></span><h2>Preprocess API<a class="headerlink" href="#preprocess-api" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/findhr.preprocess.metadata.html#module-findhr.preprocess.metadata" title="findhr.preprocess.metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findhr.preprocess.metadata</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/findhr.preprocess.mapping.html#module-findhr.preprocess.mapping" title="findhr.preprocess.mapping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findhr.preprocess.mapping</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/findhr.preprocess.example_mappings.html#module-findhr.preprocess.example_mappings" title="findhr.preprocess.example_mappings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findhr.preprocess.example_mappings</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="fair-interventions-api">
+<h2>Fair Interventions API<a class="headerlink" href="#fair-interventions-api" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/findhr.fairness.fairness_method.html#module-findhr.fairness.fairness_method" title="findhr.fairness.fairness_method"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findhr.fairness.fairness_method</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/findhr.fairness.fairness_method_LFR.html#module-findhr.fairness.fairness_method_LFR" title="findhr.fairness.fairness_method_LFR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findhr.fairness.fairness_method_LFR</span></code></a></p></td>
+<td><p>Learning fair representations is a pre-processing technique that finds a</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/findhr.fairness.fairness_method_iFair.html#module-findhr.fairness.fairness_method_iFair" title="findhr.fairness.fairness_method_iFair"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findhr.fairness.fairness_method_iFair</span></code></a></p></td>
+<td><p>Implementation of the ICDE 2019 paper iFair_module: Learning Individually Fair Data Representations for Algorithmic Decision Making url: <a class="reference external" href="https://ieeexplore.ieee.org/document/8731591">https://ieeexplore.ieee.org/document/8731591</a> citation: Lahoti, P., Gummadi, K.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/findhr.fairness.fairness_method_gFair.html#module-findhr.fairness.fairness_method_gFair" title="findhr.fairness.fairness_method_gFair"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findhr.fairness.fairness_method_gFair</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="fairness-monitoring-api">
+<h2>Fairness Monitoring API<a class="headerlink" href="#fairness-monitoring-api" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/findhr.monitoring.monitoring.html#module-findhr.monitoring.monitoring" title="findhr.monitoring.monitoring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findhr.monitoring.monitoring</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="explainability-api">
+<h2>Explainability API<a class="headerlink" href="#explainability-api" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/findhr.xai.factual.examples_factual.html#module-findhr.xai.factual.examples_factual" title="findhr.xai.factual.examples_factual"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findhr.xai.factual.examples_factual</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/findhr.xai.factual.ranking_shap.html#module-findhr.xai.factual.ranking_shap" title="findhr.xai.factual.ranking_shap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findhr.xai.factual.ranking_shap</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.html#module-findhr.xai.counterfactual.dice_ml" title="findhr.xai.counterfactual.dice_ml"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findhr.xai.counterfactual.dice_ml</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.data_interfaces.base_data_interface.html#module-findhr.xai.counterfactual.dice_ml.data_interfaces.base_data_interface" title="findhr.xai.counterfactual.dice_ml.data_interfaces.base_data_interface"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findhr.xai.counterfactual.dice_ml.data_interfaces.base_data_interface</span></code></a></p></td>
+<td><p>Module containing base class for data interfaces for dice-ml.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.data_interfaces.public_data_interface_mod.html#module-findhr.xai.counterfactual.dice_ml.data_interfaces.public_data_interface_mod" title="findhr.xai.counterfactual.dice_ml.data_interfaces.public_data_interface_mod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findhr.xai.counterfactual.dice_ml.data_interfaces.public_data_interface_mod</span></code></a></p></td>
+<td><p>Module containing all required information about the interface between raw (or transformed) public data and DiCE explainers.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.data_interfaces.labelencoder.html#module-findhr.xai.counterfactual.dice_ml.data_interfaces.labelencoder" title="findhr.xai.counterfactual.dice_ml.data_interfaces.labelencoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findhr.xai.counterfactual.dice_ml.data_interfaces.labelencoder</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_genetic.html#module-findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_genetic" title="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_genetic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_genetic</span></code></a></p></td>
+<td><p>Module to generate diverse counterfactual explanations based on genetic algorithm This code is similar to 'GeCo: Quality Counterfactual Explanations in Real Time': <a class="reference external" href="https://arxiv.org/pdf/2101.01292.pdf">https://arxiv.org/pdf/2101.01292.pdf</a></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.html#module-findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random" title="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random</span></code></a></p></td>
+<td><p>Module to generate diverse counterfactual explanations based on random sampling.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.model_interfaces.base_model.html#module-findhr.xai.counterfactual.dice_ml.model_interfaces.base_model" title="findhr.xai.counterfactual.dice_ml.model_interfaces.base_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findhr.xai.counterfactual.dice_ml.model_interfaces.base_model</span></code></a></p></td>
+<td><p>Module containing a template class as an interface to ML model.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.model_interfaces.lgbmranker_model.html#module-findhr.xai.counterfactual.dice_ml.model_interfaces.lgbmranker_model" title="findhr.xai.counterfactual.dice_ml.model_interfaces.lgbmranker_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findhr.xai.counterfactual.dice_ml.model_interfaces.lgbmranker_model</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.model_interfaces.lgbmranker_pipeline_model.html#module-findhr.xai.counterfactual.dice_ml.model_interfaces.lgbmranker_pipeline_model" title="findhr.xai.counterfactual.dice_ml.model_interfaces.lgbmranker_pipeline_model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findhr.xai.counterfactual.dice_ml.model_interfaces.lgbmranker_pipeline_model</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.data.html#module-findhr.xai.counterfactual.dice_ml.data" title="findhr.xai.counterfactual.dice_ml.data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findhr.xai.counterfactual.dice_ml.data</span></code></a></p></td>
+<td><p>Module pointing to different implementations of Data class</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.dice.html#module-findhr.xai.counterfactual.dice_ml.dice" title="findhr.xai.counterfactual.dice_ml.dice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findhr.xai.counterfactual.dice_ml.dice</span></code></a></p></td>
+<td><p>Module pointing to different implementations of DiCE based on different frameworks such as Tensorflow or PyTorch or sklearn, and different methods such as RandomSampling, DiCEKD or DiCEGenetic</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.counterfactual_explanations.html#module-findhr.xai.counterfactual.dice_ml.counterfactual_explanations" title="findhr.xai.counterfactual.dice_ml.counterfactual_explanations"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findhr.xai.counterfactual.dice_ml.counterfactual_explanations</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.diverse_counterfactuals.html#module-findhr.xai.counterfactual.dice_ml.diverse_counterfactuals" title="findhr.xai.counterfactual.dice_ml.diverse_counterfactuals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findhr.xai.counterfactual.dice_ml.diverse_counterfactuals</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/findhr.xai.counterfactual.dice_ml.model.html#module-findhr.xai.counterfactual.dice_ml.model" title="findhr.xai.counterfactual.dice_ml.model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">findhr.xai.counterfactual.dice_ml.model</span></code></a></p></td>
+<td><p>Module pointing to different implementations of Model class</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="xai.html" class="btn btn-neutral float-left" title="eXplainable AI (XAI)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="generated/findhr.preprocess.metadata.html" class="btn btn-neutral float-right" title="findhr.preprocess.metadata" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, findhr project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

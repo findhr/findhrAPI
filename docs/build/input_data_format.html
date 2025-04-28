@@ -1,0 +1,225 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Input Data Format &mdash; findhrAPI 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx-codeautolink.css?v=b2176991" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=f9c1cefe"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Feature Preprocessing" href="preprocess.html" />
+    <link rel="prev" title="Usage" href="usage.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            findhrAPI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Input Data Format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#design-choices">Design Choices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#raw-data-sources">Raw Data Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#metadata">Metadata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#target-feature-and-ranking-type">Target Feature and Ranking Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#open-issues">Open Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="preprocess.html">Feature Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fairness.html">Fairness Intervention for Fair Rankings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="monitoring.html">Fairness Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xai.html">eXplainable AI (XAI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">findhrAPI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Input Data Format</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/input_data_format.rst" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="input-data-format">
+<span id="id1"></span><h1>Input Data Format<a class="headerlink" href="#input-data-format" title="Link to this heading"></a></h1>
+<section id="design-choices">
+<h2>Design Choices<a class="headerlink" href="#design-choices" title="Link to this heading"></a></h2>
+<p>There is no standard format nor univerally agreed format of the input data to an HR ranking system.
+For this reason, we make as few as possible assumptions on the input data, so that any organization can customize the APIs with its own data sources.
+We assume that:</p>
+<ul class="simple">
+<li><p>Each raw data is provided by the user as a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>. Only a few columns are mandatory, while the number, the names and the types of all other columns are set by the user. Columns can have complex types, such as enumerated, arrays or compound types.</p></li>
+<li><p>Metadata about the format and the type/usage of columns in the raw data is provided by the user as a dictionary mapping column names to a metadata object.</p></li>
+</ul>
+<p>The preparation of raw data and metadata is left to the user, as it is highly dependent on its information system sources.
+We provide an example notebook (see <a class="reference internal" href="#ex"><span class="std std-ref">Examples</span></a>) where raw data is loaded from a CSV file and metadata is defined directly in the notebook.
+However, other solutions are possible, including loading data and metadata from a databases or from binary files, depending on the user choice.</p>
+</section>
+<section id="raw-data-sources">
+<h2>Raw Data Sources<a class="headerlink" href="#raw-data-sources" title="Link to this heading"></a></h2>
+<p>We assume three raw data sources formatted as <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> format and regarding candidates, jobs, and applications respectively.
+The columns of the three <a href="#id2"><span class="problematic" id="id3">*</span></a>DataFrame*s describe the features of the candidates, of the jobs, and of the applications respectively.
+Thus, in the following we use “column” and “feature” as interchangeable terms.
+Column values are Python objects satisfying the <a class="reference external" href="https://json-schema.org/">JSON-schema</a> format.
+Such a format allows for scalars (integers, numbers, strings) and compound objects (arrays/lists, dictionaries).</p>
+<ul class="simple">
+<li><p><strong>Candidates Data Source (CDS)</strong>: A row for each candidate involved in the screening process. The mandatory column <em>candidate_id</em> uniquely identifies each candidate. Here it is an example:</p></li>
+</ul>
+<a class="reference internal image-reference" href="_images/example_cds.png"><img alt="Table with columns referring to the candidate data source" src="_images/example_cds.png" style="width: 400px;" />
+</a>
+<ul class="simple">
+<li><p><strong>Jobs Data Source (JDS)</strong>: A row for each job description to which a candidate can apply. The mandatory column <em>job_id</em> uniquely identifies each job description. Here it is an example:</p></li>
+</ul>
+<a class="reference internal image-reference" href="_images/example_jds.png"><img alt="Table with columns referring to the job description data source" src="_images/example_jds.png" style="width: 400px;" />
+</a>
+<ul class="simple">
+<li><p><strong>Applications Data Source (ADS)</strong>: A row for each application of a candidate to a job. The pair of mandatory columns <em>(candidate_id, job_id)</em> uniquely identifies the application of the candidate <em>candidate_id</em> to the job <em>job_id</em>. When the input is used for training a model, at least one mandatory column is required that specify the target feature to be learn by the model (see <a class="reference internal" href="#target"><span class="std std-ref">Target Feature and Ranking Type</span></a>). The name of the mandatory column is not fixed. Here it is an example with three target features:</p></li>
+</ul>
+<a class="reference internal image-reference" href="_images/example_ads.png"><img alt="Table with target and id columns referring to the application data source" src="_images/example_ads.png" style="width: 400px;" />
+</a>
+</section>
+<section id="metadata">
+<h2>Metadata<a class="headerlink" href="#metadata" title="Link to this heading"></a></h2>
+<p>For each raw data source, we assume that metadata is provided to specify the format, the type and the usage of each feature in the data source.
+Metadata is in the form of a Python dictionary mapping the column name into an object of the class <a class="reference internal" href="generated/findhr.preprocess.metadata.html#findhr.preprocess.metadata.JSONMetadata" title="findhr.preprocess.metadata.JSONMetadata"><code class="xref py py-class docutils literal notranslate"><span class="pre">findhr.preprocess.metadata.JSONMetadata</span></code></a>.
+Such a class has the following members to be provided in the constructor:</p>
+<ul>
+<li><p><strong>schema</strong>: a dictionary following the <a class="reference external" href="https://json-schema.org/">JSON-schema</a> to describe the schema of the column values. The schema is used to test the conformance of the values to the expected format. The <a class="reference external" href="https://json-schema.org/">JSON-schema</a> is expressive enough to allow for scalars (integers, numbers, strings) and compound objects (arrays/lists, dictionaries), as well as for constraining their content (e.g., ranges for numbers, minimum length for arrays, optional and mandatory fields, and so on).</p></li>
+<li><p><strong>attr_type</strong>: a string expressing the type of the feature as one of the following:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>‘category’: categorical feature type,</p></li>
+<li><p>‘ordinal’: ordinal feature type,</p></li>
+<li><p>‘numeric’: numerical feature type,</p></li>
+<li><p>‘object’: generic feature type.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>attr_usage</strong>: a string expressing the usage of the feature, as one of the following:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>‘default’: predictive feature for applicants, hard constraint for jobs,</p></li>
+<li><p>‘optional’: predictive feature for applicants, soft constraint for jobs,</p></li>
+<li><p>‘protected’: protected feature (w.r.t. fairness) of applicants,</p></li>
+<li><p>‘sensitive’: sensitive feature (w.r.t. privacy) of applicants,</p></li>
+<li><p>‘target’: target feature of the ranking model.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>knowledge_base</strong>: an optional member, with an unspecified data structure, used to encode domain knowledge useful for the computation of derived features, or for explanation purposes. For example, a URI to the <a class="reference external" href="https://esco.ec.europa.eu/en/about-esco/what-esco">ESCO classification</a>.</p></li>
+</ul>
+<p>The static function <a class="reference internal" href="generated/findhr.preprocess.metadata.html#findhr.preprocess.metadata.validate_schema" title="findhr.preprocess.metadata.validate_schema"><code class="xref py py-class docutils literal notranslate"><span class="pre">findhr.preprocess.metadata.validate_schema</span></code></a> validates the schemas of the metadata against the column of the raw data <a href="#id6"><span class="problematic" id="id7">*</span></a>DataFrame*s.</p>
+</section>
+<section id="target-feature-and-ranking-type">
+<span id="target"></span><h2>Target Feature and Ranking Type<a class="headerlink" href="#target-feature-and-ranking-type" title="Link to this heading"></a></h2>
+<p>The Application Data Source (ADS) may include a feature labeled as ’target’ in the <em>attr_usage</em> metadata (the <em>target feature</em>).
+Such a target feature can be used used for the training, validation, and testing of the ranking model using (historical) data on past selection procedures.
+The <em>attr_type</em> metadata of such a feature depends on the type of ranking model as follows:</p>
+<ul>
+<li><p>‘category’: the ranking model is a <strong>binary probabilistic classifier</strong> predicting a candidate’s probability of being shortlisted. The target feature assumes binary values with the meaning:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>‘0’: (not shortlisted) the candidate has not been admitted to the next phase of the recruiting process for the job ;</p></li>
+<li><p>‘1’: (shortlisted) the candidate has been admitted to the next phase of the recruiting process for the job.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>‘ordinal’: the ranking model is a <strong>ranker</strong>, and the target feature assumes integer values corresponding to the ranking position of the candidate for the job (1 = best).</p></li>
+<li><p>‘numeric’: the ranking model is a <strong>scorer</strong>, and the target features assume numeric values (typically in the range [0,1] or [0, 100]) meaning the score assigned to the candidate for the job (the higher the better).</p></li>
+</ul>
+<p>In the following example of ADS there are three target features: <em>score</em>, which is of type numeric; <em>ranking</em>, which is of type ordinal; and <em>shortlisted</em>, which is of type category. They can be used for training a scorer, a ranker, or a binary classifier, respectively. Only one target feature is required for training a single model.</p>
+<a class="reference internal image-reference" href="_images/example_ads.png"><img alt="Table with target and id columns referring to the application data source" src="_images/example_ads.png" style="width: 400px;" />
+</a>
+</section>
+<section id="examples">
+<span id="ex"></span><h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<p>The notebook <em>Example_InputDataSources</em> in the <a class="reference internal" href="example_notebooks.html#example-notebooks"><span class="std std-ref">Examples</span></a> shows an example of the three raw data sources and of their metadata.
+The three raw data sources are joined into a single <em>DataFrame</em>.
+Similarly, the respective three metadata are joined into a single dictionary.</p>
+</section>
+<section id="open-issues">
+<h2>Open Issues<a class="headerlink" href="#open-issues" title="Link to this heading"></a></h2>
+<p>We keep monitoring the generality of the assumed raw data and metadata formats.
+In particular, the development of the demonstrators will be a useful testbed for this purpose.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="usage.html" class="btn btn-neutral float-left" title="Usage" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="preprocess.html" class="btn btn-neutral float-right" title="Feature Preprocessing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, findhr project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

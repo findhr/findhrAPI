@@ -1,0 +1,370 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random &mdash; findhrAPI 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-codeautolink.css?v=b2176991" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="findhr.xai.counterfactual.dice_ml.model_interfaces.base_model" href="findhr.xai.counterfactual.dice_ml.model_interfaces.base_model.html" />
+    <link rel="prev" title="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_genetic" href="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_genetic.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            findhrAPI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../input_data_format.html">Input Data Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../preprocess.html">Feature Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fairness.html">Fairness Intervention for Fair Rankings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Fairness Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../xai.html">eXplainable AI (XAI)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#preprocess-api">Preprocess API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#fair-interventions-api">Fair Interventions API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#fairness-monitoring-api">Fairness Monitoring API</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#explainability-api">Explainability API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.factual.examples_factual.html">findhr.xai.factual.examples_factual</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.factual.ranking_shap.html">findhr.xai.factual.ranking_shap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.html">findhr.xai.counterfactual.dice_ml</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.data_interfaces.base_data_interface.html">findhr.xai.counterfactual.dice_ml.data_interfaces.base_data_interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.data_interfaces.public_data_interface_mod.html">findhr.xai.counterfactual.dice_ml.data_interfaces.public_data_interface_mod</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.data_interfaces.labelencoder.html">findhr.xai.counterfactual.dice_ml.data_interfaces.labelencoder</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_genetic.html">findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_genetic</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.model_interfaces.base_model.html">findhr.xai.counterfactual.dice_ml.model_interfaces.base_model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.model_interfaces.lgbmranker_model.html">findhr.xai.counterfactual.dice_ml.model_interfaces.lgbmranker_model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.model_interfaces.lgbmranker_pipeline_model.html">findhr.xai.counterfactual.dice_ml.model_interfaces.lgbmranker_pipeline_model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.data.html">findhr.xai.counterfactual.dice_ml.data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.dice.html">findhr.xai.counterfactual.dice_ml.dice</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.counterfactual_explanations.html">findhr.xai.counterfactual.dice_ml.counterfactual_explanations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.diverse_counterfactuals.html">findhr.xai.counterfactual.dice_ml.diverse_counterfactuals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.xai.counterfactual.dice_ml.model.html">findhr.xai.counterfactual.dice_ml.model</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">findhrAPI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API</a></li>
+      <li class="breadcrumb-item active">findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/generated/findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.rst" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random">
+<span id="findhr-xai-counterfactual-dice-ml-explainer-interfaces-dice-random"></span><h1>findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random<a class="headerlink" href="#module-findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random" title="Link to this heading"></a></h1>
+<p>Module to generate diverse counterfactual explanations based on random sampling.
+A simple implementation.</p>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom" title="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DiceRandom</span></code></a>(data_interface, model_interface)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.</span></span><span class="sig-name descname"><span class="pre">DiceRandom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_interface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_interface</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom" title="Link to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.check_permitted_range">
+<span class="sig-name descname"><span class="pre">check_permitted_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">permitted_range</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.check_permitted_range" title="Link to this definition"></a></dt>
+<dd><p>checks permitted range for continuous features
+TODO: add comments as to where this is used if this function is necessary, else remove.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.deserialize_explainer">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">deserialize_explainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.deserialize_explainer" title="Link to this definition"></a></dt>
+<dd><p>Reload the explainer into the memory by reading the file specified by path.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.do_binary_search">
+<span class="sig-name descname"><span class="pre">do_binary_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">diff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimal_prec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_instance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cf_ix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_cfs_sparse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_pred</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.do_binary_search" title="Link to this definition"></a></dt>
+<dd><p>Performs a binary search between continuous features of a CF and corresponding values
+in query_instance until the prediction class changes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.do_linear_search">
+<span class="sig-name descname"><span class="pre">do_linear_search</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">diff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimal_prec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_instance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cf_ix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">final_cfs_sparse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_pred_orig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit_steps_ls</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.do_linear_search" title="Link to this definition"></a></dt>
+<dd><p>Performs a greedy linear search - moves the continuous features in CFs towards original values in
+query_instance greedily until the prediction class changes, or it reaches the maximum number of steps</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.do_posthoc_sparsity_enhancement">
+<span class="sig-name descname"><span class="pre">do_posthoc_sparsity_enhancement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">final_cfs_sparse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query_instance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posthoc_sparsity_param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posthoc_sparsity_algorithm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit_steps_ls</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.do_posthoc_sparsity_enhancement" title="Link to this definition"></a></dt>
+<dd><p>Post-hoc method to encourage sparsity in a generated counterfactuals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>final_cfs_sparse</strong> – Final CFs in original user-fed format, in a pandas dataframe.</p></li>
+<li><p><strong>query_instance</strong> – Query instance in original user-fed format, in a pandas dataframe.</p></li>
+<li><p><strong>posthoc_sparsity_param</strong> – Parameter for the post-hoc operation on continuous features to enhance sparsity.</p></li>
+<li><p><strong>posthoc_sparsity_algorithm</strong> – Perform either linear or binary search.
+Prefer binary search when a feature range is
+large (for instance, income varying from 10k to 1000k)
+and only if the features share a monotonic relationship
+with predicted outcome in the model.</p></li>
+<li><p><strong>limit_steps_ls</strong> – Defines the limit of steps to be done in the linear search,
+necessary to avoid infinite loops</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.feature_importance">
+<span class="sig-name descname"><span class="pre">feature_importance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_instances</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cf_examples_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_CFs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_importance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_importance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'opposite'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">permitted_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features_to_vary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stopping_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posthoc_sparsity_param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posthoc_sparsity_algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.feature_importance" title="Link to this definition"></a></dt>
+<dd><p>Estimate feature importance scores for the given inputs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query_instances</strong> – A list of inputs for which to compute the
+feature importances. These can be provided as a dataframe.</p></li>
+<li><p><strong>cf_examples_list</strong> – If precomputed, a list of counterfactual
+examples for every input point. If cf_examples_list is provided, then
+all the following parameters are ignored.</p></li>
+<li><p><strong>total_CFs</strong> – The number of counterfactuals to generate per input
+(default is 10)</p></li>
+<li><p><strong>other_parameters</strong> – These are the same as the generate_counterfactuals method.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An object of class CounterfactualExplanations that includes
+the list of counterfactuals per input, local feature importances per
+input, and the global feature importance summarized over all inputs.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.generate_counterfactuals">
+<span class="sig-name descname"><span class="pre">generate_counterfactuals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_instances</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_CFs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'opposite'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">permitted_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features_to_vary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stopping_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posthoc_sparsity_param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proximity_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparsity_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">diversity_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categorical_penalty</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posthoc_sparsity_algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.generate_counterfactuals" title="Link to this definition"></a></dt>
+<dd><p>General method for generating counterfactuals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query_instances</strong> – Input point(s) for which counterfactuals are to be generated.
+This can be a dataframe with one or more rows.</p></li>
+<li><p><strong>total_CFs</strong> – Total number of counterfactuals required.</p></li>
+<li><p><strong>desired_class</strong> – Desired counterfactual class - can take 0 or 1. Default value
+is “opposite” to the outcome class of query_instance for binary classification.</p></li>
+<li><p><strong>desired_range</strong> – For regression problems. Contains the outcome range to
+generate counterfactuals in. This should be a list of two numbers in
+ascending order.</p></li>
+<li><p><strong>permitted_range</strong> – Dictionary with feature names as keys and permitted range in list as values.
+Defaults to the range inferred from training data.
+If None, uses the parameters initialized in data_interface.</p></li>
+<li><p><strong>features_to_vary</strong> – Either a string “all” or a list of feature names to vary.</p></li>
+<li><p><strong>stopping_threshold</strong> – Minimum threshold for counterfactuals target class probability.</p></li>
+<li><p><strong>proximity_weight</strong> – A positive float. Larger this weight, more close the counterfactuals are to the
+query_instance. Used by [‘genetic’, ‘gradientdescent’],
+ignored by [‘random’, ‘kdtree’] methods.</p></li>
+<li><p><strong>sparsity_weight</strong> – A positive float. Larger this weight, less features are changed from the query_instance.
+Used by [‘genetic’, ‘kdtree’], ignored by [‘random’, ‘gradientdescent’] methods.</p></li>
+<li><p><strong>diversity_weight</strong> – A positive float. Larger this weight, more diverse the counterfactuals are.
+Used by [‘genetic’, ‘gradientdescent’], ignored by [‘random’, ‘kdtree’] methods.</p></li>
+<li><p><strong>categorical_penalty</strong> – A positive float. A weight to ensure that all levels of a categorical variable sums to 1.
+Used by [‘genetic’, ‘gradientdescent’], ignored by [‘random’, ‘kdtree’] methods.</p></li>
+<li><p><strong>posthoc_sparsity_param</strong> – Parameter for the post-hoc operation on continuous features to enhance sparsity.</p></li>
+<li><p><strong>posthoc_sparsity_algorithm</strong> – Perform either linear or binary search. Takes “linear” or “binary”.
+Prefer binary search when a feature range is large (for instance,
+income varying from 10k to 1000k) and only if the features share a
+monotonic relationship with predicted outcome in the model.</p></li>
+<li><p><strong>verbose</strong> – Whether to output detailed messages.</p></li>
+<li><p><strong>sample_size</strong> – Sampling size</p></li>
+<li><p><strong>random_seed</strong> – Random seed for reproducibility</p></li>
+<li><p><strong>kwargs</strong> – Other parameters accepted by specific explanation method</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A CounterfactualExplanations object that contains the list of
+counterfactual examples per query_instance as one of its attributes.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.global_feature_importance">
+<span class="sig-name descname"><span class="pre">global_feature_importance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_instances</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cf_examples_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_CFs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_importance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'opposite'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">permitted_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features_to_vary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stopping_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posthoc_sparsity_param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posthoc_sparsity_algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.global_feature_importance" title="Link to this definition"></a></dt>
+<dd><p>Estimate global feature importance scores for the given inputs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query_instances</strong> – A list of inputs for which to compute the
+feature importances. These can be provided as a dataframe.</p></li>
+<li><p><strong>cf_examples_list</strong> – If precomputed, a list of counterfactual
+examples for every input point. If cf_examples_list is provided, then
+all the following parameters are ignored.</p></li>
+<li><p><strong>total_CFs</strong> – The number of counterfactuals to generate per input
+(default is 10)</p></li>
+<li><p><strong>local_importance</strong> – Binary flag indicating whether local feature
+importance values should also be returned for each query instance.</p></li>
+<li><p><strong>other_parameters</strong> – These are the same as the generate_counterfactuals method.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An object of class CounterfactualExplanations that includes
+the list of counterfactuals per input, local feature importances per
+input, and the global feature importance summarized over all inputs.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.infer_target_cfs_class">
+<span class="sig-name descname"><span class="pre">infer_target_cfs_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">desired_class_input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">original_pred</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_output_nodes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.infer_target_cfs_class" title="Link to this definition"></a></dt>
+<dd><p>Infer the target class for generating CFs. Only called when
+model_type==”classifier”.
+TODO: Add support for opposite desired class in multiclass.
+Downstream methods should decide whether it is allowed or not.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.is_cf_valid">
+<span class="sig-name descname"><span class="pre">is_cf_valid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_score</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.is_cf_valid" title="Link to this definition"></a></dt>
+<dd><p>Check if a cf belongs to the target class or target range.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.local_feature_importance">
+<span class="sig-name descname"><span class="pre">local_feature_importance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_instances</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cf_examples_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_CFs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'opposite'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">permitted_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features_to_vary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stopping_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posthoc_sparsity_param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">posthoc_sparsity_algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'linear'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.local_feature_importance" title="Link to this definition"></a></dt>
+<dd><p>Estimate local feature importance scores for the given inputs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query_instances</strong> – A list of inputs for which to compute the
+feature importances. These can be provided as a dataframe.</p></li>
+<li><p><strong>cf_examples_list</strong> – If precomputed, a list of counterfactual
+examples for every input point. If cf_examples_list is provided, then
+all the following parameters are ignored.</p></li>
+<li><p><strong>total_CFs</strong> – The number of counterfactuals to generate per input
+(default is 10)</p></li>
+<li><p><strong>other_parameters</strong> – These are the same as the
+generate_counterfactuals method.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An object of class CounterfactualExplanations that includes
+the list of counterfactuals per input, local feature importances per
+input, and the global feature importance summarized over all inputs.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.predict_fn">
+<span class="sig-name descname"><span class="pre">predict_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_instance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.predict_fn" title="Link to this definition"></a></dt>
+<dd><p>prediction function</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.predict_fn_for_sparsity">
+<span class="sig-name descname"><span class="pre">predict_fn_for_sparsity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_instance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.predict_fn_for_sparsity" title="Link to this definition"></a></dt>
+<dd><p>prediction function for sparsity correction</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.serialize_explainer">
+<span class="sig-name descname"><span class="pre">serialize_explainer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.serialize_explainer" title="Link to this definition"></a></dt>
+<dd><p>Serialize the explainer to the file specified by path.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.sigmoid">
+<span class="sig-name descname"><span class="pre">sigmoid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_random.DiceRandom.sigmoid" title="Link to this definition"></a></dt>
+<dd><p>This is used in VAE-based CF explainers.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_genetic.html" class="btn btn-neutral float-left" title="findhr.xai.counterfactual.dice_ml.explainer_interfaces.dice_genetic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="findhr.xai.counterfactual.dice_ml.model_interfaces.base_model.html" class="btn btn-neutral float-right" title="findhr.xai.counterfactual.dice_ml.model_interfaces.base_model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, findhr project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

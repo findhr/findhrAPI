@@ -1,0 +1,679 @@
+
+<!DOCTYPE html>
+
+<html class="writer-html5" data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Fairness Monitoring — findhrAPI 1.0.0 documentation</title>
+<link href="../_static/pygments.css?v=b86133f3" rel="stylesheet" type="text/css"/>
+<link href="../_static/css/theme.css?v=e59714d7" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-codeautolink.css?v=b2176991" rel="stylesheet" type="text/css"/>
+<link href="../_static/nbsphinx-code-cells.css?v=2aa19091" rel="stylesheet" type="text/css"/>
+<script src="../_static/jquery.js?v=5d32c60e"></script>
+<script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+<script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+<script src="../_static/doctools.js?v=9a2dae69"></script>
+<script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+<script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+<script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="../_static/js/theme.js"></script>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+</head>
+<body class="wy-body-for-nav">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../index.html">
+            findhrAPI
+          </a>
+<div role="search">
+<form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
+<input aria-label="Search docs" name="q" placeholder="Search docs" type="text"/>
+<input name="check_keywords" type="hidden" value="yes"/>
+<input name="area" type="hidden" value="default"/>
+</form>
+</div>
+</div><div aria-label="Navigation menu" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../input_data_format.html">Input Data Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../preprocess.html">Feature Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fairness.html">Fairness Intervention for Fair Rankings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Fairness Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../xai.html">eXplainable AI (XAI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift"><nav aria-label="Mobile navigation menu" class="wy-nav-top">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../index.html">findhrAPI</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="Page navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a aria-label="Home" class="icon icon-home" href="../index.html"></a></li>
+<li class="breadcrumb-item active">Fairness Monitoring</li>
+<li class="wy-breadcrumbs-aside">
+<a href="../_sources/example_notebooks/Example_Risk_Monitoring.ipynb" rel="nofollow"> View page source</a>
+</li>
+</ul>
+<hr/>
+</div>
+<div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+<div itemprop="articleBody">
+<section id="Fairness-Monitoring">
+<h1>Fairness Monitoring<a class="headerlink" href="#Fairness-Monitoring" title="Link to this heading"></a></h1>
+<p>This notebook explains how to use the findhr API to monitor the fairness of a candidate pool.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="n">project_root</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s2">"../../../src"</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">project_root</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">findhr.monitoring</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+2025-04-24 18:02:19,257 Install package gmpy2 for better performance.
+</pre></div></div>
+</div>
+<section id="Protocol-Stage-1:-Candidate-application-+-redirection-to-optional-attribute-donation">
+<h2>Protocol Stage 1: Candidate application + redirection to optional attribute donation<a class="headerlink" href="#Protocol-Stage-1:-Candidate-application-+-redirection-to-optional-attribute-donation" title="Link to this heading"></a></h2>
+<p>This step will be implemented by the service provider. See the documentation for more details.</p>
+</section>
+<section id="Protocol-Stage-2:-Optional-attribute-donation">
+<h2>Protocol Stage 2: Optional attribute donation<a class="headerlink" href="#Protocol-Stage-2:-Optional-attribute-donation" title="Link to this heading"></a></h2>
+<p>Choose either method A (Third-party-mediated attribute distribution in backend) or method B (Front-end-supported attribute distribution) to deposit encrypted data in the two parties. See the documentation for more details.</p>
+<section id="Method-A:-Third-party-mediated-attribute-distribution">
+<h3>Method A: Third-party-mediated attribute distribution<a class="headerlink" href="#Method-A:-Third-party-mediated-attribute-distribution" title="Link to this heading"></a></h3>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The third party can create their own data handling class inheriting from MultipartyDataCollection</span>
+<span class="c1"># The class needs to override two functions for handling the storage of secret data locally, as well as sending it to the server</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SecretDataHandler</span><span class="p">(</span><a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyDataCollection" title="findhr.monitoring.monitoring.MultipartyDataCollection"><span class="n">MultipartyDataCollection</span></a><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">send_to_model_owner</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">provider_id</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">,</span> <span class="n">secret_protected_attribute</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">store</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">provider_id</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">,</span> <span class="n">secret_protected_attribute</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+
+<span class="c1"># For the purpose of this demonstration, however, we're going to use an example implementation that uses CSV files for storing data locally</span>
+
+<span class="c1"># Replace with your own files if you wish.</span>
+<span class="c1"># These files will be overwritten with new example data after running this notebook.</span>
+<span class="n">filename_third_party</span> <span class="o">=</span> <span class="s1">'../../../data/risk_monitoring/third_party_local_data.csv'</span>
+<span class="n">filename_service_provider</span> <span class="o">=</span> <span class="s1">'../../../data/risk_monitoring/service_provider_remote_data.csv'</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># When the user wants to donate the attribute, we need to:</span>
+<span class="c1"># (1) generate multi-party components from the value of the attribute,</span>
+<span class="c1"># (2) store the local component</span>
+<span class="c1"># (3) send the Model Owner component to them</span>
+
+<span class="c1"># Model owner authenticates themselves with an ID, e.g., an API key</span>
+<span class="c1"># (the exact form of this identifier will depend on the third party implementation)</span>
+<span class="c1"># How to safely authenticate will be determined when we build project demonstrators.</span>
+<span class="c1"># For now, we assume this has already happened and the third party has the unique provider identifier.</span>
+<span class="n">provider_id</span> <span class="o">=</span> <span class="s1">'346723798'</span>
+
+<span class="c1"># Model owner, when redirecting the user to the TP, sends a unique ID that will identify the user+application process.</span>
+<span class="c1"># The third party simply treats this as a string, always used in conjuction with the provider_id.</span>
+<span class="c1"># In this example, we're going to generate multiparty data for 10 different users:</span>
+<span class="n">user_ids</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'11'</span><span class="p">,</span> <span class="s1">'137'</span><span class="p">,</span> <span class="s1">'171'</span><span class="p">,</span> <span class="s1">'234'</span><span class="p">,</span> <span class="s1">'279'</span><span class="p">,</span> <span class="s1">'311'</span><span class="p">,</span> <span class="s1">'377'</span><span class="p">,</span> <span class="s1">'435'</span><span class="p">,</span> <span class="s1">'716'</span><span class="p">,</span> <span class="s1">'931'</span><span class="p">]</span>
+
+<span class="c1"># When donating data, a user can select an attribute they wish to donate, e.g., attribute_name = 'gender'</span>
+<span class="c1"># The process has to be repeated for each attribute separately.</span>
+<span class="c1"># A catalogue of attributes is available at the Third Party.</span>
+<span class="n">attribute_name</span> <span class="o">=</span> <span class="s1">'gender'</span>
+
+<span class="c1"># When donating data, the user selects the value of their attribute, e.g., attribute_value = 'female'</span>
+<span class="n">attribute_value</span> <span class="o">=</span> <span class="s1">'female'</span>
+
+<span class="c1"># For the users in the example, let's deposit the following data:</span>
+
+<span class="n">deposited_data</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">[(</span><span class="s1">'gender'</span><span class="p">,</span> <span class="s1">'female'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'disabled'</span><span class="p">,</span> <span class="s1">'False'</span><span class="p">)],</span>
+    <span class="p">[(</span><span class="s1">'gender'</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'disabled'</span><span class="p">,</span> <span class="s1">'False'</span><span class="p">)],</span>
+    <span class="p">[(</span><span class="s1">'gender'</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'disabled'</span><span class="p">,</span> <span class="s1">'True'</span><span class="p">)],</span>
+    <span class="p">[(</span><span class="s1">'gender'</span><span class="p">,</span> <span class="s1">'non-binary'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'disabled'</span><span class="p">,</span> <span class="s1">'False'</span><span class="p">)],</span>
+    <span class="p">[(</span><span class="s1">'gender'</span><span class="p">,</span> <span class="s1">'female'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'disabled'</span><span class="p">,</span> <span class="s1">'False'</span><span class="p">)],</span>
+    <span class="p">[(</span><span class="s1">'gender'</span><span class="p">,</span> <span class="s1">'female'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'disabled'</span><span class="p">,</span> <span class="s1">'True'</span><span class="p">)],</span>
+    <span class="p">[(</span><span class="s1">'gender'</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'disabled'</span><span class="p">,</span> <span class="s1">'False'</span><span class="p">)],</span>
+    <span class="p">[(</span><span class="s1">'gender'</span><span class="p">,</span> <span class="s1">'female'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'disabled'</span><span class="p">,</span> <span class="s1">'False'</span><span class="p">)],</span>
+    <span class="p">[(</span><span class="s1">'gender'</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'disabled'</span><span class="p">,</span> <span class="s1">'False'</span><span class="p">)],</span>
+    <span class="p">[(</span><span class="s1">'gender'</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'disabled'</span><span class="p">,</span> <span class="s1">'False'</span><span class="p">)],</span>
+<span class="p">]</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="n">user_ids</span><span class="p">,</span> <span class="n">deposited_data</span><span class="p">)</span>
+
+<span class="c1"># We now deposit the data for each user and sensitive attribute:</span>
+
+
+<a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyDataHandlerCSV" title="findhr.monitoring.monitoring.MultipartyDataHandlerCSV"><span class="n">handler</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyDataHandlerCSV" title="findhr.monitoring.monitoring.MultipartyDataHandlerCSV"><span class="n">MultipartyDataHandlerCSV</span></a><span class="p">(</span><span class="n">filename_third_party</span><span class="p">)</span>
+
+<a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.ServiceProviderHandlerCSV" title="findhr.monitoring.monitoring.ServiceProviderHandlerCSV"><span class="n">service_provider_handler</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.ServiceProviderHandlerCSV" title="findhr.monitoring.monitoring.ServiceProviderHandlerCSV"><span class="n">ServiceProviderHandlerCSV</span></a><span class="p">(</span><span class="n">filename_service_provider</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">deposits</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">attribute_name</span><span class="p">,</span> <span class="n">attribute_value</span><span class="p">)</span> <span class="ow">in</span> <span class="n">deposits</span><span class="p">:</span>
+        <span class="n">local_party_val</span><span class="p">,</span> <span class="n">remote_party_val</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyDataHandlerCSV.generate_multiparty_data" title="findhr.monitoring.monitoring.MultipartyDataHandlerCSV.generate_multiparty_data"><span class="n">handler</span><span class="o">.</span><span class="n">generate_multiparty_data</span></a><span class="p">(</span>
+            <span class="n">provider_id</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">,</span> <span class="n">attribute_value</span><span class="p">)</span>
+
+        <span class="c1"># The handler below:</span>
+        <span class="c1"># (1) maps the above attribute parameters to an integer value,</span>
+        <span class="c1"># (2) generates multiparty components</span>
+        <span class="c1"># (3) stores the local component</span>
+        <span class="c1"># (4) sends the remote component</span>
+        <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyDataHandlerCSV.store" title="findhr.monitoring.monitoring.MultipartyDataHandlerCSV.store"><span class="n">handler</span><span class="o">.</span><span class="n">store</span></a><span class="p">(</span><span class="n">provider_id</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">,</span> <span class="n">local_party_val</span><span class="p">)</span>
+        <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyDataHandlerCSV.send_to_model_owner" title="findhr.monitoring.monitoring.MultipartyDataHandlerCSV.send_to_model_owner"><span class="n">handler</span><span class="o">.</span><span class="n">send_to_model_owner</span></a><span class="p">(</span><span class="n">provider_id</span><span class="p">,</span> <span class="n">user_id</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">,</span> <span class="n">remote_party_val</span><span class="p">,</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.ServiceProviderHandlerCSV" title="findhr.monitoring.monitoring.ServiceProviderHandlerCSV"><span class="n">service_provider_handler</span></a><span class="p">)</span>
+
+<a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyDataHandlerCSV.save_session_data" title="findhr.monitoring.monitoring.MultipartyDataHandlerCSV.save_session_data"><span class="n">handler</span><span class="o">.</span><span class="n">save_session_data</span></a><span class="p">()</span>
+<a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.ServiceProviderHandlerCSV.save_session_data" title="findhr.monitoring.monitoring.ServiceProviderHandlerCSV.save_session_data"><span class="n">service_provider_handler</span><span class="o">.</span><span class="n">save_session_data</span></a><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Method-B:-Front-end-supported-attribute-distribution">
+<h3>Method B: Front-end-supported attribute distribution<a class="headerlink" href="#Method-B:-Front-end-supported-attribute-distribution" title="Link to this heading"></a></h3>
+<p>UNCOMMENT THE FOLLOWING CODE BLOCK TO RUN THE FRONTEND-SUPPORTED EXAMPLE (the code is unsupported for sphinx documentation, but it is available in the repository for reproducibility)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># # In method A, the third party generates the randomised two-party components from the protected attribute, and then distribute the components to the Third Party (locally) and the Model Owner (remotely)</span>
+<span class="c1"># # As the third party can directly access the sensitive attributes before the deposit, Method A has the following trust assumptions:</span>
+<span class="c1"># # The third party keeps the sensitive attributes save before depositing the components, and discards the raw value of the attribute after depositing</span>
+<span class="c1">#</span>
+<span class="c1"># # Here we illustrate another possible solution:</span>
+<span class="c1"># # The randomised two-party components are generated and encrypted in the front end of data donation, and the Third Party and the Model Owner only need to listen and store the data</span>
+<span class="c1"># # One example of front end that supports data donation, encryption, and distribution can be found in frontend/index.html.</span>
+<span class="c1"># # For better illustration, the service provider and third party listen data from the frontend at the same app in the example; In real world cases, they are two independent parties and listen in different apps.</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># import threading</span>
+<span class="c1"># from flask import Flask, request, jsonify, send_file</span>
+<span class="c1"># from flask_cors import CORS</span>
+<span class="c1"># from cryptography.hazmat.primitives import serialization</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># app = Flask(__name__)</span>
+<span class="c1"># CORS(app)</span>
+<span class="c1">#</span>
+<span class="c1"># # Load RSA private key</span>
+<span class="c1"># private_key_path = "./monitoring/RSA/private_key.pem"</span>
+<span class="c1"># with open(private_key_path, "rb") as f:</span>
+<span class="c1">#    private_key = serialization.load_pem_private_key(f.read(), password=None)</span>
+<span class="c1">#</span>
+<span class="c1"># # Load RSA public key and send it to frontend</span>
+<span class="c1"># public_key_path = "./monitoring/RSA/public_key.pem"</span>
+<span class="c1"># @app.route('/public_key')</span>
+<span class="c1"># def get_public_key():</span>
+<span class="c1">#     return send_file(public_key_path, mimetype="text/plain")</span>
+<span class="c1">#</span>
+<span class="c1"># # Replace with your own files if you wish.</span>
+<span class="c1"># filename_third_party = '../../../data/risk_monitoring/third_party_local_data.csv'</span>
+<span class="c1"># filename_service_provider = '../../../data/risk_monitoring/service_provider_remote_data.csv'</span>
+<span class="c1"># service_provider_handler = ServiceProviderHandlerCSV(filename_third_party)</span>
+<span class="c1"># third_party_handler = MultipartyDataHandlerCSV(filename_service_provider)</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># # Service provider endpoint listens, decrypts and stores encrypted data sent by the client using the private key</span>
+<span class="c1"># @app.route('/store_service_provider', methods=['POST'])</span>
+<span class="c1"># def store_service_provider():</span>
+<span class="c1">#     encrypted_data = request.json.get("data")</span>
+<span class="c1">#     if not encrypted_data:</span>
+<span class="c1">#         return jsonify({"error": "Missing encrypted data"}), 400</span>
+<span class="c1">#</span>
+<span class="c1">#     result = service_provider_handler.store_encrypted_data(encrypted_data, private_key)</span>
+<span class="c1">#     # print(encrypted_data, "-----", result)</span>
+<span class="c1">#     return jsonify(result)</span>
+<span class="c1">#</span>
+<span class="c1"># # Third party endpoint listens, decrypts and stores encrypted data sent by the client using the private key</span>
+<span class="c1"># @app.route('/store_third_party', methods=['POST'])</span>
+<span class="c1"># def store_third_party():</span>
+<span class="c1">#     encrypted_data = request.json.get("data")</span>
+<span class="c1">#     if not encrypted_data:</span>
+<span class="c1">#         return jsonify({"error": "Missing encrypted data"}), 400</span>
+<span class="c1">#</span>
+<span class="c1">#     result = third_party_handler.store_encrypted_data(encrypted_data, private_key)</span>
+<span class="c1">#     # print(encrypted_data, "-----", result)</span>
+<span class="c1">#     return jsonify(result)</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+<span class="c1"># def run_flask():</span>
+<span class="c1">#     app.run(debug=True, use_reloader=False)</span>
+<span class="c1">#</span>
+<span class="c1"># # start listening - try some input from the front end</span>
+<span class="c1"># # for testing, open frontend/index.html first</span>
+<span class="c1"># flask_thread = threading.Thread(target=run_flask)</span>
+<span class="c1"># flask_thread.start()</span>
+<br/></pre></div>
+</div>
+</div>
+</section>
+</section>
+<section id="Protocol-Stage-3:-Fairness-measurement">
+<h2>Protocol Stage 3: Fairness measurement<a class="headerlink" href="#Protocol-Stage-3:-Fairness-measurement" title="Link to this heading"></a></h2>
+<section id="case-1:-illustration-of-fairness-metrics">
+<h3>case 1: illustration of fairness metrics<a class="headerlink" href="#case-1:-illustration-of-fairness-metrics" title="Link to this heading"></a></h3>
+<section id="method-1:-pseudo-two-party-computation-(easier-to-operate;-stronger-trust-assumption-on-TTP)">
+<h4>method 1: pseudo two-party computation (easier to operate; stronger trust assumption on TTP)<a class="headerlink" href="#method-1:-pseudo-two-party-computation-(easier-to-operate;-stronger-trust-assumption-on-TTP)" title="Link to this heading"></a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># method 1: Pseudo two-party computation with reconstruction of sensitive attributes for fairness measurement (on-the-fly). It is easier to operate, but with a stronger trust assumption on TTP.</span>
+
+<span class="c1"># Model owner wants to measure the diversity of a candidate pool</span>
+
+<span class="c1"># Locally, the model owner creates a list representing the pool of pairs: (user_id, remote_attr_secret)</span>
+
+<a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyDataHandlerCSV" title="findhr.monitoring.monitoring.MultipartyDataHandlerCSV"><span class="n">data_handler</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyDataHandlerCSV" title="findhr.monitoring.monitoring.MultipartyDataHandlerCSV"><span class="n">MultipartyDataHandlerCSV</span></a><span class="p">(</span><span class="n">filename_third_party</span><span class="p">)</span>
+<a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.ServiceProviderHandlerCSV" title="findhr.monitoring.monitoring.ServiceProviderHandlerCSV"><span class="n">service_provider_handler</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.ServiceProviderHandlerCSV" title="findhr.monitoring.monitoring.ServiceProviderHandlerCSV"><span class="n">ServiceProviderHandlerCSV</span></a><span class="p">(</span><span class="n">filename_service_provider</span><span class="p">)</span>
+
+<span class="c1"># We want to measure fairness for the ranking of these 5 users:</span>
+<span class="n">user_ids</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'11'</span><span class="p">,</span> <span class="s1">'137'</span><span class="p">,</span> <span class="s1">'171'</span><span class="p">,</span> <span class="s1">'234'</span><span class="p">,</span> <span class="s1">'279'</span><span class="p">]</span>
+
+<span class="c1"># They would like to measure diversity wrt gender</span>
+<span class="n">attribute_name</span> <span class="o">=</span> <span class="s1">'gender'</span>
+
+<span class="c1"># And measure the prevalence of female candidates</span>
+<span class="n">attribute_value</span> <span class="o">=</span> <span class="s1">'female'</span>
+
+<span class="c1"># We create a pool of user IDs together with the local secret components of the third party:</span>
+<span class="n">secrets</span> <span class="o">=</span> <span class="p">[</span><span class="n">service_provider_handler</span><span class="o">.</span><span class="n">local_data</span><span class="p">[</span><span class="n">provider_id</span><span class="p">][</span><span class="n">u</span><span class="p">][</span><span class="n">attribute_name</span><span class="p">]</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">user_ids</span><span class="p">]</span>
+<span class="n">pool</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">user_ids</span><span class="p">,</span> <span class="n">secrets</span><span class="p">))</span>
+
+<span class="c1"># They create a handler with their API authentication key</span>
+<a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyFairnessMeasurement" title="findhr.monitoring.monitoring.MultipartyFairnessMeasurement"><span class="n">handler</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyFairnessMeasurement" title="findhr.monitoring.monitoring.MultipartyFairnessMeasurement"><span class="n">MultipartyFairnessMeasurement</span></a><span class="p">(</span><span class="n">provider_id</span><span class="p">,</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyDataHandlerCSV" title="findhr.monitoring.monitoring.MultipartyDataHandlerCSV"><span class="n">data_handler</span></a><span class="p">)</span>
+
+
+<span class="c1"># They send this data to the third party, and get the value of the pool diversity fairness metric back:</span>
+<span class="n">diversity</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_pool_diversity" title="findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_pool_diversity"><span class="n">handler</span><span class="o">.</span><span class="n">measure_pool_diversity</span></a><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">,</span> <span class="n">attribute_value</span><span class="p">)</span>
+
+<span class="c1"># In some cases, they might want to measure conditional diversity -- diversity of the pool from among e.g. qualified candidates.</span>
+<span class="c1"># An optional 'conditionals' argument allows them to specify a list of boolean values</span>
+<span class="c1"># specifying whether the candidate should be included in the computation.</span>
+<span class="c1"># Assertion: len(pool) == len(conditionals)</span>
+<span class="n">diversity</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_pool_diversity" title="findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_pool_diversity"><span class="n">handler</span><span class="o">.</span><span class="n">measure_pool_diversity</span></a><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">,</span> <span class="n">attribute_value</span><span class="p">,</span>
+                                   <span class="n">conditionals</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">])</span>
+
+<span class="c1"># This is the fraction of female candidates in the above pool (2/5):</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">"The fraction of female candidates in the pool is: </span><span class="si">%f</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">diversity</span><span class="p">))</span>
+
+
+<span class="c1"># They might also want to measure the exposure of a given group in a ranking under a selected browsing model.</span>
+<span class="c1"># A browsing model is a set of weights indicating how much attention searchers pay to a given ranking position.</span>
+<span class="n">exposure</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_group_exposure" title="findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_group_exposure"><span class="n">handler</span><span class="o">.</span><span class="n">measure_group_exposure</span></a><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">,</span> <span class="n">attribute_value</span><span class="p">,</span>
+                                          <span class="n">browsing_model</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>
+
+<span class="c1"># This is the fraction of exposure of female candidates in the above ranking, from positions 1 and 5 (0.6):</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">"The exposure of female candidates in the ranking (manual weights) is: </span><span class="si">%f</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">exposure</span><span class="p">))</span>
+
+<span class="c1"># In addition to mannually defining the weights, The browsing model can also be based on predefined models, such as Inverse Log Model and Exponential Decay Model</span>
+<span class="n">exposure</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_group_exposure" title="findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_group_exposure"><span class="n">handler</span><span class="o">.</span><span class="n">measure_group_exposure</span></a><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">,</span> <span class="n">attribute_value</span><span class="p">,</span> <span class="n">browsing_model</span><span class="o">=</span><span class="s2">"inverse_log"</span><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">"The exposure of female candidates in the ranking (Inverse Log Model) is: </span><span class="si">%f</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">exposure</span><span class="p">))</span>
+
+<span class="n">exposure</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_group_exposure" title="findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_group_exposure"><span class="n">handler</span><span class="o">.</span><span class="n">measure_group_exposure</span></a><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">,</span> <span class="n">attribute_value</span><span class="p">,</span> <span class="n">browsing_model</span><span class="o">=</span><span class="s2">"exp_decay"</span><span class="p">,</span> <span class="n">browsing_param</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">"The exposure of female candidates in the ranking (Exp Decay Model) is: </span><span class="si">%f</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">exposure</span><span class="p">))</span>
+
+<span class="c1"># They might also want to evaluate fairness based on the top-k positions of a ranking.</span>
+
+<span class="c1"># Skew: Measures the difference between the proportion of the group in top-k vs. overall.</span>
+<span class="n">fairness_skew</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_topk_fairness" title="findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_topk_fairness"><span class="n">handler</span><span class="o">.</span><span class="n">measure_topk_fairness</span></a><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">,</span> <span class="n">attribute_value</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">"skew"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Top-3 fairness of female candidates in the ranking (Skew@k) is: </span><span class="si">%f</span><span class="s2">"</span> <span class="o">%</span> <span class="n">fairness_skew</span><span class="p">)</span>
+
+<span class="c1"># Discounted Representation Difference: Captures position-sensitive differences in group presence in top-k.</span>
+<span class="n">fairness_discounted_diff</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_topk_fairness" title="findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_topk_fairness"><span class="n">handler</span><span class="o">.</span><span class="n">measure_topk_fairness</span></a><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">,</span> <span class="n">attribute_value</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">"discounted_rep_diff"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Top-3 fairness of female candidates in the ranking (Discounted Rep. Diff@k) is: </span><span class="si">%f</span><span class="s2"> "</span> <span class="o">%</span> <span class="n">fairness_discounted_diff</span><span class="p">)</span>
+
+
+
+<span class="c1"># To measure the accept rate of a given group for demographic parity</span>
+<span class="c1"># For this a pool_stage list (user_id: string, targeted: 1, selected: bool) needs to be provided</span>
+<span class="c1"># For each candidate, the first bool (targeted) is set to 1 to include all potential candidates;</span>
+<span class="c1"># and the second bool (selected) indicates the decisions (e.g., final interview or recruitment decisions)</span>
+<span class="n">pool_stage</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">"11"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="p">(</span><span class="s2">"137"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="p">(</span><span class="s2">"171"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="s2">"234"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="s2">"279"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)]</span>
+<span class="n">demographic_parity</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_accept_rate" title="findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_accept_rate"><span class="n">handler</span><span class="o">.</span><span class="n">measure_accept_rate</span></a><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">pool_stage</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">,</span> <span class="n">attribute_value</span><span class="p">)</span>
+
+<span class="c1"># This is the proportion of qualified female individuals who were correctly selected:</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">"The demographic parity measurement of female candidates in the pool is: </span><span class="si">%f</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">demographic_parity</span><span class="p">))</span>
+
+<span class="c1"># To measure the proportion of qualified individuals who were correctly selected.</span>
+<span class="c1"># For this a pool_stage list (user_id: string, targeted: bool, selected: bool) needs to be provided</span>
+<span class="c1"># For each candidate, the first bool (targeted) is set to whether the candidate is qualified or not, e.g., based on evaluations by a group of experts;</span>
+<span class="c1"># and the second bool (selected) indicates the decisions (e.g., final interview or recruitment decisions)</span>
+<span class="n">pool_stage</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">"11"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="s2">"137"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="p">(</span><span class="s2">"171"</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="s2">"234"</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="p">(</span><span class="s2">"279"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)]</span>
+<span class="n">equal_opportunity</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_accept_rate" title="findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_accept_rate"><span class="n">handler</span><span class="o">.</span><span class="n">measure_accept_rate</span></a><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">pool_stage</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">,</span> <span class="n">attribute_value</span><span class="p">)</span>
+
+<span class="c1"># This is the proportion of qualified female individuals who were correctly selected:</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">"The equal opportunity measurement of female candidates in the pool is: </span><span class="si">%f</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">equal_opportunity</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The fraction of female candidates in the pool is: 0.400000
+The exposure of female candidates in the ranking (manual weights) is: 0.600000
+The exposure of female candidates in the ranking (Inverse Log Model) is: 0.470365
+The exposure of female candidates in the ranking (Exp Decay Model) is: 0.447189
+Top-3 fairness of female candidates in the ranking (Skew@k) is: -0.182322
+Top-3 fairness of female candidates in the ranking (Discounted Rep. Diff@k) is: -0.130930
+The demographic parity measurement of female candidates in the pool is: 1.000000
+The equal opportunity measurement of female candidates in the pool is: 0.500000
+</pre></div></div>
+</div>
+</section>
+<section id="method-2:-two-party-computation-(higher-demands-on-coordination-between-two-parties;-stronger-data-protection)">
+<h4>method 2: two-party computation (higher demands on coordination between two parties; stronger data protection)<a class="headerlink" href="#method-2:-two-party-computation-(higher-demands-on-coordination-between-two-parties;-stronger-data-protection)" title="Link to this heading"></a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># #execute this cell to simulate the output of the cell above</span>
+
+<span class="c1"># import subprocess</span>
+
+<span class="c1"># third_party_process = subprocess.Popen(["python", "monitoring/fairness.py", "-M2", "-I0", "--no-log"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)</span>
+<span class="c1"># service_provider_process = subprocess.Popen(["python", "monitoring/fairness.py", "-M2", "-I1", "--no-log"])</span>
+
+<span class="c1"># out, err = third_party_process.communicate()</span>
+<span class="c1"># print(out)</span>
+
+<span class="c1"># third_party_process.wait()</span>
+<span class="c1"># service_provider_process.wait()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+SERVICE-PROVIDER OUTPUT: The fraction of female candidates in the pool is: 0.400000
+SERVICE-PROVIDER OUTPUT: The exposure of female candidates in the ranking (manual weights) is: 0.600000
+SERVICE-PROVIDER OUTPUT: The exposure of female candidates in the ranking (Inverse Log Model) is: 0.470365
+SERVICE-PROVIDER OUTPUT: The exposure of female candidates in the ranking (Exp Decay Model) is: 0.447189
+SERVICE-PROVIDER OUTPUT: Top-3 fairness of female candidates in the ranking (Skew@k) is: -0.182322
+SERVICE-PROVIDER OUTPUT: Top-3 fairness of female candidates in the ranking (Discounted Rep. Diff@k) is: -0.130930
+SERVICE-PROVIDER OUTPUT: The demographic parity measurement of female candidates in the pool is: 1.000000
+SERVICE-PROVIDER OUTPUT: The equal opportunity measurement of female candidates in the pool is: 0.500000
+THIRD-PARTY OUTPUT: The fraction of female candidates in the pool is: 0.400000
+THIRD-PARTY OUTPUT: The exposure of female candidates in the ranking (manual weights) is: 0.600000
+THIRD-PARTY OUTPUT: The exposure of female candidates in the ranking (Inverse Log Model) is: 0.470365
+THIRD-PARTY OUTPUT: The exposure of female candidates in the ranking (Exp Decay Model) is: 0.447189
+THIRD-PARTY OUTPUT: Top-3 fairness of female candidates in the ranking (Skew@k) is: -0.182322
+THIRD-PARTY OUTPUT: Top-3 fairness of female candidates in the ranking (Discounted Rep. Diff@k) is: -0.130930
+THIRD-PARTY OUTPUT: The demographic parity measurement of female candidates in the pool is: 1.000000
+THIRD-PARTY OUTPUT: The equal opportunity measurement of female candidates in the pool is: 0.500000
+
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="case-2:-intersectional-metrics">
+<h3>case 2: intersectional metrics<a class="headerlink" href="#case-2:-intersectional-metrics" title="Link to this heading"></a></h3>
+<section id="id1">
+<h4>method 1: pseudo two-party computation (easier to operate; stronger trust assumption on TTP)<a class="headerlink" href="#id1" title="Link to this heading"></a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># method 1: Pseudo two-party computation with reconstruction of sensitive attributes for fairness measurement (on-the-fly). It is easier to operate, but with a stronger trust assumption on TTP.</span>
+
+<span class="c1"># Model owner wants to measure the diversity of a candidate pool</span>
+
+<span class="c1"># Locally, the model owner creates a list representing the pool of pairs: (user_id, remote_attr_secret)</span>
+
+<a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyDataHandlerCSV" title="findhr.monitoring.monitoring.MultipartyDataHandlerCSV"><span class="n">data_handler</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyDataHandlerCSV" title="findhr.monitoring.monitoring.MultipartyDataHandlerCSV"><span class="n">MultipartyDataHandlerCSV</span></a><span class="p">(</span><span class="n">filename_third_party</span><span class="p">)</span>
+<a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.ServiceProviderHandlerCSV" title="findhr.monitoring.monitoring.ServiceProviderHandlerCSV"><span class="n">service_provider_handler</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.ServiceProviderHandlerCSV" title="findhr.monitoring.monitoring.ServiceProviderHandlerCSV"><span class="n">ServiceProviderHandlerCSV</span></a><span class="p">(</span><span class="n">filename_service_provider</span><span class="p">)</span>
+
+<span class="c1"># We want to measure fairness for the ranking of these 5 users:</span>
+<span class="n">user_ids</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'11'</span><span class="p">,</span> <span class="s1">'137'</span><span class="p">,</span> <span class="s1">'171'</span><span class="p">,</span> <span class="s1">'234'</span><span class="p">,</span> <span class="s1">'311'</span><span class="p">]</span>
+
+<span class="c1"># They would like to measure diversity wrt gender and disability</span>
+<span class="n">attribute_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'gender'</span><span class="p">,</span> <span class="s1">'disabled'</span><span class="p">]</span>
+
+<span class="c1"># And measure the prevalence of female candidates that are disabled</span>
+<span class="n">attribute_values</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'female'</span><span class="p">,</span> <span class="s1">'True'</span><span class="p">]</span>
+
+<span class="c1"># We create a pool of user IDs together with the local secret components of the third party:</span>
+<span class="n">pool</span> <span class="o">=</span> <span class="p">[(</span><span class="n">u</span><span class="p">,</span> <span class="p">{</span><span class="n">attribute_name</span><span class="p">:</span> <span class="n">service_provider_handler</span><span class="o">.</span><span class="n">local_data</span><span class="p">[</span><span class="n">provider_id</span><span class="p">][</span><span class="n">u</span><span class="p">][</span><span class="n">attribute_name</span><span class="p">]</span> <span class="k">for</span> <span class="n">attribute_name</span> <span class="ow">in</span> <span class="n">attribute_names</span><span class="p">})</span>
+    <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">user_ids</span><span class="p">]</span>
+
+<span class="c1"># They create a handler with their API authentication key</span>
+<a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyFairnessMeasurement" title="findhr.monitoring.monitoring.MultipartyFairnessMeasurement"><span class="n">handler</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyFairnessMeasurement" title="findhr.monitoring.monitoring.MultipartyFairnessMeasurement"><span class="n">MultipartyFairnessMeasurement</span></a><span class="p">(</span><span class="n">provider_id</span><span class="p">,</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyDataHandlerCSV" title="findhr.monitoring.monitoring.MultipartyDataHandlerCSV"><span class="n">data_handler</span></a><span class="p">)</span>
+
+<span class="c1"># They send this data to the third party, and get the value of the pool diversity fairness metric back:</span>
+<span class="n">diversity</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_pool_diversity" title="findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_pool_diversity"><span class="n">handler</span><span class="o">.</span><span class="n">measure_pool_diversity</span></a><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">attribute_names</span><span class="p">,</span> <span class="n">attribute_values</span><span class="p">)</span>
+
+<span class="c1"># In some cases, they might want to measure conditional diversity -- diversity of the pool from among e.g. qualified candidates.</span>
+<span class="c1"># An optional 'conditionals' argument allows them to specify a list of boolean values</span>
+<span class="c1"># specifying whether the candidate should be included in the computation.</span>
+<span class="c1"># Assertion: len(pool) == len(conditionals)</span>
+<span class="n">diversity</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_pool_diversity" title="findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_pool_diversity"><span class="n">handler</span><span class="o">.</span><span class="n">measure_pool_diversity</span></a><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">attribute_names</span><span class="p">,</span> <span class="n">attribute_values</span><span class="p">,</span>
+                                   <span class="n">conditionals</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">])</span>
+
+<span class="c1"># This is the fraction of female candidates in the above pool (2/5):</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">"The fraction of female disabled candidates in the pool is: </span><span class="si">%f</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">diversity</span><span class="p">))</span>
+
+
+<span class="c1"># They might also want to measure the exposure of a given group in a ranking under a selected browsing model.</span>
+<span class="c1"># A browsing model is a set of weights indicating how much attention searchers pay to a given ranking position.</span>
+<span class="n">exposure</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_group_exposure" title="findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_group_exposure"><span class="n">handler</span><span class="o">.</span><span class="n">measure_group_exposure</span></a><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">attribute_names</span><span class="p">,</span> <span class="n">attribute_values</span><span class="p">,</span>
+                                          <span class="n">browsing_model</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>
+
+<span class="c1"># This is the fraction of exposure of female candidates in the above ranking, from positions 1 and 5 (0.6):</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">"The exposure of female disabled candidates in the ranking is: </span><span class="si">%f</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">exposure</span><span class="p">))</span>
+
+
+<span class="c1"># To measure the accept rate of a given group for demographic parity</span>
+<span class="c1"># For this a pool_stage list (user_id: string, selected: bool) needs to be provided</span>
+<span class="n">pool_stage</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">"11"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="p">(</span><span class="s2">"137"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="p">(</span><span class="s2">"171"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="s2">"234"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="s2">"311"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)]</span>
+<span class="n">demographic_parity</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_accept_rate" title="findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_accept_rate"><span class="n">handler</span><span class="o">.</span><span class="n">measure_accept_rate</span></a><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">pool_stage</span><span class="p">,</span> <span class="n">attribute_names</span><span class="p">,</span> <span class="n">attribute_values</span><span class="p">)</span>
+
+<span class="c1"># This is the proportion of qualified female individuals who were correctly selected:</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">"The demographic parity measurement of female disabled candidates in the pool is: </span><span class="si">%f</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">demographic_parity</span><span class="p">))</span>
+
+<span class="c1"># To measure the proportion of qualified individuals who were correctly selected.</span>
+<span class="c1"># For this a pool_stage list (user_id: string, qualified: bool, selected: bool) needs to be provided</span>
+<span class="n">pool_stage</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">"11"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="s2">"137"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="p">(</span><span class="s2">"171"</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="s2">"234"</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span> <span class="p">(</span><span class="s2">"311"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)]</span>
+<span class="n">equal_opportunity</span> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_accept_rate" title="findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_accept_rate"><span class="n">handler</span><span class="o">.</span><span class="n">measure_accept_rate</span></a><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">pool_stage</span><span class="p">,</span> <span class="n">attribute_names</span><span class="p">,</span> <span class="n">attribute_values</span><span class="p">)</span>
+
+<span class="c1"># This is the proportion of qualified female individuals who were correctly selected:</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">"The equal opportunity measurement of female disabled candidates in the pool is: </span><span class="si">%f</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">equal_opportunity</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The fraction of female disabled candidates in the pool is: 0.200000
+The exposure of female disabled candidates in the ranking is: 0.100000
+The demographic parity measurement of female disabled candidates in the pool is: 1.000000
+The equal opportunity measurement of female disabled candidates in the pool is: 1.000000
+</pre></div></div>
+</div>
+</section>
+<section id="id2">
+<h4>method 2: two-party computation (higher demands on coordination between two parties; stronger data protection)<a class="headerlink" href="#id2" title="Link to this heading"></a></h4>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import subprocess</span>
+
+<span class="c1"># third_party_process = subprocess.Popen(["python", "monitoring/intersection.py", "-M2", "-I0", "--no-log"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)</span>
+<span class="c1"># service_provider_process = subprocess.Popen(["python", "monitoring/intersection.py", "-M2", "-I1", "--no-log"])</span>
+
+<span class="c1"># out, err = third_party_process.communicate()</span>
+<span class="c1"># print(out)</span>
+
+<span class="c1"># third_party_process.wait()</span>
+<span class="c1"># service_provider_process.wait()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+SERVICE-PROVIDER OUTPUT: the fraction of female disabled candidates in the pool is: 0.200000
+SERVICE-PROVIDER OUTPUT: The exposure of female disabled candidates in the ranking is: 0.100000
+SERVICE-PROVIDER OUTPUT: The demographic parity score for female disabled candidates is: 1.000000
+SERVICE-PROVIDER OUTPUT: The equal opportunity score for female disabled candidates is: 1.000000
+THIRD-PARTY OUTPUT: the fraction of female disabled candidates in the pool is: 0.200000
+THIRD-PARTY OUTPUT: The exposure of female disabled candidates in the ranking is: 0.100000
+THIRD-PARTY OUTPUT: The demographic parity score for female disabled candidates is: 1.000000
+THIRD-PARTY OUTPUT: The equal opportunity score for female disabled candidates is: 1.000000
+
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+0
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="case-3:-one-party-computation">
+<h3>case 3: one-party computation<a class="headerlink" href="#case-3:-one-party-computation" title="Link to this heading"></a></h3>
+<p>It’s possible that there is no trust third party in real-life applications. While the package can accommodate scenarios where one party has full access to the sensitive data, it is strongly recommended to distribute data to 2 different stakeholders (e.g. different departments) to secure sensitive data and simulate two-party computation.</p>
+</section>
+<section id="case-4:-visualization-and-reliability-testing">
+<h3>case 4: visualization and reliability testing<a class="headerlink" href="#case-4:-visualization-and-reliability-testing" title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># As the fairness metrics are based on samples from data donation, reliability testing is important to help interpret the results.</span>
+<span class="c1"># Here we provide an example of showing the accepted rate with confidence interval to help interpret demographic parity.</span>
+
+<a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyFairnessMeasurementMPYC" title="findhr.monitoring.monitoring.MultipartyFairnessMeasurementMPYC"><span class="n">handler</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyFairnessMeasurementMPYC" title="findhr.monitoring.monitoring.MultipartyFairnessMeasurementMPYC"><span class="n">MultipartyFairnessMeasurementMPYC</span></a><span class="p">(</span><span class="n">provider_id</span><span class="p">,</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.monitoring.monitoring.html#findhr.monitoring.monitoring.MultipartyDataHandlerCSV" title="findhr.monitoring.monitoring.MultipartyDataHandlerCSV"><span class="n">data_handler</span></a><span class="p">)</span>
+
+<span class="c1"># Suppose non-binary, female, male has accepted rate of 0.3, 0.4, 0.6</span>
+<span class="n">p</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">]</span>
+
+<span class="c1"># This is the sample size of each group</span>
+<span class="n">n</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">400</span><span class="p">]</span>
+
+<span class="c1"># To visualize the accepted rate with confidence interval</span>
+<span class="n">handler</span><span class="o">.</span><span class="n">_plot_confidence_intervals</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">'non-binary'</span><span class="p">,</span> <span class="s1">'female'</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">])</span>
+
+<span class="c1">#higher n result in lower confidence intervals</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_notebooks_Example_Risk_Monitoring_26_0.png" src="../_images/example_notebooks_Example_Risk_Monitoring_26_0.png"/>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Knowing the full size (N) of specific group can also facilitate the interpretation (e.g., n=100 among N=120 female candidates donate the data and compose the sample)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">]</span>
+<span class="n">n</span> <span class="o">=</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+<span class="n">N</span> <span class="o">=</span> <span class="p">[</span><span class="mi">120</span><span class="p">,</span> <span class="mi">1500</span><span class="p">]</span>
+
+<span class="n">handler</span><span class="o">.</span><span class="n">_plot_confidence_intervals</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">'female'</span><span class="p">,</span> <span class="s1">'male'</span><span class="p">])</span>
+<span class="c1"># a higher donation rate results in lower confidence intervals</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/example_notebooks_Example_Risk_Monitoring_27_0.png" src="../_images/example_notebooks_Example_Risk_Monitoring_27_0.png"/>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+</section>
+</div>
+</div>
+<footer>
+<hr/>
+<div role="contentinfo">
+<p>© Copyright 2024, findhr project.</p>
+</div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+</div>
+</div>
+</section>
+</div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+</body>
+</html>

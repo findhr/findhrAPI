@@ -1,0 +1,883 @@
+
+<!DOCTYPE html>
+
+<html class="writer-html5" data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Counterfactual Explanation for the Feature Engineering Data-Domain (FEDD) — findhrAPI 1.0.0 documentation</title>
+<link href="../_static/pygments.css?v=b86133f3" rel="stylesheet" type="text/css"/>
+<link href="../_static/css/theme.css?v=e59714d7" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-codeautolink.css?v=b2176991" rel="stylesheet" type="text/css"/>
+<link href="../_static/nbsphinx-code-cells.css?v=2aa19091" rel="stylesheet" type="text/css"/>
+<script src="../_static/jquery.js?v=5d32c60e"></script>
+<script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+<script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+<script src="../_static/doctools.js?v=9a2dae69"></script>
+<script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+<script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+<script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="../_static/js/theme.js"></script>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+</head>
+<body class="wy-body-for-nav">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../index.html">
+            findhrAPI
+          </a>
+<div role="search">
+<form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
+<input aria-label="Search docs" name="q" placeholder="Search docs" type="text"/>
+<input name="check_keywords" type="hidden" value="yes"/>
+<input name="area" type="hidden" value="default"/>
+</form>
+</div>
+</div><div aria-label="Navigation menu" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../input_data_format.html">Input Data Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../preprocess.html">Feature Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fairness.html">Fairness Intervention for Fair Rankings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Fairness Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../xai.html">eXplainable AI (XAI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift"><nav aria-label="Mobile navigation menu" class="wy-nav-top">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../index.html">findhrAPI</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="Page navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a aria-label="Home" class="icon icon-home" href="../index.html"></a></li>
+<li class="breadcrumb-item active">Counterfactual Explanation for the Feature Engineering Data-Domain (FEDD)</li>
+<li class="wy-breadcrumbs-aside">
+<a href="../_sources/example_notebooks/Example_CounterfactualExplanation_FEDD.ipynb" rel="nofollow"> View page source</a>
+</li>
+</ul>
+<hr/>
+</div>
+<div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+<div itemprop="articleBody">
+<section id="Counterfactual-Explanation-for-the-Feature-Engineering-Data-Domain-(FEDD)">
+<h1>Counterfactual Explanation for the Feature Engineering Data-Domain (FEDD)<a class="headerlink" href="#Counterfactual-Explanation-for-the-Feature-Engineering-Data-Domain-(FEDD)" title="Link to this heading"></a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># import libraries</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">lightgbm</span><span class="w"> </span><span class="kn">import</span> <span class="n">LGBMRanker</span>
+<span class="kn">from</span><span class="w"> </span><a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.mapping.html#module-findhr.preprocess.mapping" title="findhr.preprocess.mapping"><span class="nn">findhr.preprocess.mapping</span></a><span class="w"> </span><span class="kn">import</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.mapping.html#findhr.preprocess.mapping.AttachMetadata" title="findhr.preprocess.mapping.AttachMetadata"><span class="n">AttachMetadata</span></a><span class="p">,</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.mapping.html#findhr.preprocess.mapping.DetachMetadata" title="findhr.preprocess.mapping.DetachMetadata"><span class="n">DetachMetadata</span></a><span class="p">,</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.mapping.html#findhr.preprocess.mapping.DerivedColumn" title="findhr.preprocess.mapping.DerivedColumn"><span class="n">DerivedColumn</span></a>
+<span class="kn">from</span><span class="w"> </span><a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.example_mappings.html#module-findhr.preprocess.example_mappings" title="findhr.preprocess.example_mappings"><span class="nn">findhr.preprocess.example_mappings</span></a><span class="w"> </span><span class="kn">import</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.example_mappings.html#findhr.preprocess.example_mappings.RelevantExperienceForRole" title="findhr.preprocess.example_mappings.RelevantExperienceForRole"><span class="n">RelevantExperienceForRole</span></a><span class="p">,</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.example_mappings.html#findhr.preprocess.example_mappings.ExtractMonthDurationJob" title="findhr.preprocess.example_mappings.ExtractMonthDurationJob"><span class="n">ExtractMonthDurationJob</span></a><span class="p">,</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.example_mappings.html#findhr.preprocess.example_mappings.MatchOrdinal" title="findhr.preprocess.example_mappings.MatchOrdinal"><span class="n">MatchOrdinal</span></a><span class="p">,</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.example_mappings.html#findhr.preprocess.example_mappings.ExtractListOfProperty" title="findhr.preprocess.example_mappings.ExtractListOfProperty"><span class="n">ExtractListOfProperty</span></a><span class="p">,</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.example_mappings.html#findhr.preprocess.example_mappings.MatchFeatureAtLeastInList" title="findhr.preprocess.example_mappings.MatchFeatureAtLeastInList"><span class="n">MatchFeatureAtLeastInList</span></a><span class="p">,</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.example_mappings.html#findhr.preprocess.example_mappings.MatchFeatureSet" title="findhr.preprocess.example_mappings.MatchFeatureSet"><span class="n">MatchFeatureSet</span></a><span class="p">,</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.example_mappings.html#findhr.preprocess.example_mappings.MatchBinary" title="findhr.preprocess.example_mappings.MatchBinary"><span class="n">MatchBinary</span></a>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">findhr.xai.counterfactual</span><span class="w"> </span><span class="kn">import</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.xai.counterfactual.dice_ml.html#module-findhr.xai.counterfactual.dice_ml" title="findhr.xai.counterfactual.dice_ml"><span class="n">dice_ml</span></a>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># suppress warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">'ignore'</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">SettingWithCopyWarning</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">'ignore'</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">'ignore'</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">RuntimeWarning</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">'ignore'</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">FutureWarning</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<section id="Define-Helper-Classes-and-Functions">
+<h2>Define Helper Classes and Functions<a class="headerlink" href="#Define-Helper-Classes-and-Functions" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">run</span> ./Example_InputDataSources.ipynb
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Joined DataFrame.</span>
+<span class="n">df_all</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>id_c</th>
+<th>education_background_c</th>
+<th>professional_experience_c</th>
+<th>skills_c</th>
+<th>gender_c</th>
+<th>agg_perceived_foreign_c</th>
+<th>id_j</th>
+<th>education_reqs_j</th>
+<th>experience_reqs_role_j</th>
+<th>experience_reqs_duration_j</th>
+<th>skills_j</th>
+<th>gender_j</th>
+<th>agg_perceived_foreign_j</th>
+<th>ranking</th>
+<th>shortlisted</th>
+<th>score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>5</td>
+<td>[{'institution': 'Complutense University Of Ma...</td>
+<td>[{'institution': 'Stylo Milano', 'start_date':...</td>
+<td>[Communications, Social Integration, Microsoft...</td>
+<td>Man</td>
+<td>No</td>
+<td>5</td>
+<td>[Law Bachelor, Degree In Law, Higher Degree In...</td>
+<td>[Consultant]</td>
+<td>12</td>
+<td>[Punctuality, Organization, Accounting, Englis...</td>
+<td>Man</td>
+<td>No</td>
+<td>4</td>
+<td>1</td>
+<td>0.0</td>
+</tr>
+<tr>
+<th>1</th>
+<td>6</td>
+<td>[{'institution': 'Coronel Rosales Agricultural...</td>
+<td>[{'institution': 'Securitas Direct', 'start_da...</td>
+<td>[Refinancing, Economy, Microsoft Excel, Collec...</td>
+<td>Man</td>
+<td>No</td>
+<td>3</td>
+<td>[]</td>
+<td>[Sales Assistant, Saleswoman, Commercial Advisor]</td>
+<td>12</td>
+<td>[English, Spanish, Communications, Communicati...</td>
+<td>Man</td>
+<td>No</td>
+<td>8</td>
+<td>1</td>
+<td>0.6</td>
+</tr>
+<tr>
+<th>2</th>
+<td>10</td>
+<td>[{'institution': 'Complutense University Of Ma...</td>
+<td>[{'institution': 'Carrefour Express', 'start_d...</td>
+<td>[Entrepreneurship, Literacy, Web Design, Adobe...</td>
+<td>Woman</td>
+<td>No</td>
+<td>5</td>
+<td>[Law Bachelor, Degree In Law, Higher Degree In...</td>
+<td>[Consultant]</td>
+<td>12</td>
+<td>[Punctuality, Organization, Accounting, Englis...</td>
+<td>Man</td>
+<td>No</td>
+<td>4</td>
+<td>1</td>
+<td>0.0</td>
+</tr>
+<tr>
+<th>3</th>
+<td>11</td>
+<td>[{'institution': 'Les Ribera De Los Molinos', ...</td>
+<td>[{'institution': 'Decimas Sl', 'start_date': '...</td>
+<td>[Consulting, Sap Crm, Collections, Automation,...</td>
+<td>Woman</td>
+<td>No</td>
+<td>3</td>
+<td>[]</td>
+<td>[Sales Assistant, Saleswoman, Commercial Advisor]</td>
+<td>12</td>
+<td>[English, Spanish, Communications, Communicati...</td>
+<td>Man</td>
+<td>No</td>
+<td>12</td>
+<td>0</td>
+<td>0.4</td>
+</tr>
+<tr>
+<th>4</th>
+<td>15</td>
+<td>[{'institution': 'Escuela Politcnica Superior ...</td>
+<td>[{'institution': 'Reintegrate', 'start_date': ...</td>
+<td>[Microsoft Word, Biofuels, English, Entreprene...</td>
+<td>Man</td>
+<td>No</td>
+<td>3</td>
+<td>[]</td>
+<td>[Sales Assistant, Saleswoman, Commercial Advisor]</td>
+<td>12</td>
+<td>[English, Spanish, Communications, Communicati...</td>
+<td>Man</td>
+<td>No</td>
+<td>5</td>
+<td>1</td>
+<td>0.7</td>
+</tr>
+</tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Joined metadata.</span>
+<span class="n">md_all</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{'id_c':
+        SCHEMA = {'type': 'number'}
+        ATTR_TYPE = object
+        ATTR_USAGE = default
+        KNOWLEDGE_BASE = None,
+ 'education_background_c':
+        SCHEMA = {'type': 'array', 'items': {'type': 'object', 'properties': {'institution': {'type': 'string'}, 'end_date': {'type': 'string'}, 'degree': {'type': 'string'}, 'duration': {'type': 'string'}}}}
+        ATTR_TYPE = object
+        ATTR_USAGE = default
+        KNOWLEDGE_BASE = None,
+ 'professional_experience_c':
+        SCHEMA = {'type': 'array', 'items': {'type': 'object', 'properties': {'institution': {'type': 'string'}, 'end_date': {'type': 'string'}, 'role': {'type': 'string'}, 'duration': {'type': 'string'}}}}
+        ATTR_TYPE = object
+        ATTR_USAGE = default
+        KNOWLEDGE_BASE = None,
+ 'skills_c':
+        SCHEMA = {'type': 'array', 'items': {'type': 'string'}}
+        ATTR_TYPE = object
+        ATTR_USAGE = default
+        KNOWLEDGE_BASE = None,
+ 'gender_c':
+        SCHEMA = {'enum': ['Man', 'Woman', 'Any']}
+        ATTR_TYPE = category
+        ATTR_USAGE = sensitive
+        KNOWLEDGE_BASE = None,
+ 'agg_perceived_foreign_c':
+        SCHEMA = {'enum': ['No', 'Yes', 'Any']}
+        ATTR_TYPE = category
+        ATTR_USAGE = sensitive
+        KNOWLEDGE_BASE = None,
+ 'id_j':
+        SCHEMA = {'type': 'number'}
+        ATTR_TYPE = object
+        ATTR_USAGE = default
+        KNOWLEDGE_BASE = None,
+ 'education_reqs_j':
+        SCHEMA = {'type': 'array', 'items': {'type': 'string'}}
+        ATTR_TYPE = object
+        ATTR_USAGE = default
+        KNOWLEDGE_BASE = None,
+ 'experience_reqs_role_j':
+        SCHEMA = {'type': 'array', 'items': {'type': 'string'}}
+        ATTR_TYPE = object
+        ATTR_USAGE = default
+        KNOWLEDGE_BASE = None,
+ 'experience_reqs_duration_j':
+        SCHEMA = {'type': 'number'}
+        ATTR_TYPE = object
+        ATTR_USAGE = default
+        KNOWLEDGE_BASE = None,
+ 'skills_j':
+        SCHEMA = {'type': 'array', 'items': {'type': 'string'}}
+        ATTR_TYPE = object
+        ATTR_USAGE = default
+        KNOWLEDGE_BASE = None,
+ 'gender_j':
+        SCHEMA = {'enum': ['Man', 'Woman', 'Any']}
+        ATTR_TYPE = category
+        ATTR_USAGE = sensitive
+        KNOWLEDGE_BASE = None,
+ 'agg_perceived_foreign_j':
+        SCHEMA = {'enum': ['No', 'Yes', 'Any']}
+        ATTR_TYPE = category
+        ATTR_USAGE = sensitive
+        KNOWLEDGE_BASE = None,
+ 'score':
+        SCHEMA = {'type': 'number'}
+        ATTR_TYPE = numeric
+        ATTR_USAGE = target
+        KNOWLEDGE_BASE = None,
+ 'ranking':
+        SCHEMA = {'type': 'integer'}
+        ATTR_TYPE = ordinal
+        ATTR_USAGE = target
+        KNOWLEDGE_BASE = None,
+ 'shortlisted':
+        SCHEMA = {'type': 'integer'}
+        ATTR_TYPE = category
+        ATTR_USAGE = target
+        KNOWLEDGE_BASE = None}
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define helper function</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">rank2relevance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">top_k</span><span class="p">,</span> <span class="n">col_rank</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">top_k</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="n">col_rank</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Define-the-Preprocessing-pipeline">
+<h2>Define the Preprocessing pipeline<a class="headerlink" href="#Define-the-Preprocessing-pipeline" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define subsets of columns</span>
+<span class="n">cols_id</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'id_c'</span><span class="p">,</span> <span class="s1">'id_j'</span><span class="p">]</span>
+<span class="n">all_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'id_c'</span><span class="p">,</span> <span class="s1">'education_background_c'</span><span class="p">,</span> <span class="s1">'professional_experience_c'</span><span class="p">,</span>
+   <span class="s1">'skills_c'</span><span class="p">,</span> <span class="s1">'gender_c'</span><span class="p">,</span> <span class="s1">'agg_perceived_foreign_c'</span><span class="p">,</span> <span class="s1">'id_j'</span><span class="p">,</span>
+   <span class="s1">'education_reqs_j'</span><span class="p">,</span> <span class="s1">'experience_reqs_role_j'</span><span class="p">,</span>
+   <span class="s1">'experience_reqs_duration_j'</span><span class="p">,</span> <span class="s1">'skills_j'</span><span class="p">,</span> <span class="s1">'gender_j'</span><span class="p">,</span>
+   <span class="s1">'agg_perceived_foreign_j'</span><span class="p">,</span> <span class="s1">'ranking'</span><span class="p">,</span> <span class="s1">'shortlisted'</span><span class="p">,</span> <span class="s1">'score'</span><span class="p">]</span>
+<span class="c1"># Define the subset of columns of the HUDD dataset describing the candidate,</span>
+<span class="c1"># which are used in the preprocessing+prediction pipeline</span>
+<span class="n">cols_c</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'education_background_c'</span><span class="p">,</span> <span class="s1">'professional_experience_c'</span><span class="p">,</span>
+          <span class="s1">'skills_c'</span><span class="p">,</span> <span class="s1">'gender_c'</span><span class="p">,</span> <span class="s1">'agg_perceived_foreign_c'</span><span class="p">]</span>
+<span class="n">cols_j</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'education_reqs_j'</span><span class="p">,</span> <span class="s1">'experience_reqs_role_j'</span><span class="p">,</span>
+   <span class="s1">'experience_reqs_duration_j'</span><span class="p">,</span> <span class="s1">'skills_j'</span><span class="p">,</span> <span class="s1">'gender_j'</span><span class="p">,</span> <span class="s1">'agg_perceived_foreign_j'</span><span class="p">]</span>
+<span class="n">cols_pred_preprocess</span> <span class="o">=</span> <span class="n">cols_c</span> <span class="o">+</span> <span class="n">cols_j</span>
+<span class="n">cols_not_for_pred</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'id_c'</span><span class="p">,</span> <span class="s1">'id_j'</span><span class="p">,</span> <span class="s1">'ranking'</span><span class="p">,</span> <span class="s1">'shortlisted'</span><span class="p">]</span>
+<span class="n">cols_sensitive</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'gender_c'</span><span class="p">,</span> <span class="s1">'agg_perceived_foreign_c'</span><span class="p">]</span>
+<span class="n">col_target</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'score'</span><span class="p">]</span>
+
+<span class="n">df_CDS_JDS</span> <span class="o">=</span> <span class="n">df_all</span><span class="p">[</span><span class="n">cols_id</span> <span class="o">+</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df_all</span> <span class="k">if</span> <span class="n">col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cols_id</span><span class="o">+</span><span class="n">col_target</span><span class="p">]</span> <span class="o">+</span> <span class="n">col_target</span> <span class="p">]</span>
+
+<span class="n">cols_dict_HUDD</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'cols_pred_preprocess'</span><span class="p">:</span> <span class="n">cols_pred_preprocess</span><span class="p">,</span>
+                    <span class="s1">'cols_sensitive'</span><span class="p">:</span> <span class="n">cols_sensitive</span><span class="p">,</span>
+                    <span class="s1">'cols_id'</span><span class="p">:</span> <span class="n">cols_id</span><span class="p">,</span>
+                    <span class="s1">'cols_not_for_pred'</span><span class="p">:</span> <span class="n">cols_not_for_pred</span><span class="p">,</span>
+                    <span class="s1">'col_target'</span><span class="p">:</span> <span class="n">col_target</span><span class="p">}</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">build_fitness_matrix</span><span class="p">(</span><span class="n">df_CDS_JDS</span><span class="p">,</span> <span class="n">cols_dict</span><span class="p">):</span>
+    <span class="c1"># Calculated features.</span>
+    <span class="n">maps_derived_1</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">((</span><span class="s1">'professional_experience_c'</span><span class="p">,</span> <span class="s1">'experience_reqs_role_j'</span><span class="p">,),</span> <span class="p">(</span><span class="s1">'relevant_exp_role_c'</span><span class="p">,)):</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.example_mappings.html#findhr.preprocess.example_mappings.RelevantExperienceForRole" title="findhr.preprocess.example_mappings.RelevantExperienceForRole"><span class="n">RelevantExperienceForRole</span></a><span class="p">(),</span>
+    <span class="p">}</span>
+
+    <span class="n">maps_derived_2</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="p">((</span><span class="s1">'relevant_exp_role_c'</span><span class="p">,),</span> <span class="p">(</span><span class="s1">'role_duration_months_c'</span><span class="p">,)):</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.example_mappings.html#findhr.preprocess.example_mappings.ExtractMonthDurationJob" title="findhr.preprocess.example_mappings.ExtractMonthDurationJob"><span class="n">ExtractMonthDurationJob</span></a><span class="p">(</span><span class="n">duration_key</span><span class="o">=</span><span class="s1">'duration_months'</span><span class="p">),</span>
+            <span class="p">((</span><span class="s1">'education_background_c'</span><span class="p">,),</span> <span class="p">(</span><span class="s1">'degree_list_c'</span><span class="p">,)):</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.example_mappings.html#findhr.preprocess.example_mappings.ExtractListOfProperty" title="findhr.preprocess.example_mappings.ExtractListOfProperty"><span class="n">ExtractListOfProperty</span></a><span class="p">(</span><span class="n">property_key</span><span class="o">=</span><span class="s1">'degree'</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Fitness features about the matching between candidate's features and job's requirements.</span>
+    <span class="n">maps_matching</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">((</span><span class="s1">'experience_reqs_duration_j'</span><span class="p">,</span> <span class="s1">'role_duration_months_c'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'fitness_experience'</span><span class="p">,)):</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.example_mappings.html#findhr.preprocess.example_mappings.MatchOrdinal" title="findhr.preprocess.example_mappings.MatchOrdinal"><span class="n">MatchOrdinal</span></a><span class="p">(),</span>
+        <span class="p">((</span><span class="s1">'education_reqs_j'</span><span class="p">,</span> <span class="s1">'education_background_c'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'fitness_education'</span><span class="p">,)):</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.example_mappings.html#findhr.preprocess.example_mappings.MatchFeatureAtLeastInList" title="findhr.preprocess.example_mappings.MatchFeatureAtLeastInList"><span class="n">MatchFeatureAtLeastInList</span></a><span class="p">(),</span>
+        <span class="p">((</span><span class="s1">'skills_j'</span><span class="p">,</span> <span class="s1">'skills_c'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'fitness_skills'</span><span class="p">,)):</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.example_mappings.html#findhr.preprocess.example_mappings.MatchFeatureSet" title="findhr.preprocess.example_mappings.MatchFeatureSet"><span class="n">MatchFeatureSet</span></a><span class="p">(),</span>
+        <span class="p">((</span><span class="s1">'gender_j'</span><span class="p">,</span> <span class="s1">'gender_c'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'fitness_gender'</span><span class="p">,)):</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.example_mappings.html#findhr.preprocess.example_mappings.MatchBinary" title="findhr.preprocess.example_mappings.MatchBinary"><span class="n">MatchBinary</span></a><span class="p">(),</span>
+        <span class="p">((</span><span class="s1">'agg_perceived_foreign_j'</span><span class="p">,</span> <span class="s1">'agg_perceived_foreign_c'</span><span class="p">),</span> <span class="p">(</span><span class="s1">'fitness_foreign'</span><span class="p">,)):</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.example_mappings.html#findhr.preprocess.example_mappings.MatchBinary" title="findhr.preprocess.example_mappings.MatchBinary"><span class="n">MatchBinary</span></a><span class="p">()</span>
+    <span class="p">}</span>
+
+
+    <span class="c1"># Calculation as fit-transform preprocessing</span>
+    <span class="n">pipeline_fitness</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">(</span><span class="s2">"init"</span><span class="p">,</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.mapping.html#findhr.preprocess.mapping.AttachMetadata" title="findhr.preprocess.mapping.AttachMetadata"><span class="n">AttachMetadata</span></a><span class="p">(</span><span class="n">md_all</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s1">'mapping_1'</span><span class="p">,</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.mapping.html#findhr.preprocess.mapping.DerivedColumn" title="findhr.preprocess.mapping.DerivedColumn"><span class="n">DerivedColumn</span></a><span class="p">(</span><span class="n">maps_derived_1</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s1">'mapping_2'</span><span class="p">,</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.mapping.html#findhr.preprocess.mapping.DerivedColumn" title="findhr.preprocess.mapping.DerivedColumn"><span class="n">DerivedColumn</span></a><span class="p">(</span><span class="n">maps_derived_2</span><span class="p">)),</span>
+        <span class="p">(</span><span class="s2">"matching"</span><span class="p">,</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.mapping.html#findhr.preprocess.mapping.DerivedColumn" title="findhr.preprocess.mapping.DerivedColumn"><span class="n">DerivedColumn</span></a><span class="p">(</span><span class="n">maps_matching</span><span class="p">)),</span>
+        <span class="c1"># ("fitness", GroundTruthLinearWeightedScorer(gt_weights_fair)),</span>
+        <span class="p">(</span><span class="s2">"end"</span><span class="p">,</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.mapping.html#findhr.preprocess.mapping.DetachMetadata" title="findhr.preprocess.mapping.DetachMetadata"><span class="n">DetachMetadata</span></a><span class="p">())</span>
+    <span class="p">])</span>
+
+    <span class="n">pipeline_fitness</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">df_CDS_JDS</span><span class="p">)</span>
+    <span class="n">fitness_matrix</span> <span class="o">=</span> <span class="n">pipeline_fitness</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">df_CDS_JDS</span><span class="p">)</span>
+    <span class="n">df_fitness_mat</span> <span class="o">=</span> <span class="n">fitness_matrix</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">columns_keep</span> <span class="o">=</span> <span class="n">cols_dict</span><span class="p">[</span><span class="s1">'cols_id'</span><span class="p">]</span> <span class="o">+</span> \
+                   <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">fitness_matrix</span> <span class="k">if</span>
+                    <span class="n">col</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">'fitness_'</span><span class="p">)]</span> <span class="o">+</span> <span class="n">cols_dict</span><span class="p">[</span><span class="s1">'cols_sensitive'</span><span class="p">]</span> <span class="o">+</span> <span class="n">cols_dict</span><span class="p">[</span><span class="s1">'col_target'</span><span class="p">]</span>
+
+    <span class="n">df_fitness_mat</span> <span class="o">=</span> <span class="n">df_fitness_mat</span><span class="p">[</span><span class="n">columns_keep</span><span class="p">]</span>
+
+    <span class="c1"># From scores, we can learn regressors; or we can produce ranks, and learn ranking models</span>
+    <span class="n">df_fitness_mat</span><span class="p">[</span><span class="s1">'rank'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_fitness_mat</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"id_j"</span><span class="p">)[</span><span class="s1">'score'</span><span class="p">]</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s1">'dense'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">df_fitness_mat</span><span class="p">[</span><span class="s1">'rank'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_fitness_mat</span><span class="p">[</span><span class="s1">'rank'</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="n">TOP_K</span> <span class="k">else</span> <span class="n">TOP_K</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">pipeline_fitness</span><span class="p">,</span> <span class="n">df_fitness_mat</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Define-the-ranking-model">
+<h2>Define the ranking model<a class="headerlink" href="#Define-the-ranking-model" title="Link to this heading"></a></h2>
+<p>To better understand the LambdaRank framework, we point to the relevant literature (e.g. <a class="reference external" href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/MSR-TR-2010-82.pdf">Burges, 2010, From RankNet to LambdaRank to LambdaMART: An Overview</a>)</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">data_split_FEDD</span><span class="p">(</span><span class="n">df_fitness_mat</span><span class="p">):</span>
+    <span class="n">all_jobs</span> <span class="o">=</span> <span class="n">df_fitness_mat</span><span class="p">[</span><span class="s1">'id_j'</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+    <span class="c1"># For this example, we assume that train, val and test sets are the same</span>
+    <span class="n">train_jobs</span> <span class="o">=</span> <span class="n">test_jobs</span> <span class="o">=</span> <span class="n">val_jobs</span> <span class="o">=</span> <span class="n">all_jobs</span>
+    <span class="c1"># train_jobs, test_jobs = train_test_split(all_jobs, test_size=0.5, random_state=42, # shuffle=False)</span>
+    <span class="c1"># train_jobs, val_jobs = train_test_split(train_jobs, test_size=0.25, random_state=42, shuffle=False)</span>
+
+    <span class="c1"># Build train, test and validation sets, ensuring they are sorted by id_j, id_c</span>
+    <span class="n">df_train</span> <span class="o">=</span> <span class="n">df_fitness_mat</span><span class="p">[</span><span class="n">df_fitness_mat</span><span class="p">[</span><span class="s1">'id_j'</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">train_jobs</span><span class="p">)]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">"id_j"</span><span class="p">,</span> <span class="s2">"id_c"</span><span class="p">])</span>
+    <span class="n">df_val</span> <span class="o">=</span> <span class="n">df_fitness_mat</span><span class="p">[</span><span class="n">df_fitness_mat</span><span class="p">[</span><span class="s1">'id_j'</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">val_jobs</span><span class="p">)]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">"id_j"</span><span class="p">,</span> <span class="s2">"id_c"</span><span class="p">])</span>
+    <span class="n">df_test</span> <span class="o">=</span> <span class="n">df_fitness_mat</span><span class="p">[</span><span class="n">df_fitness_mat</span><span class="p">[</span><span class="s1">'id_j'</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">test_jobs</span><span class="p">)]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">"id_j"</span><span class="p">,</span> <span class="s2">"id_c"</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">df_train</span><span class="p">,</span> <span class="n">df_val</span><span class="p">,</span> <span class="n">df_test</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">init</span><span class="p">(</span><span class="n">df_fitness_mat</span><span class="p">):</span>
+    <span class="n">df_train</span><span class="p">,</span> <span class="n">df_val</span><span class="p">,</span> <span class="n">df_test</span> <span class="o">=</span> <span class="n">data_split_FEDD</span><span class="p">(</span><span class="n">df_fitness_mat</span><span class="p">)</span>
+    <span class="c1"># Define subsets of columns</span>
+    <span class="n">cols_id</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'id_j'</span><span class="p">,</span> <span class="s1">'id_c'</span><span class="p">]</span>  <span class="c1"># ids</span>
+    <span class="n">cols_pred</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span>  <span class="c1"># predictive</span>
+        <span class="s1">'fitness_experience'</span><span class="p">,</span>
+        <span class="s1">'fitness_education'</span><span class="p">,</span>
+        <span class="s1">'fitness_skills'</span><span class="p">,</span>
+        <span class="s1">'fitness_gender'</span><span class="p">,</span>
+        <span class="s1">'fitness_foreign'</span><span class="p">])</span>
+    <span class="n">cols_sensitive</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'gender_c'</span><span class="p">]</span>  <span class="c1"># sensitive attribute(s)</span>
+    <span class="n">col_target</span> <span class="o">=</span> <span class="s1">'score'</span>  <span class="c1"># target value for ranking</span>
+    <span class="n">col_rank</span> <span class="o">=</span> <span class="s1">'rank'</span>  <span class="c1"># rank value for ranking</span>
+
+    <span class="n">cols_dict_FEDD</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'cols_id'</span><span class="p">:</span> <span class="n">cols_id</span><span class="p">,</span>
+                      <span class="s1">'cols_pred'</span><span class="p">:</span> <span class="n">cols_pred</span><span class="p">,</span>
+                      <span class="s1">'cols_sensitive'</span><span class="p">:</span> <span class="n">cols_sensitive</span><span class="p">,</span>
+                      <span class="s1">'col_target'</span><span class="p">:</span> <span class="n">col_target</span><span class="p">,</span>
+                      <span class="s1">'col_rank'</span><span class="p">:</span> <span class="n">col_rank</span><span class="p">}</span>
+    <span class="c1"># Define the ranking model</span>
+    <span class="n">ranker</span> <span class="o">=</span> <span class="n">LGBMRanker</span><span class="p">(</span>
+        <span class="n">objective</span><span class="o">=</span><span class="s2">"lambdarank"</span><span class="p">,</span>
+        <span class="n">class_weight</span><span class="o">=</span><span class="s2">"balanced"</span><span class="p">,</span>
+        <span class="n">boosting_type</span><span class="o">=</span><span class="s2">"gbdt"</span><span class="p">,</span>
+        <span class="n">importance_type</span><span class="o">=</span><span class="s2">"gain"</span><span class="p">,</span>
+        <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+        <span class="n">n_estimators</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">force_row_wise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>  <span class="c1"># max parallelism</span>
+        <span class="n">verbose</span><span class="o">=-</span><span class="mi">1</span>  <span class="c1"># no verbosity</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">ranker</span><span class="p">,</span> <span class="n">df_train</span><span class="p">,</span> <span class="n">df_val</span><span class="p">,</span> <span class="n">df_test</span><span class="p">,</span> <span class="n">cols_dict_FEDD</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span><span class="n">ranker</span><span class="p">,</span> <span class="n">df_train</span><span class="p">,</span> <span class="n">df_val</span><span class="p">,</span> <span class="n">cols_dict</span><span class="p">):</span>
+    <span class="n">df_train_counts</span> <span class="o">=</span> <span class="n">df_train</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"id_j"</span><span class="p">)[</span><span class="s2">"id_j"</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">df_val_counts</span> <span class="o">=</span> <span class="n">df_val</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"id_j"</span><span class="p">)[</span><span class="s2">"id_j"</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+    <span class="c1"># Fitting ranker:</span>
+    <span class="n">ranker</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+        <span class="n">X</span><span class="o">=</span><span class="n">df_train</span><span class="p">[</span><span class="n">cols_dict</span><span class="p">[</span><span class="s1">'cols_pred'</span><span class="p">]],</span>
+        <span class="c1"># LightGBM relevance is the higher the better</span>
+        <span class="n">y</span><span class="o">=</span><span class="n">rank2relevance</span><span class="p">(</span><span class="n">df_train</span><span class="p">,</span> <span class="n">TOP_K</span><span class="p">,</span> <span class="n">cols_dict</span><span class="p">[</span><span class="s1">'col_rank'</span><span class="p">]),</span>
+        <span class="n">group</span> <span class="o">=</span> <span class="n">df_train_counts</span><span class="p">,</span>
+        <span class="n">eval_at</span> <span class="o">=</span> <span class="p">[</span><span class="n">TOP_K</span><span class="p">],</span>
+        <span class="c1"># LightGBM relevance is the higher the better</span>
+        <span class="n">eval_set</span> <span class="o">=</span><span class="p">[(</span><span class="n">df_val</span><span class="p">[</span><span class="n">cols_dict</span><span class="p">[</span><span class="s1">'cols_pred'</span><span class="p">]],</span> <span class="n">rank2relevance</span><span class="p">(</span><span class="n">df_val</span><span class="p">,</span> <span class="n">TOP_K</span><span class="p">,</span> <span class="n">cols_dict</span><span class="p">[</span><span class="s1">'col_rank'</span><span class="p">]))],</span>
+        <span class="n">eval_group</span> <span class="o">=</span><span class="p">[</span><span class="n">df_val_counts</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ranker</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">evaluate</span><span class="p">(</span><span class="n">ranker</span><span class="p">,</span> <span class="n">df_test</span><span class="p">,</span> <span class="n">cols_dict</span><span class="p">):</span>
+    <span class="n">df_test_counts</span> <span class="o">=</span> <span class="n">df_test</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"id_j"</span><span class="p">)[</span><span class="s2">"id_j"</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="c1"># Predicting ranker:</span>
+    <span class="n">df_test</span><span class="p">[</span><span class="s1">'lambda'</span><span class="p">]</span> <span class="o">=</span> <span class="n">ranker</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">df_test</span><span class="p">[</span><span class="n">cols_dict</span><span class="p">[</span><span class="s1">'cols_pred'</span><span class="p">]])</span>
+    <span class="n">df_test</span><span class="p">[</span><span class="s1">'pred_rank'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_test</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"id_j"</span><span class="p">)[</span><span class="s1">'lambda'</span><span class="p">]</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s1">'dense'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">df_test</span><span class="p">[</span><span class="s1">'pred_rank'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_test</span><span class="p">[</span><span class="s1">'pred_rank'</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="n">TOP_K</span> <span class="k">else</span> <span class="n">TOP_K</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">df_test</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">ranking_pipeline</span><span class="p">(</span><span class="n">df_fitness_mat</span><span class="p">):</span>
+    <span class="n">ranker</span><span class="p">,</span> <span class="n">df_train</span><span class="p">,</span> <span class="n">df_val</span><span class="p">,</span> <span class="n">df_test</span><span class="p">,</span> <span class="n">cols_dict_FEDD</span> <span class="o">=</span> <span class="n">init</span><span class="p">(</span><span class="n">df_fitness_mat</span><span class="p">)</span>
+    <span class="n">ranker</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="n">ranker</span><span class="p">,</span> <span class="n">df_train</span><span class="p">,</span> <span class="n">df_val</span><span class="p">,</span> <span class="n">cols_dict_FEDD</span><span class="p">)</span>
+    <span class="n">df_test</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">ranker</span><span class="p">,</span> <span class="n">df_test</span><span class="p">,</span> <span class="n">cols_dict_FEDD</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ranker</span><span class="p">,</span> <span class="n">df_test</span><span class="p">,</span> <span class="n">cols_dict_FEDD</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Prepare-data-and-functions-for-the-counterfactual-explanation">
+<h2>Prepare data and functions for the counterfactual explanation<a class="headerlink" href="#Prepare-data-and-functions-for-the-counterfactual-explanation" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">define_cols_dict</span><span class="p">():</span>
+    <span class="n">outcome_name_col</span> <span class="o">=</span> <span class="s1">'lambda'</span>  <span class="c1"># 'pred_rank'</span>
+    <span class="n">continuous_features</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="s1">'fitness_skills'</span><span class="p">,</span> <span class="s1">'fitness_gender'</span><span class="p">,</span><span class="s1">'fitness_foreign'</span><span class="p">])</span>
+    <span class="n">categorical_features</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span><span class="s1">'fitness_education'</span><span class="p">,</span> <span class="s1">'fitness_experience'</span><span class="p">])</span>
+    <span class="n">cols_pred</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">continuous_features</span> <span class="o">+</span> <span class="n">categorical_features</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">'outcome_name_col'</span><span class="p">:</span> <span class="n">outcome_name_col</span><span class="p">,</span> <span class="s1">'continuous_features'</span><span class="p">:</span> <span class="n">continuous_features</span><span class="p">,</span>
+            <span class="s1">'categorical_features'</span><span class="p">:</span> <span class="n">categorical_features</span><span class="p">,</span> <span class="s1">'cols_pred'</span><span class="p">:</span> <span class="n">cols_pred</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_explicand_data_cf</span><span class="p">(</span><span class="n">id_j</span><span class="p">,</span> <span class="n">candidate_position</span><span class="p">,</span> <span class="n">df_test</span><span class="p">,</span> <span class="n">ranker</span><span class="p">,</span> <span class="n">cols_dict_FEDD</span><span class="p">,</span> <span class="n">df_CDS_JDS</span><span class="p">):</span>
+    <span class="c1"># Extract the data of the candidate to be explained</span>
+
+    <span class="c1"># df_id_j contains the data for the job id_j</span>
+    <span class="n">df_id_j_FEDD</span> <span class="o">=</span> <span class="n">df_test</span><span class="p">[</span><span class="n">df_test</span><span class="p">[</span><span class="s1">'id_j'</span><span class="p">]</span> <span class="o">==</span> <span class="n">id_j</span><span class="p">]</span>
+    <span class="c1"># Add the lambda and the predicted rank for all the candidates</span>
+    <span class="n">df_id_j_FEDD</span><span class="p">[</span><span class="s1">'lambda'</span><span class="p">]</span> <span class="o">=</span> <span class="n">ranker</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">df_id_j_FEDD</span><span class="p">[</span><span class="n">cols_dict_FEDD</span><span class="p">[</span><span class="s1">'cols_pred'</span><span class="p">]])</span>
+    <span class="n">df_id_j_FEDD</span><span class="p">[</span><span class="s1">'pred_rank'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_id_j_FEDD</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"id_j"</span><span class="p">)[</span><span class="s1">'lambda'</span><span class="p">]</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s1">'dense'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">exp_c_pred_rank</span> <span class="o">=</span> <span class="n">candidate_position</span>
+
+    <span class="c1"># Extract the explicand candidate id_c</span>
+    <span class="n">exp_c_id_c</span> <span class="o">=</span> <span class="n">df_id_j_FEDD</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df_id_j_FEDD</span><span class="p">[</span><span class="s1">'pred_rank'</span><span class="p">]</span> <span class="o">==</span> <span class="n">exp_c_pred_rank</span><span class="p">,</span> <span class="s1">'id_c'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Isolate the candidates' profiles applying for the job id_j</span>
+    <span class="n">df_id_j_HUDD</span> <span class="o">=</span> <span class="n">df_CDS_JDS</span><span class="p">[</span><span class="n">df_CDS_JDS</span><span class="p">[</span><span class="s1">'id_j'</span><span class="p">]</span> <span class="o">==</span> <span class="n">id_j</span><span class="p">]</span>
+
+    <span class="c1"># Isolate the explicand candidate profile</span>
+    <span class="n">exp_c_profile</span> <span class="o">=</span> <span class="n">df_CDS_JDS</span><span class="p">[</span><span class="n">df_CDS_JDS</span><span class="p">[</span><span class="s1">'id_c'</span><span class="p">]</span> <span class="o">==</span> <span class="n">exp_c_id_c</span><span class="p">]</span>
+
+    <span class="n">exp_c</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'id_c'</span><span class="p">:</span> <span class="n">exp_c_id_c</span><span class="p">,</span> <span class="s1">'profile'</span><span class="p">:</span> <span class="n">exp_c_profile</span><span class="p">}</span>
+
+    <span class="n">cols_dict</span> <span class="o">=</span> <span class="n">define_cols_dict</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">df_id_j_FEDD</span><span class="p">,</span> <span class="n">df_id_j_HUDD</span><span class="p">,</span> <span class="n">exp_c</span><span class="p">,</span> <span class="n">cols_dict</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">prepare_data_cf</span><span class="p">(</span><span class="n">df_id_j_FEDD</span><span class="p">,</span> <span class="n">cols_dict</span><span class="p">):</span>
+
+    <span class="c1"># Convert data types</span>
+    <span class="n">df_id_j_FEDD_pre</span> <span class="o">=</span> <span class="n">df_id_j_FEDD</span><span class="p">[</span><span class="n">cols_dict</span><span class="p">[</span><span class="s1">'categorical_features'</span><span class="p">]]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'int'</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">df_id_j_FEDD_pre</span><span class="p">[</span><span class="n">cols_dict</span><span class="p">[</span><span class="s1">'continuous_features'</span><span class="p">]]</span> <span class="o">=</span> <span class="n">df_id_j_FEDD</span><span class="p">[</span><span class="n">cols_dict</span><span class="p">[</span><span class="s1">'continuous_features'</span><span class="p">]]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'float'</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">df_id_j_FEDD_pre</span><span class="p">[</span><span class="n">cols_dict</span><span class="p">[</span><span class="s1">'outcome_name_col'</span><span class="p">]]</span> <span class="o">=</span> <span class="n">df_id_j_FEDD</span><span class="p">[</span><span class="n">cols_dict</span><span class="p">[</span><span class="s1">'outcome_name_col'</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">feature_dtypes</span> <span class="o">=</span> <span class="p">{</span><span class="n">col</span><span class="p">:</span> <span class="n">df_id_j_FEDD_pre</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df_id_j_FEDD_pre</span><span class="p">[</span><span class="n">cols_dict</span><span class="p">[</span><span class="s1">'cols_pred'</span><span class="p">]]</span><span class="o">.</span><span class="n">columns</span><span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">df_id_j_FEDD_pre</span><span class="p">,</span> <span class="n">feature_dtypes</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">define_target</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">df_id_j_FEDD</span><span class="p">,</span> <span class="n">target_rank</span><span class="o">=</span><span class="n">TOP_K</span><span class="p">):</span>
+    <span class="c1"># 'in_top_k' or 'out_top_k' depending on the candidate position</span>
+    <span class="n">explicand_class</span> <span class="o">=</span> <span class="s1">'in_top_k'</span> <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">candidate_position</span> <span class="o">&lt;=</span> <span class="n">target_rank</span> <span class="k">else</span> <span class="s1">'out_top_k'</span>
+
+    <span class="c1"># target rank for counterfactual explanation</span>
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">target_rank</span><span class="p">:</span>
+        <span class="n">tgt_cf_rank</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">target_rank</span>
+        <span class="n">tgt_cf_score</span> <span class="o">=</span> <span class="n">df_id_j_FEDD</span><span class="p">[</span><span class="n">df_id_j_FEDD</span><span class="p">[</span><span class="s1">'pred_rank'</span><span class="p">]</span> <span class="o">==</span> <span class="n">tgt_cf_rank</span><span class="p">][</span><span class="s1">'score'</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">tgt_cf_candidate</span> <span class="o">=</span> <span class="n">df_id_j_FEDD</span><span class="p">[</span><span class="n">df_id_j_FEDD</span><span class="p">[</span><span class="s1">'pred_rank'</span><span class="p">]</span> <span class="o">==</span> <span class="n">tgt_cf_rank</span><span class="p">]</span>
+
+    <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">target_score</span><span class="p">:</span>
+        <span class="n">tgt_cf_rank</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">tgt_cf_score</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">target_score</span>
+        <span class="n">tgt_cf_candidate</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">'Either target rank or target score must be provided'</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">explicand_class</span><span class="p">,</span> <span class="n">tgt_cf_rank</span><span class="p">,</span> <span class="n">tgt_cf_score</span><span class="p">,</span> <span class="n">tgt_cf_candidate</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">define_explainer_FEDD</span><span class="p">(</span><span class="n">ranker</span><span class="p">,</span> <span class="n">df_id_j_FEDD_pre</span><span class="p">,</span> <span class="n">cols_dict_cf</span><span class="p">,</span> <span class="n">feature_dtypes</span><span class="p">,</span> <span class="n">explanation_method</span><span class="p">,</span> <span class="n">target_rank</span><span class="o">=</span><span class="n">TOP_K</span><span class="p">):</span>
+    <a class="sphinx-codeautolink-a" href="../generated/findhr.xai.counterfactual.dice_ml.data.html#findhr.xai.counterfactual.dice_ml.data.Data" title="findhr.xai.counterfactual.dice_ml.data.Data"><span class="n">data_dice</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.xai.counterfactual.dice_ml.data.html#findhr.xai.counterfactual.dice_ml.data.Data" title="findhr.xai.counterfactual.dice_ml.data.Data"><span class="n">dice_ml</span><span class="o">.</span><span class="n">Data</span></a><span class="p">(</span><span class="n">dataframe</span><span class="o">=</span><span class="n">df_id_j_FEDD_pre</span><span class="p">[</span><span class="n">cols_dict_cf</span><span class="p">[</span><span class="s1">'cols_pred'</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">cols_dict_cf</span><span class="p">[</span><span class="s1">'outcome_name_col'</span><span class="p">]]],</span>
+                             <span class="n">continuous_features</span><span class="o">=</span><span class="n">cols_dict_cf</span><span class="p">[</span><span class="s1">'continuous_features'</span><span class="p">],</span>
+                             <span class="n">categorical_features</span><span class="o">=</span><span class="n">cols_dict_cf</span><span class="p">[</span><span class="s1">'categorical_features'</span><span class="p">],</span>
+                             <span class="n">outcome_name</span><span class="o">=</span><span class="n">cols_dict_cf</span><span class="p">[</span><span class="s1">'outcome_name_col'</span><span class="p">])</span>
+
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'top_k'</span><span class="p">:</span> <span class="n">target_rank</span><span class="p">,</span> <span class="s1">'features_dtype'</span><span class="p">:</span> <span class="n">feature_dtypes</span><span class="p">}</span>
+
+    <a class="sphinx-codeautolink-a" href="../generated/findhr.xai.counterfactual.dice_ml.model.html#findhr.xai.counterfactual.dice_ml.model.Model" title="findhr.xai.counterfactual.dice_ml.model.Model"><span class="n">model_dice</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.xai.counterfactual.dice_ml.model.html#findhr.xai.counterfactual.dice_ml.model.Model" title="findhr.xai.counterfactual.dice_ml.model.Model"><span class="n">dice_ml</span><span class="o">.</span><span class="n">Model</span></a><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">ranker</span><span class="p">,</span>
+                               <span class="n">backend</span><span class="o">=</span><span class="p">{</span><span class="s1">'explainer'</span><span class="p">:</span> <span class="s1">'dice_xgboost.DiceGenetic'</span><span class="p">,</span>
+                                        <span class="s1">'model'</span><span class="p">:</span> <span class="s2">"lgbmranker_model.LGBMRankerModel"</span><span class="p">},</span>
+                               <span class="n">model_type</span><span class="o">=</span><span class="s2">"regressor"</span><span class="p">,</span>
+                               <span class="c1"># model_type="classifier",</span>
+                               <span class="n">kw_args</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <a class="sphinx-codeautolink-a" href="../generated/findhr.xai.counterfactual.dice_ml.dice.html#findhr.xai.counterfactual.dice_ml.dice.Dice" title="findhr.xai.counterfactual.dice_ml.dice.Dice"><span class="n">explainer</span></a> <span class="o">=</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.xai.counterfactual.dice_ml.dice.html#findhr.xai.counterfactual.dice_ml.dice.Dice" title="findhr.xai.counterfactual.dice_ml.dice.Dice"><span class="n">dice_ml</span><span class="o">.</span><span class="n">Dice</span></a><span class="p">(</span><a class="sphinx-codeautolink-a" href="../generated/findhr.xai.counterfactual.dice_ml.data.html#findhr.xai.counterfactual.dice_ml.data.Data" title="findhr.xai.counterfactual.dice_ml.data.Data"><span class="n">data_dice</span></a><span class="p">,</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.xai.counterfactual.dice_ml.model.html#findhr.xai.counterfactual.dice_ml.model.Model" title="findhr.xai.counterfactual.dice_ml.model.Model"><span class="n">model_dice</span></a><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">explanation_method</span><span class="p">)</span>
+
+    <span class="k">return</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.xai.counterfactual.dice_ml.dice.html#findhr.xai.counterfactual.dice_ml.dice.Dice" title="findhr.xai.counterfactual.dice_ml.dice.Dice"><span class="n">explainer</span></a><span class="p">,</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.xai.counterfactual.dice_ml.data.html#findhr.xai.counterfactual.dice_ml.data.Data" title="findhr.xai.counterfactual.dice_ml.data.Data"><span class="n">data_dice</span></a><span class="p">,</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.xai.counterfactual.dice_ml.model.html#findhr.xai.counterfactual.dice_ml.model.Model" title="findhr.xai.counterfactual.dice_ml.model.Model"><span class="n">model_dice</span></a>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">get_explanations_FEDD</span><span class="p">(</span><span class="n">df_id_j_FEDD</span><span class="p">,</span> <span class="n">exp_c</span><span class="p">,</span> <span class="n">cols_dict_cf</span><span class="p">,</span> <span class="n">explainer</span><span class="p">,</span> <span class="n">target_rank</span><span class="o">=</span><span class="n">TOP_K</span><span class="p">):</span>
+
+    <span class="c1"># Get the predicted lambda for the candidate in target_rank position</span>
+    <span class="n">c_th_lambda</span> <span class="o">=</span> <span class="n">df_id_j_FEDD</span><span class="p">[</span><span class="n">df_id_j_FEDD</span><span class="p">[</span><span class="s1">'pred_rank'</span><span class="p">]</span> <span class="o">==</span> <span class="n">target_rank</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">'lambda'</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Predicted lambda for candidate in rank </span><span class="si">{</span><span class="n">target_rank</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">c_th_lambda</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+    <span class="c1"># Generate the counterfactual explanations</span>
+    <span class="n">explanations</span> <span class="o">=</span> <span class="n">explainer</span><span class="o">.</span><span class="n">generate_counterfactuals</span><span class="p">(</span><span class="n">exp_c</span><span class="p">[</span><span class="s1">'profile'</span><span class="p">][</span><span class="n">cols_dict_cf</span><span class="p">[</span><span class="s1">'cols_pred'</span><span class="p">]],</span>
+                                                      <span class="n">total_CFs</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                                                      <span class="n">desired_range</span><span class="o">=</span><span class="p">[</span><span class="n">c_th_lambda</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="c1"># Look for alternative candidates with a higher lambda than c_th_lambda</span>
+                                                      <span class="c1"># desired_class="opposite",</span>
+                                                      <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">explanations</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Compute-counterfactual-explanation-for-an-instance">
+<h2>Compute counterfactual explanation for an instance<a class="headerlink" href="#Compute-counterfactual-explanation-for-an-instance" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The job id for which the counterfactual explanation is to be generated'</span>
+<span class="c1"># Valid values 1-5</span>
+<span class="n">id_j</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="c1"># The position of the candidate to explain the prediction</span>
+<span class="n">candidate_position</span> <span class="o">=</span> <span class="mi">12</span>
+
+<span class="c1"># Alternative ways to define the target of the explanation (less than or equal to TOP_K):</span>
+<span class="n">target_rank</span> <span class="o">=</span> <span class="n">TOP_K</span>
+
+<span class="c1"># Select the algorithm for generating the counterfactual explanation:</span>
+<span class="c1"># valid values are 'genetic' or 'random'</span>
+<span class="n">explanation_method</span> <span class="o">=</span> <span class="s1">'genetic'</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Helper structure to save the target rank and candidate position for the explanations</span>
+<span class="n">args</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">'Args'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'target_rank'</span><span class="p">,</span> <span class="s1">'target_candidate'</span><span class="p">])</span>
+
+<span class="n">args</span><span class="o">.</span><span class="n">target_rank</span> <span class="o">=</span> <span class="n">target_rank</span>
+<span class="n">args</span><span class="o">.</span><span class="n">candidate_position</span> <span class="o">=</span> <span class="n">candidate_position</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the pipeline:</span>
+<span class="c1"># - first the fitness pipeline</span>
+<span class="c1"># - then the ranking pipeline</span>
+<span class="n">pipeline_fitness</span><span class="p">,</span> <span class="n">df_fitness_mat</span> <span class="o">=</span> <span class="n">build_fitness_matrix</span><span class="p">(</span><span class="n">df_CDS_JDS</span><span class="p">,</span> <span class="n">cols_dict_HUDD</span><span class="p">)</span>
+<span class="n">ranker</span><span class="p">,</span> <span class="n">df_test</span><span class="p">,</span> <span class="n">cols_dict_FEDD</span> <span class="o">=</span> <span class="n">ranking_pipeline</span><span class="p">(</span><span class="n">df_fitness_mat</span><span class="p">)</span>
+
+<span class="c1"># Extract the data of the candidate to be explained</span>
+<span class="n">df_id_j_FEDD</span><span class="p">,</span> <span class="n">df_id_j_HUDD</span><span class="p">,</span> <span class="n">exp_c</span><span class="p">,</span> <span class="n">cols_dict_cf</span> <span class="o">=</span> <span class="n">extract_explicand_data_cf</span><span class="p">(</span><span class="n">id_j</span><span class="p">,</span> <span class="n">candidate_position</span><span class="p">,</span> <span class="n">df_test</span><span class="p">,</span> <span class="n">ranker</span><span class="p">,</span> <span class="n">cols_dict_FEDD</span><span class="p">,</span> <span class="n">df_CDS_JDS</span><span class="p">)</span>
+
+<span class="c1"># Prepare the data for the explanations. Define the column data types</span>
+<span class="n">df_id_j_FEDD_pre</span><span class="p">,</span> <span class="n">feature_dtypes</span> <span class="o">=</span> <span class="n">prepare_data_cf</span><span class="p">(</span><span class="n">df_id_j_FEDD</span><span class="p">,</span> <span class="n">cols_dict_cf</span><span class="p">)</span>
+
+<span class="c1"># Extract the target for the counterfactual explanation (i.e., the data of the candidate in the target position)</span>
+<span class="n">explicand_class</span><span class="p">,</span> <span class="n">tgt_cf_rank</span><span class="p">,</span> <span class="n">tgt_cf_score</span><span class="p">,</span> <span class="n">tgt_cf_candidate</span> <span class="o">=</span> <span class="n">define_target</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">df_id_j_FEDD</span><span class="p">,</span> <span class="n">target_rank</span><span class="o">=</span><span class="n">target_rank</span><span class="p">)</span>
+
+<span class="c1"># Define the counterfactual explainer for the ranker</span>
+<span class="n">explainer</span><span class="p">,</span> <span class="n">data_dice</span><span class="p">,</span> <span class="n">model_dice</span> <span class="o">=</span> <span class="n">define_explainer_FEDD</span><span class="p">(</span><span class="n">ranker</span><span class="p">,</span> <span class="n">df_id_j_FEDD_pre</span><span class="p">,</span> <span class="n">cols_dict_cf</span><span class="p">,</span> <span class="n">feature_dtypes</span><span class="p">,</span> <span class="n">explanation_method</span><span class="p">,</span> <span class="n">target_rank</span><span class="o">=</span><span class="n">target_rank</span><span class="p">)</span>
+
+<span class="c1"># Generate the counterfactual explanations</span>
+<span class="n">explanations_FEDD</span> <span class="o">=</span> <span class="n">get_explanations_FEDD</span><span class="p">(</span><span class="n">df_id_j_FEDD</span><span class="p">,</span> <span class="n">exp_c</span><span class="p">,</span> <span class="n">cols_dict_cf</span><span class="p">,</span> <span class="n">explainer</span><span class="p">,</span> <span class="n">target_rank</span><span class="o">=</span><span class="n">target_rank</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Predicted lambda for candidate in rank 10: -0.0475644202820686
+Initializing initial parameters to the genetic algorithm...
+Initialization complete! Generating counterfactuals...
+Only 1 (required 4)  Diverse Counterfactuals found for the given configuation, perhaps  change the query instance or the features to vary...; total time taken: 00 min 01 sec
+</pre></div></div>
+</div>
+</section>
+<section id="Compare-original-instance-with-the-obtained-counterfactuals">
+<h2>Compare original instance with the obtained counterfactuals<a class="headerlink" href="#Compare-original-instance-with-the-obtained-counterfactuals" title="Link to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print(explanations_FEDD.cf_examples_list.visualize_as_dataframe(show_only_changes=True))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">explanations_FEDD</span><span class="o">.</span><span class="n">visualize_as_dataframe</span><span class="p">(</span><span class="n">show_only_changes</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Query instance (original outcome : -0.11087183654308319)
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>fitness_education</th>
+<th>fitness_experience</th>
+<th>fitness_foreign</th>
+<th>fitness_gender</th>
+<th>fitness_skills</th>
+<th>lambda</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>0.2</td>
+<td>-0.110872</td>
+</tr>
+</tbody>
+</table>
+</div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Diverse Counterfactual set (new outcome: [np.float64(-0.0475644202820686), 100])
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>fitness_education</th>
+<th>fitness_experience</th>
+<th>fitness_foreign</th>
+<th>fitness_gender</th>
+<th>fitness_skills</th>
+<th>lambda</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>1.0</td>
+<td>0.13224426029289033</td>
+</tr>
+</tbody>
+</table>
+</div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+None
+</pre></div></div>
+</div>
+<p>The query instance has a original predicted outcome of about -0.11. The obtained counterfactual have a greater lambda of 0.13. The counterfactual explanations shows that the candidate should improve the skills (from fitness_skill=0.2 to 1.0), to reach the selected top 10 candidates.</p>
+</section>
+</section>
+</div>
+</div>
+<footer>
+<hr/>
+<div role="contentinfo">
+<p>© Copyright 2024, findhr project.</p>
+</div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+</div>
+</div>
+</section>
+</div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+</body>
+</html>

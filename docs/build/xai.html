@@ -1,0 +1,193 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>eXplainable AI (XAI) &mdash; findhrAPI 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx-codeautolink.css?v=b2176991" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=f9c1cefe"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API" href="api.html" />
+    <link rel="prev" title="Fairness Monitoring" href="monitoring.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            findhrAPI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input_data_format.html">Input Data Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preprocess.html">Feature Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fairness.html">Fairness Intervention for Fair Rankings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="monitoring.html">Fairness Monitoring</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">eXplainable AI (XAI)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#design-choices">Design Choices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#xai-architecture">XAI Architecture</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#explanations">Explanations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#open-issues">Open Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">findhrAPI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">eXplainable AI (XAI)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/xai.rst" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="explainable-ai-xai">
+<h1>eXplainable AI (XAI)<a class="headerlink" href="#explainable-ai-xai" title="Link to this heading"></a></h1>
+<section id="design-choices">
+<h2>Design Choices<a class="headerlink" href="#design-choices" title="Link to this heading"></a></h2>
+<p>Explanations aim to provide understandable information about the ranking produced by the HR ranking system. An explanation can be factual (<em>“Why the decision?”</em>) or counterfactual (<em>“Why not another decision?”</em>). In addition, the explanations should take into account the specific stakeholder’s information needs (expectations, assumed knowledge, level of detail, etc.).</p>
+<p>To clarify the explanation process, it is useful to identify three data domains.</p>
+<ul class="simple">
+<li><p>The <em>Human-Understandable Data Domain (HUDD)</em> consists of the domain of raw data sources (see <a class="reference internal" href="input_data_format.html#input-data-format"><span class="std std-ref">Input Data Format</span></a>). This domain is the interface to human stakeholders, who are assumed to clearly understand the structure, semantics, and connections among features.</p></li>
+<li><p>The <em>Feature Engineering Data Domain (FEDD)</em> is the domain of the output of the preprocessing phase (see <a class="reference internal" href="preprocess.html#feature-preprocessing"><span class="std std-ref">Feature Preprocessing</span></a>). It includes features that are derived from the HUDD by design choices of the developers of the HR system. Such features are fed in input to the ranking model.</p></li>
+<li><p>The <em>Ranking Output Data Domain (RODD)</em> is the domain of the output of the ranking model. For scoring models and probabilistic classifiers models, it consists of score values to be sorted for producing a ranking for each job position. For ranking models, it consists of ranks starting from 1 (the best) to the number N (the worst) candidates to a each job position.</p></li>
+</ul>
+<p>Consequently, each explanation function will be specific to the data domain over which the explanation has to be provided, e.g., FEDD for developers and HUDD for candidates and recruiters. Moreover, explanations may operate differently based on the stakeholder they are addressed to; for example, feature importance for candidates should be computed by keeping the job description features constant.</p>
+</section>
+<section id="xai-architecture">
+<h2>XAI Architecture<a class="headerlink" href="#xai-architecture" title="Link to this heading"></a></h2>
+<p>HR ranking systems are the result of a pipeline consisting of a preprocessing phase and a model training phase producing a ranking model (a scorer, a probabilistic classifier, or a ranking model).
+Altogether, this is the explicand to be explained.
+We distinguish three architectures of the HR ranking systems, and their respective explanation design:</p>
+<ul class="simple">
+<li><p><strong>Black-box</strong>: both the preprocessing and the ranking model provide no information about their inner working rationale.
+We do not have access to the metadata information of the preprocessing; furthermore, the ranking model is not interpretable, yet it can be accessed (e.g., a neural network can be accessed in its components, but it is not interpretable).
+The explanation method can only access the predict function, which passed through both preprocessing and model prediction. The explanation is then made ex-post to map back directly from the RODD to HUDD.
+In summary, the explanation describes each ranking outcome in the human-understandable domain with no knowledge of preprocessing and ranking.</p></li>
+<li><p><strong>White-box</strong>: the pipeline allows backtracking of the data and metadata flow at each step.
+The ranking model is interpretable (either by-design or as an integrated interpretation method), i.e., it provides a clearly understandable interpretation of itself.
+The explanation method can compose the explanation of the ranking model with the metadata of the preprocessing steps to obtain an interpretation of each prediction from the RODD to the HUDD.</p></li>
+<li><p><strong>Gray-box</strong>: the preprocessing pipeline is as in the white-box category, whereas the ranking model is as in the black-box category.
+In this case, a post-hoc model-agnostic explanation is applied to the ranking model to obtain an explanation in the FEDD.
+The final HUDD explanation is obtained by composing the FEDD explanation with the inverse tracking method exposed by the pipeline of the preprocessing phase, which accounts for the metadata flow.</p></li>
+</ul>
+</section>
+<section id="explanations">
+<h2>Explanations<a class="headerlink" href="#explanations" title="Link to this heading"></a></h2>
+<p>We distinguish:</p>
+<ul>
+<li><p><strong>Factual explanation</strong>: We assign a numeric value (feature importance) to each feature of an instance x based on the following cases:</p>
+<ul class="simple">
+<li><p>if <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> is from HUDD and the explicand is a black-box, then the prediction is in RODD. Therefore the numeric value represents the feature importance with respect to the ranking.</p></li>
+<li><p>if <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> is from HUDD and the explicand is a gray-box, then the preprocessing yields an instance in the FEDD. In this case, the numeric value represents the importance of the features in <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> with respect to the preprocessed features.</p></li>
+<li><p>if <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> is from FEDD and the explicand is a gray-box, then the prediction is in the RODD. Here, the numeric value represents the importance of the preprocessed features with respect to the ranking.</p></li>
+</ul>
+<p>The last two cases are not mutually exclusive, i.e., there can be an explanation for an instance of HUDD mapping feature importance towards preprocessed instance in FEDD, and another explanation mapping feature importance of the preprocessed features with regard to the ranking in RODD.</p>
+<p>We provide base classes <code class="xref py py-class docutils literal notranslate"><span class="pre">findhr.xai.factual.PostHocAgnosticExplainer</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">findhr.xai.factual.PostHocSpecificExplainer</span></code> for model-agnostic and model-specific explainers respectively. A wrapper around the <cite>KernelExplainer</cite> of the <cite>shap</cite> package is provided in <code class="xref py py-class docutils literal notranslate"><span class="pre">findhr.xai.examples_factual.PostHocAgnosticSHAPKernelExplainer</span></code>. Wrapping allows us to reuse the existing explanation methods from the literature. Specialized classes for factual explanation will be developed in the FINDHR project.</p>
+</li>
+<li><p><strong>Counterfactual explanation</strong>: Consider an instance <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> belonging to the HUDD or to the FEDD. Once in input to the explicand, produces an output (a score, a probability, or a rank position). A counterfactual explanation consists of one (or more) other instance(s) <span class="math notranslate nohighlight">\(\mathbf{x}_c\)</span> which highlights the features to be modified to obtain a different output. Modification of features should be minimal (so that <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> and <span class="math notranslate nohighlight">\(\mathbf{x}_c\)</span> are close each other) and actionable (i.e., feasible). In particular, counterfactual explanations help understand what a candidate could to change to improve the suitability for the job by setting the different output as follows:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>for a scorer (where a prediction is a score), an increased score for <span class="math notranslate nohighlight">\(\mathbf{x}_c\)</span>;</p></li>
+<li><p>for a binary probabilistic classifier (where a prediction is the probability of being shortlisted), an increased probability for <span class="math notranslate nohighlight">\(\mathbf{x}_c\)</span>;</p></li>
+<li><p>for a ranking model (where a prediction is the rank of the candidate to the job), an increased rank (e.g., to be in the top-k positions) for <span class="math notranslate nohighlight">\(\mathbf{x}_c\)</span>.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p>A further input for the explainability counterfactual process is the cost to modify certain features, which maybe different from one candidate to another.</p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<p>The notebook Example_FactualExplanation in the <a class="reference internal" href="example_notebooks.html#example-notebooks"><span class="std std-ref">Examples</span></a> shows an example of factual explanation built on top of the preprocessing and scorer (regression) model from the notebook Example_Preprocessing.</p>
+</section>
+<section id="open-issues">
+<h2>Open Issues<a class="headerlink" href="#open-issues" title="Link to this heading"></a></h2>
+<ol class="arabic simple">
+<li><p>We want to allow factual explanations expressed by feature importance to be implemented by defining inverse transformations of the mappings of the preprocessing phase.
+Clearly, not all the mappings are invertible, therefore an idea is to design a method to standardize the computation of the feature importance also through non-invertible mappings.</p></li>
+<li><p>The implementation of an interpretable-by-design ranking model accounting for fairness is not straightforward.
+The main problem to be addressed is how to design a method that is flexible enough to account for in-processing fairness and it is interpretable-by-design.</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="monitoring.html" class="btn btn-neutral float-left" title="Fairness Monitoring" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="api.html" class="btn btn-neutral float-right" title="API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, findhr project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

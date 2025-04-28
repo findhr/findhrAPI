@@ -1,0 +1,42 @@
+[
+    {
+        "id": 181,
+        "fitness": 2,
+        "attributes": {
+            "gender": "female",
+            "disabled": true
+        }
+    },
+    {
+        "id": 32,
+        "fitness": 5,
+        "attributes": {
+            "gender": "non-binary",
+            "disabled": true
+        }
+    },
+    {
+        "id": 29,
+        "fitness": 5,
+        "attributes": {
+            "gender": "male",
+            "disabled": false
+        }
+    },
+    {
+        "id": 911,
+        "fitness": 1,
+        "attributes": {
+            "gender": "female",
+            "disabled": false
+        }
+    },
+    {
+        "id": 320,
+        "fitness": 2,
+        "attributes": {
+            "gender": "male",
+            "disabled": false
+        }
+    }
+]

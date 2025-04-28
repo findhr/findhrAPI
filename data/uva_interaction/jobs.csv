@@ -1,0 +1,3 @@
+,_id,_title,education_reqs_degree,education_reqs_major,experience_reqs_role,experience_reqs_duration,skills_reqs_hard,skills_reqs_soft
+0,{'$oid': '65e255fbcd25d2d4e81b6e9c'},project manager,Bachelors Degree,civil engineering or environmental engineering or management engineering,Project Manager,2 years,"['Agile project management', 'Lean project management', 'PRINCE2', 'MS Project', 'Health and safety regulation', 'ISO 9001']","['Leadership', 'Risk management', 'Coaching', 'Stakeholder management']"
+1,{'$oid': '65e255fbcd25d2d4e81b6ea7'},customer service representative,,,Customer Service Representative,1 year,"['CRM', 'KPI management', 'Logging', 'Telephone etiquette', 'MS Office']",['Confident communication']

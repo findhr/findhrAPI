@@ -1,0 +1,840 @@
+
+<!DOCTYPE html>
+
+<html class="writer-html5" data-content_root="../" lang="en">
+<head>
+<meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Input Data Sources — findhrAPI 1.0.0 documentation</title>
+<link href="../_static/pygments.css?v=b86133f3" rel="stylesheet" type="text/css"/>
+<link href="../_static/css/theme.css?v=e59714d7" rel="stylesheet" type="text/css"/>
+<link href="../_static/sphinx-codeautolink.css?v=b2176991" rel="stylesheet" type="text/css"/>
+<link href="../_static/nbsphinx-code-cells.css?v=2aa19091" rel="stylesheet" type="text/css"/>
+<script src="../_static/jquery.js?v=5d32c60e"></script>
+<script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+<script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+<script src="../_static/doctools.js?v=9a2dae69"></script>
+<script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+<script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+<script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+<script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="../_static/js/theme.js"></script>
+<link href="../genindex.html" rel="index" title="Index"/>
+<link href="../search.html" rel="search" title="Search"/>
+</head>
+<body class="wy-body-for-nav">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a class="icon icon-home" href="../index.html">
+            findhrAPI
+          </a>
+<div role="search">
+<form action="../search.html" class="wy-form" id="rtd-search-form" method="get">
+<input aria-label="Search docs" name="q" placeholder="Search docs" type="text"/>
+<input name="check_keywords" type="hidden" value="yes"/>
+<input name="area" type="hidden" value="default"/>
+</form>
+</div>
+</div><div aria-label="Navigation menu" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../input_data_format.html">Input Data Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../preprocess.html">Feature Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fairness.html">Fairness Intervention for Fair Rankings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Fairness Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../xai.html">eXplainable AI (XAI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API</a></li>
+</ul>
+</div>
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift"><nav aria-label="Mobile navigation menu" class="wy-nav-top">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../index.html">findhrAPI</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="Page navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a aria-label="Home" class="icon icon-home" href="../index.html"></a></li>
+<li class="breadcrumb-item active">Input Data Sources</li>
+<li class="wy-breadcrumbs-aside">
+<a href="../_sources/example_notebooks/Example_InputDataSources.ipynb" rel="nofollow"> View page source</a>
+</li>
+</ul>
+<hr/>
+</div>
+<div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main">
+<div itemprop="articleBody">
+<section id="Input-Data-Sources">
+<h1>Input Data Sources<a class="headerlink" href="#Input-Data-Sources" title="Link to this heading"></a></h1>
+<p>This notebook shows an example of how to load raw data from a CSV file and how to define metadata. Other solutions are possible, including loading data and metadata from a databases or from binary files, depending on an organization’s information system.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> autoreload
+<span class="o">%</span><span class="k">autoreload</span> 2
+
+<span class="c1"># global imports</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ast</span><span class="w"> </span><span class="kn">import</span> <span class="n">literal_eval</span>
+<span class="c1"># local imports</span>
+<span class="kn">from</span><span class="w"> </span><a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.metadata.html#module-findhr.preprocess.metadata" title="findhr.preprocess.metadata"><span class="nn">findhr.preprocess.metadata</span></a><span class="w"> </span><span class="kn">import</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.metadata.html#findhr.preprocess.metadata.JSONMetadata" title="findhr.preprocess.metadata.JSONMetadata"><span class="n">JSONMetadata</span></a><span class="p">,</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.metadata.html#findhr.preprocess.metadata.validate_schema" title="findhr.preprocess.metadata.validate_schema"><span class="n">validate_schema</span></a>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The autoreload extension is already loaded. To reload it, use:
+  %reload_ext autoreload
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load CDS (Candidate Data Source) DataFrame from a CSV file.</span>
+<span class="c1"># Here, the CSV file is a sample of the interaction log synthetic data generated in the FINDHR project.</span>
+<span class="c1"># The converters argument is specific of an organization's information system, because it depends on the source format of raw data.</span>
+<span class="c1"># Only candidate_id is mandatory, all other columns are features of the candidate available in the organization's information system.</span>
+
+<span class="n">df_CDS</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'../../../data/upf_gen/candidates.csv'</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">converters</span><span class="o">=</span><span class="p">{</span><span class="s1">'professional_experience_c'</span><span class="p">:</span> <span class="n">literal_eval</span><span class="p">,</span>
+                        <span class="s1">'education_background_c'</span><span class="p">:</span> <span class="n">literal_eval</span><span class="p">,</span>
+                        <span class="s1">'skills_c'</span><span class="p">:</span> <span class="n">literal_eval</span><span class="p">})</span>
+<span class="n">df_CDS</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>id_c</th>
+<th>education_background_c</th>
+<th>professional_experience_c</th>
+<th>skills_c</th>
+<th>gender_c</th>
+<th>agg_perceived_foreign_c</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>5</th>
+<td>5</td>
+<td>[{'institution': 'Complutense University Of Ma...</td>
+<td>[{'institution': 'Stylo Milano', 'start_date':...</td>
+<td>[Communications, Social Integration, Microsoft...</td>
+<td>Man</td>
+<td>No</td>
+</tr>
+<tr>
+<th>6</th>
+<td>6</td>
+<td>[{'institution': 'Coronel Rosales Agricultural...</td>
+<td>[{'institution': 'Securitas Direct', 'start_da...</td>
+<td>[Refinancing, Economy, Microsoft Excel, Collec...</td>
+<td>Man</td>
+<td>No</td>
+</tr>
+<tr>
+<th>10</th>
+<td>10</td>
+<td>[{'institution': 'Complutense University Of Ma...</td>
+<td>[{'institution': 'Carrefour Express', 'start_d...</td>
+<td>[Entrepreneurship, Literacy, Web Design, Adobe...</td>
+<td>Woman</td>
+<td>No</td>
+</tr>
+<tr>
+<th>11</th>
+<td>11</td>
+<td>[{'institution': 'Les Ribera De Los Molinos', ...</td>
+<td>[{'institution': 'Decimas Sl', 'start_date': '...</td>
+<td>[Consulting, Sap Crm, Collections, Automation,...</td>
+<td>Woman</td>
+<td>No</td>
+</tr>
+<tr>
+<th>15</th>
+<td>15</td>
+<td>[{'institution': 'Escuela Politcnica Superior ...</td>
+<td>[{'institution': 'Reintegrate', 'start_date': ...</td>
+<td>[Microsoft Word, Biofuels, English, Entreprene...</td>
+<td>Man</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load JDS (Job Data Source) DataFrame from a CSV file.</span>
+<span class="c1"># Here, the CSV file is a sample of the interaction log synthetic data generated in the FINDHR project.</span>
+<span class="c1"># The converters argument is specific of an organization's information system, because it depends on the source format of raw data.</span>
+<span class="c1"># Only job_id is mandatory, all other columns are features of the job available in the organization's information system.</span>
+
+<span class="n">df_JDS</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'../../../data/upf_gen/jobs.csv'</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">converters</span><span class="o">=</span><span class="p">{</span><span class="s1">'experience_reqs_duration_j'</span><span class="p">:</span> <span class="n">literal_eval</span><span class="p">,</span>
+                             <span class="s1">'experience_reqs_role_j'</span><span class="p">:</span> <span class="n">literal_eval</span><span class="p">,</span>
+                             <span class="s1">'education_reqs_j'</span><span class="p">:</span> <span class="n">literal_eval</span><span class="p">,</span>
+                             <span class="s1">'skills_j'</span><span class="p">:</span> <span class="n">literal_eval</span>
+                             <span class="p">})</span>
+<span class="n">df_JDS</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>id_j</th>
+<th>education_reqs_j</th>
+<th>experience_reqs_role_j</th>
+<th>experience_reqs_duration_j</th>
+<th>skills_j</th>
+<th>gender_j</th>
+<th>agg_perceived_foreign_j</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>1</td>
+<td>[Bachelor's Degree in Information Society Tech...</td>
+<td>[Data Analyst, Analyst, Embedded Software Engi...</td>
+<td>12</td>
+<td>[English, Teamwork, Microsoft Office, Python (...</td>
+<td>Man</td>
+<td>No</td>
+</tr>
+<tr>
+<th>1</th>
+<td>2</td>
+<td>[Graduated In Administration And Management Cf...</td>
+<td>[Administrative, Administrative Assistant, Ass...</td>
+<td>36</td>
+<td>[English, Management, Planning, Microsoft Exce...</td>
+<td>Man</td>
+<td>No</td>
+</tr>
+<tr>
+<th>2</th>
+<td>3</td>
+<td>[]</td>
+<td>[Sales Assistant, Saleswoman, Commercial Advisor]</td>
+<td>12</td>
+<td>[English, Spanish, Communications, Communicati...</td>
+<td>Man</td>
+<td>No</td>
+</tr>
+<tr>
+<th>3</th>
+<td>4</td>
+<td>[Graduated In Administration And Management Cf...</td>
+<td>[Project Manager, Project Leader]</td>
+<td>12</td>
+<td>[Organization, Management, Teamwork, Planning,...</td>
+<td>Man</td>
+<td>No</td>
+</tr>
+<tr>
+<th>4</th>
+<td>5</td>
+<td>[Law Bachelor, Degree In Law, Higher Degree In...</td>
+<td>[Consultant]</td>
+<td>12</td>
+<td>[Punctuality, Organization, Accounting, Englis...</td>
+<td>Man</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create fictious ADS (Application Data Source) DataFrame (not present in the interaction log synthetic data).</span>
+<span class="c1"># first 10 candidates apply to first job position, second 10 candidates apply to second job position</span>
+<span class="c1"># Only job_id, candidate_id and *one* target feature are mandatory.</span>
+<span class="n">TOP_K</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">df_ADS</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'../../../data/upf_gen/ADS.csv'</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># ranking is based on descending score</span>
+<span class="n">df_ADS</span><span class="p">[</span><span class="s1">'ranking'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_ADS</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'id_j'</span><span class="p">)[</span><span class="s1">'score'</span><span class="p">]</span><span class="o">.</span><span class="n">rank</span><span class="p">(</span><span class="s1">'dense'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="c1"># shortlisted is top10 based on descending score</span>
+<span class="n">df_ADS</span><span class="p">[</span><span class="s1">'shortlisted'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_ADS</span><span class="p">[</span><span class="s1">'ranking'</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">TOP_K</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">df_ADS</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>id_c</th>
+<th>id_j</th>
+<th>score</th>
+<th>ranking</th>
+<th>shortlisted</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>6</td>
+<td>3</td>
+<td>0.000000</td>
+<td>55</td>
+<td>0</td>
+</tr>
+<tr>
+<th>1</th>
+<td>11</td>
+<td>3</td>
+<td>0.492754</td>
+<td>25</td>
+<td>0</td>
+</tr>
+<tr>
+<th>3</th>
+<td>15</td>
+<td>3</td>
+<td>0.453089</td>
+<td>36</td>
+<td>0</td>
+</tr>
+<tr>
+<th>4</th>
+<td>17</td>
+<td>3</td>
+<td>0.049689</td>
+<td>49</td>
+<td>0</td>
+</tr>
+<tr>
+<th>5</th>
+<td>19</td>
+<td>3</td>
+<td>0.080268</td>
+<td>46</td>
+<td>0</td>
+</tr>
+<tr>
+<th>...</th>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr>
+<th>1537</th>
+<td>2204</td>
+<td>1</td>
+<td>0.550725</td>
+<td>13</td>
+<td>0</td>
+</tr>
+<tr>
+<th>1538</th>
+<td>2211</td>
+<td>1</td>
+<td>0.550725</td>
+<td>13</td>
+<td>0</td>
+</tr>
+<tr>
+<th>1539</th>
+<td>2213</td>
+<td>1</td>
+<td>0.478261</td>
+<td>35</td>
+<td>0</td>
+</tr>
+<tr>
+<th>1540</th>
+<td>2214</td>
+<td>1</td>
+<td>0.478261</td>
+<td>35</td>
+<td>0</td>
+</tr>
+<tr>
+<th>1541</th>
+<td>2215</td>
+<td>1</td>
+<td>0.455243</td>
+<td>48</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>1643 rows × 5 columns</p>
+</div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Metadata for CDS is a dictionary mapping column names to JSONMetadata object</span>
+<span class="n">md_CDS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">'id_c'</span><span class="p">:</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.metadata.html#findhr.preprocess.metadata.JSONMetadata" title="findhr.preprocess.metadata.JSONMetadata"><span class="n">JSONMetadata</span></a><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s1">'number'</span><span class="p">}),</span>
+    <span class="s1">'education_background_c'</span> <span class="p">:</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.metadata.html#findhr.preprocess.metadata.JSONMetadata" title="findhr.preprocess.metadata.JSONMetadata"><span class="n">JSONMetadata</span></a><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s1">'array'</span><span class="p">,</span>
+                                                  <span class="s1">'items'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s1">'object'</span><span class="p">,</span>
+                                                            <span class="s1">'properties'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'institution'</span> <span class="p">:</span> <span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">},</span>
+                                                                           <span class="s1">'end_date'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">},</span>
+                                                                           <span class="s1">'degree'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">},</span>
+                                                                           <span class="s1">'duration'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">}</span>
+                                                                           <span class="p">}</span>
+                                                            <span class="p">}</span>
+                                                  <span class="p">},</span>
+                                           <span class="n">attr_type</span><span class="o">=</span><span class="s1">'object'</span><span class="p">,</span>
+                                           <span class="n">attr_usage</span><span class="o">=</span><span class="s1">'default'</span>
+                                                            <span class="p">),</span>
+    <span class="s1">'professional_experience_c'</span><span class="p">:</span>  <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.metadata.html#findhr.preprocess.metadata.JSONMetadata" title="findhr.preprocess.metadata.JSONMetadata"><span class="n">JSONMetadata</span></a><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s1">'array'</span><span class="p">,</span>
+                                                                       <span class="s1">'items'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s1">'object'</span><span class="p">,</span>
+                                                                              <span class="s1">'properties'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'institution'</span> <span class="p">:</span> <span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">},</span>
+                                                                                   <span class="s1">'end_date'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">},</span>
+                                                                                   <span class="s1">'role'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">},</span>
+                                                                                   <span class="s1">'duration'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">}</span>
+                                                                                   <span class="p">}</span>
+                                                                              <span class="p">}</span>
+                                                                    <span class="p">},</span>
+                                                             <span class="n">attr_type</span><span class="o">=</span><span class="s1">'object'</span><span class="p">,</span>
+                                                             <span class="n">attr_usage</span><span class="o">=</span><span class="s1">'default'</span>
+                                                               <span class="p">),</span>
+    <span class="s1">'skills_c'</span><span class="p">:</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.metadata.html#findhr.preprocess.metadata.JSONMetadata" title="findhr.preprocess.metadata.JSONMetadata"><span class="n">JSONMetadata</span></a><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s2">"array"</span><span class="p">,</span>
+                                     <span class="s1">'items'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s1">'string'</span><span class="p">}</span>
+                                     <span class="p">},</span>
+                             <span class="n">attr_type</span><span class="o">=</span><span class="s1">'object'</span><span class="p">,</span>
+                             <span class="n">attr_usage</span><span class="o">=</span><span class="s1">'default'</span>
+                             <span class="p">),</span>
+    <span class="s1">'gender_c'</span><span class="p">:</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.metadata.html#findhr.preprocess.metadata.JSONMetadata" title="findhr.preprocess.metadata.JSONMetadata"><span class="n">JSONMetadata</span></a><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="p">{</span><span class="s1">'enum'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'Man'</span><span class="p">,</span> <span class="s1">'Woman'</span><span class="p">,</span> <span class="s1">'Any'</span><span class="p">]},</span>
+                             <span class="n">attr_type</span><span class="o">=</span><span class="s1">'category'</span><span class="p">,</span>
+                             <span class="n">attr_usage</span><span class="o">=</span><span class="s1">'sensitive'</span><span class="p">),</span>
+    <span class="s1">'agg_perceived_foreign_c'</span><span class="p">:</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.metadata.html#findhr.preprocess.metadata.JSONMetadata" title="findhr.preprocess.metadata.JSONMetadata"><span class="n">JSONMetadata</span></a><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="p">{</span><span class="s1">'enum'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'No'</span><span class="p">,</span> <span class="s1">'Yes'</span><span class="p">,</span> <span class="s1">'Any'</span><span class="p">]},</span>
+                                            <span class="n">attr_type</span><span class="o">=</span><span class="s1">'category'</span><span class="p">,</span>
+                                            <span class="n">attr_usage</span><span class="o">=</span><span class="s1">'sensitive'</span><span class="p">),</span>
+                                            <span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Metadata for JDS is a dictionary mapping column names to JSONMetadata object.</span>
+<span class="n">md_JDS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">'id_j'</span><span class="p">:</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.metadata.html#findhr.preprocess.metadata.JSONMetadata" title="findhr.preprocess.metadata.JSONMetadata"><span class="n">JSONMetadata</span></a><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s1">'number'</span><span class="p">}),</span>
+    <span class="s1">'education_reqs_j'</span><span class="p">:</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.metadata.html#findhr.preprocess.metadata.JSONMetadata" title="findhr.preprocess.metadata.JSONMetadata"><span class="n">JSONMetadata</span></a><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s2">"array"</span><span class="p">,</span>
+                                     <span class="s1">'items'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s1">'string'</span><span class="p">}</span>
+                                     <span class="p">},</span>
+                                     <span class="n">attr_type</span><span class="o">=</span><span class="s1">'object'</span><span class="p">,</span>
+                                     <span class="n">attr_usage</span><span class="o">=</span><span class="s1">'default'</span>
+                             <span class="p">),</span>
+    <span class="s1">'experience_reqs_role_j'</span><span class="p">:</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.metadata.html#findhr.preprocess.metadata.JSONMetadata" title="findhr.preprocess.metadata.JSONMetadata"><span class="n">JSONMetadata</span></a><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s2">"array"</span><span class="p">,</span>
+                                                   <span class="s1">'items'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s1">'string'</span><span class="p">}</span>
+                                                   <span class="p">},</span>
+                                           <span class="n">attr_type</span><span class="o">=</span><span class="s1">'object'</span><span class="p">,</span>
+                                           <span class="n">attr_usage</span><span class="o">=</span><span class="s1">'default'</span>
+                             <span class="p">),</span>
+    <span class="s1">'experience_reqs_duration_j'</span><span class="p">:</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.metadata.html#findhr.preprocess.metadata.JSONMetadata" title="findhr.preprocess.metadata.JSONMetadata"><span class="n">JSONMetadata</span></a><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s1">'number'</span><span class="p">},</span>
+                                               <span class="n">attr_type</span><span class="o">=</span><span class="s1">'object'</span><span class="p">,</span>
+                                               <span class="n">attr_usage</span><span class="o">=</span><span class="s1">'default'</span><span class="p">),</span>
+    <span class="s1">'skills_j'</span><span class="p">:</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.metadata.html#findhr.preprocess.metadata.JSONMetadata" title="findhr.preprocess.metadata.JSONMetadata"><span class="n">JSONMetadata</span></a><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s2">"array"</span><span class="p">,</span>
+                                     <span class="s1">'items'</span><span class="p">:</span> <span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s1">'string'</span><span class="p">}</span>
+                                     <span class="p">},</span>
+                             <span class="n">attr_type</span><span class="o">=</span><span class="s1">'object'</span><span class="p">,</span>
+                             <span class="n">attr_usage</span><span class="o">=</span><span class="s1">'default'</span>
+                             <span class="p">),</span>
+    <span class="s1">'gender_j'</span><span class="p">:</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.metadata.html#findhr.preprocess.metadata.JSONMetadata" title="findhr.preprocess.metadata.JSONMetadata"><span class="n">JSONMetadata</span></a><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="p">{</span><span class="s1">'enum'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'Man'</span><span class="p">,</span> <span class="s1">'Woman'</span><span class="p">,</span> <span class="s1">'Any'</span><span class="p">]},</span>
+                             <span class="n">attr_type</span><span class="o">=</span><span class="s1">'category'</span><span class="p">,</span>
+                             <span class="n">attr_usage</span><span class="o">=</span><span class="s1">'sensitive'</span><span class="p">),</span>
+    <span class="s1">'agg_perceived_foreign_j'</span><span class="p">:</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.metadata.html#findhr.preprocess.metadata.JSONMetadata" title="findhr.preprocess.metadata.JSONMetadata"><span class="n">JSONMetadata</span></a><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="p">{</span><span class="s1">'enum'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'No'</span><span class="p">,</span> <span class="s1">'Yes'</span><span class="p">,</span> <span class="s1">'Any'</span><span class="p">]},</span>
+                                            <span class="n">attr_type</span><span class="o">=</span><span class="s1">'category'</span><span class="p">,</span>
+                                            <span class="n">attr_usage</span><span class="o">=</span><span class="s1">'sensitive'</span><span class="p">),</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Metadata for ADS is a dictionary mapping column names to JSONMetadata object</span>
+<span class="n">md_ADS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">'score'</span><span class="p">:</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.metadata.html#findhr.preprocess.metadata.JSONMetadata" title="findhr.preprocess.metadata.JSONMetadata"><span class="n">JSONMetadata</span></a><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s1">'number'</span><span class="p">},</span> <span class="n">attr_type</span><span class="o">=</span><span class="s1">'numeric'</span><span class="p">,</span> <span class="n">attr_usage</span><span class="o">=</span><span class="s1">'target'</span><span class="p">),</span>
+    <span class="s1">'ranking'</span><span class="p">:</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.metadata.html#findhr.preprocess.metadata.JSONMetadata" title="findhr.preprocess.metadata.JSONMetadata"><span class="n">JSONMetadata</span></a><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s1">'integer'</span><span class="p">},</span> <span class="n">attr_type</span><span class="o">=</span><span class="s1">'ordinal'</span><span class="p">,</span> <span class="n">attr_usage</span><span class="o">=</span><span class="s1">'target'</span><span class="p">),</span>
+    <span class="s1">'shortlisted'</span><span class="p">:</span> <a class="sphinx-codeautolink-a" href="../generated/findhr.preprocess.metadata.html#findhr.preprocess.metadata.JSONMetadata" title="findhr.preprocess.metadata.JSONMetadata"><span class="n">JSONMetadata</span></a><span class="p">(</span><span class="n">schema</span><span class="o">=</span><span class="p">{</span><span class="s1">'type'</span><span class="p">:</span> <span class="s1">'integer'</span><span class="p">},</span> <span class="n">attr_type</span><span class="o">=</span><span class="s1">'category'</span><span class="p">,</span> <span class="n">attr_usage</span><span class="o">=</span><span class="s1">'target'</span><span class="p">),</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Uncomment to Validate JSON schema.</span>
+<span class="c1"># print('{} Validating schema for df_CDS {}'.format('-' * 20, '-' * 20))</span>
+<span class="c1"># validate_schema(df_CDS, md_CDS)</span>
+<span class="c1"># print('{} Validating schema for df_JDS {}'.format('-' * 20, '-' * 20))</span>
+<span class="c1"># validate_schema(df_JDS, md_JDS)</span>
+<span class="c1"># print('{} Validating schema for df_ADS {}'.format('-' * 20, '-' * 20))</span>
+<span class="c1"># validate_schema(df_ADS, md_ADS)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Join metadata (assume no clash of column names).</span>
+<span class="n">md_all</span> <span class="o">=</span>  <span class="p">{</span><span class="o">**</span><span class="n">md_CDS</span><span class="p">,</span> <span class="o">**</span><span class="n">md_JDS</span><span class="p">,</span> <span class="o">**</span><span class="n">md_ADS</span><span class="p">}</span>
+<span class="n">md_all</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{'id_c':
+        SCHEMA = {'type': 'number'}
+        ATTR_TYPE = object
+        ATTR_USAGE = default
+        KNOWLEDGE_BASE = None,
+ 'education_background_c':
+        SCHEMA = {'type': 'array', 'items': {'type': 'object', 'properties': {'institution': {'type': 'string'}, 'end_date': {'type': 'string'}, 'degree': {'type': 'string'}, 'duration': {'type': 'string'}}}}
+        ATTR_TYPE = object
+        ATTR_USAGE = default
+        KNOWLEDGE_BASE = None,
+ 'professional_experience_c':
+        SCHEMA = {'type': 'array', 'items': {'type': 'object', 'properties': {'institution': {'type': 'string'}, 'end_date': {'type': 'string'}, 'role': {'type': 'string'}, 'duration': {'type': 'string'}}}}
+        ATTR_TYPE = object
+        ATTR_USAGE = default
+        KNOWLEDGE_BASE = None,
+ 'skills_c':
+        SCHEMA = {'type': 'array', 'items': {'type': 'string'}}
+        ATTR_TYPE = object
+        ATTR_USAGE = default
+        KNOWLEDGE_BASE = None,
+ 'gender_c':
+        SCHEMA = {'enum': ['Man', 'Woman', 'Any']}
+        ATTR_TYPE = category
+        ATTR_USAGE = sensitive
+        KNOWLEDGE_BASE = None,
+ 'agg_perceived_foreign_c':
+        SCHEMA = {'enum': ['No', 'Yes', 'Any']}
+        ATTR_TYPE = category
+        ATTR_USAGE = sensitive
+        KNOWLEDGE_BASE = None,
+ 'id_j':
+        SCHEMA = {'type': 'number'}
+        ATTR_TYPE = object
+        ATTR_USAGE = default
+        KNOWLEDGE_BASE = None,
+ 'education_reqs_j':
+        SCHEMA = {'type': 'array', 'items': {'type': 'string'}}
+        ATTR_TYPE = object
+        ATTR_USAGE = default
+        KNOWLEDGE_BASE = None,
+ 'experience_reqs_role_j':
+        SCHEMA = {'type': 'array', 'items': {'type': 'string'}}
+        ATTR_TYPE = object
+        ATTR_USAGE = default
+        KNOWLEDGE_BASE = None,
+ 'experience_reqs_duration_j':
+        SCHEMA = {'type': 'number'}
+        ATTR_TYPE = object
+        ATTR_USAGE = default
+        KNOWLEDGE_BASE = None,
+ 'skills_j':
+        SCHEMA = {'type': 'array', 'items': {'type': 'string'}}
+        ATTR_TYPE = object
+        ATTR_USAGE = default
+        KNOWLEDGE_BASE = None,
+ 'gender_j':
+        SCHEMA = {'enum': ['Man', 'Woman', 'Any']}
+        ATTR_TYPE = category
+        ATTR_USAGE = sensitive
+        KNOWLEDGE_BASE = None,
+ 'agg_perceived_foreign_j':
+        SCHEMA = {'enum': ['No', 'Yes', 'Any']}
+        ATTR_TYPE = category
+        ATTR_USAGE = sensitive
+        KNOWLEDGE_BASE = None,
+ 'score':
+        SCHEMA = {'type': 'number'}
+        ATTR_TYPE = numeric
+        ATTR_USAGE = target
+        KNOWLEDGE_BASE = None,
+ 'ranking':
+        SCHEMA = {'type': 'integer'}
+        ATTR_TYPE = ordinal
+        ATTR_USAGE = target
+        KNOWLEDGE_BASE = None,
+ 'shortlisted':
+        SCHEMA = {'type': 'integer'}
+        ATTR_TYPE = category
+        ATTR_USAGE = target
+        KNOWLEDGE_BASE = None}
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Join raw data.</span>
+<span class="n">df_all</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_JDS</span><span class="p">,</span> <span class="n">df_ADS</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'id_j'</span><span class="p">)</span>
+<span class="n">df_all</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_CDS</span><span class="p">,</span> <span class="n">df_all</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'id_c'</span><span class="p">)</span>
+<span class="n">df_all</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>id_c</th>
+<th>education_background_c</th>
+<th>professional_experience_c</th>
+<th>skills_c</th>
+<th>gender_c</th>
+<th>agg_perceived_foreign_c</th>
+<th>id_j</th>
+<th>education_reqs_j</th>
+<th>experience_reqs_role_j</th>
+<th>experience_reqs_duration_j</th>
+<th>skills_j</th>
+<th>gender_j</th>
+<th>agg_perceived_foreign_j</th>
+<th>score</th>
+<th>ranking</th>
+<th>shortlisted</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>5</td>
+<td>[{'institution': 'Complutense University Of Ma...</td>
+<td>[{'institution': 'Stylo Milano', 'start_date':...</td>
+<td>[Communications, Social Integration, Microsoft...</td>
+<td>Man</td>
+<td>No</td>
+<td>5</td>
+<td>[Law Bachelor, Degree In Law, Higher Degree In...</td>
+<td>[Consultant]</td>
+<td>12</td>
+<td>[Punctuality, Organization, Accounting, Englis...</td>
+<td>Man</td>
+<td>No</td>
+<td>0.000000</td>
+<td>138</td>
+<td>0</td>
+</tr>
+<tr>
+<th>1</th>
+<td>6</td>
+<td>[{'institution': 'Coronel Rosales Agricultural...</td>
+<td>[{'institution': 'Securitas Direct', 'start_da...</td>
+<td>[Refinancing, Economy, Microsoft Excel, Collec...</td>
+<td>Man</td>
+<td>No</td>
+<td>3</td>
+<td>[]</td>
+<td>[Sales Assistant, Saleswoman, Commercial Advisor]</td>
+<td>12</td>
+<td>[English, Spanish, Communications, Communicati...</td>
+<td>Man</td>
+<td>No</td>
+<td>0.000000</td>
+<td>89</td>
+<td>0</td>
+</tr>
+<tr>
+<th>2</th>
+<td>10</td>
+<td>[{'institution': 'Complutense University Of Ma...</td>
+<td>[{'institution': 'Carrefour Express', 'start_d...</td>
+<td>[Entrepreneurship, Literacy, Web Design, Adobe...</td>
+<td>Woman</td>
+<td>No</td>
+<td>5</td>
+<td>[Law Bachelor, Degree In Law, Higher Degree In...</td>
+<td>[Consultant]</td>
+<td>12</td>
+<td>[Punctuality, Organization, Accounting, Englis...</td>
+<td>Man</td>
+<td>No</td>
+<td>0.492754</td>
+<td>55</td>
+<td>0</td>
+</tr>
+<tr>
+<th>3</th>
+<td>11</td>
+<td>[{'institution': 'Les Ribera De Los Molinos', ...</td>
+<td>[{'institution': 'Decimas Sl', 'start_date': '...</td>
+<td>[Consulting, Sap Crm, Collections, Automation,...</td>
+<td>Woman</td>
+<td>No</td>
+<td>3</td>
+<td>[]</td>
+<td>[Sales Assistant, Saleswoman, Commercial Advisor]</td>
+<td>12</td>
+<td>[English, Spanish, Communications, Communicati...</td>
+<td>Man</td>
+<td>No</td>
+<td>0.492754</td>
+<td>35</td>
+<td>0</td>
+</tr>
+<tr>
+<th>4</th>
+<td>15</td>
+<td>[{'institution': 'Escuela Politcnica Superior ...</td>
+<td>[{'institution': 'Reintegrate', 'start_date': ...</td>
+<td>[Microsoft Word, Biofuels, English, Entreprene...</td>
+<td>Man</td>
+<td>No</td>
+<td>3</td>
+<td>[]</td>
+<td>[Sales Assistant, Saleswoman, Commercial Advisor]</td>
+<td>12</td>
+<td>[English, Spanish, Communications, Communicati...</td>
+<td>Man</td>
+<td>No</td>
+<td>0.453089</td>
+<td>49</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</div>
+</div>
+<footer>
+<hr/>
+<div role="contentinfo">
+<p>© Copyright 2024, findhr project.</p>
+</div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+</div>
+</div>
+</section>
+</div>
+<script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+</body>
+</html>

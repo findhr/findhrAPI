@@ -1,0 +1,228 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fairness Monitoring &mdash; findhrAPI 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx-codeautolink.css?v=b2176991" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=f9c1cefe"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="eXplainable AI (XAI)" href="xai.html" />
+    <link rel="prev" title="Fairness Intervention for Fair Rankings" href="fairness.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            findhrAPI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input_data_format.html">Input Data Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="preprocess.html">Feature Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fairness.html">Fairness Intervention for Fair Rankings</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Fairness Monitoring</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#the-setting-and-protocol">The setting and protocol</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#protocol-stage-1-candidate-application-redirection-to-optional-attribute-deposit">Protocol Stage 1: Candidate application + redirection to optional attribute deposit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#protocol-stage-2-optional-attribute-deposit">Protocol Stage 2: Optional attribute deposit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#protocol-stage-3-fairness-measurement">Protocol Stage 3: Fairness measurement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fairness-metrics">Fairness Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#two-party-fairness-measurement">Two-Party Fairness Measurement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#third-party-trust-assumptions">Third Party Trust Assumptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#implementation-of-the-third-party">Implementation of the third party</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="xai.html">eXplainable AI (XAI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">findhrAPI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Fairness Monitoring</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/monitoring.rst" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fairness-monitoring">
+<h1>Fairness Monitoring<a class="headerlink" href="#fairness-monitoring" title="Link to this heading"></a></h1>
+<p>This python package supports the implementation of a secure two-party protocol for fairness monitoring. The two parties are:
+(1) the service provider operating a job application system, and
+(2) a trusted third party which manages the deposit of protected attributes and runs the computation of fairness metrics.</p>
+<section id="the-setting-and-protocol">
+<h2>The setting and protocol<a class="headerlink" href="#the-setting-and-protocol" title="Link to this heading"></a></h2>
+<p>This protocol is one of the solutions for fairness monitoring with minimized access to sensitive data. In the setting, we assume two cooperating parties. The first party is the service provider that operates a job application system. The second party is a trusted third party which manages the execution of the protocol. The service provider would like to be able to measure the fairness of their automated system outputs (here, we assume a ranking system ordering applicants/CVs for a given job opening) and hiring decisions for applicants from different protected groups (i.e., groups determined by special categories of data such as ethnicity or sexual orientation). At the same time, the service provider should at no point store or otherwise have access to these special categories of data.</p>
+<p>The protocol consists of three operational elements:
+(1) A redirection from the service provider’s job application system to attribute donation.
+(2) An (optional) protected attribute donation by the job applicant and generation of two-party components based on the protected attribute.
+(3) Two-party computation of the fairness metrics.</p>
+</section>
+<section id="protocol-stage-1-candidate-application-redirection-to-optional-attribute-deposit">
+<h2>Protocol Stage 1: Candidate application + redirection to optional attribute deposit<a class="headerlink" href="#protocol-stage-1-candidate-application-redirection-to-optional-attribute-deposit" title="Link to this heading"></a></h2>
+<p>After the candidate completes a job application, the service provider displays a confirmation screen, which includes a redirection link to a data donation service operated by the third party. The redirection link (or donation service) should allow the third party to (1) unqiuely identify the service provider (e.g., an API key), and (ii) include a service-provider-generated applicant ID, which will allow both parties to uniquely identify the applicant (for a given service provider and job application).</p>
+<p>The secure implementation of this data exchange is outside the scope of the library.</p>
+</section>
+<section id="protocol-stage-2-optional-attribute-deposit">
+<h2>Protocol Stage 2: Optional attribute deposit<a class="headerlink" href="#protocol-stage-2-optional-attribute-deposit" title="Link to this heading"></a></h2>
+<p>On the data donation page, an identified applicant (we have a unique service provider ID and applicant ID) can optionally specify the values of selected special categories of data. The third party maintains a catalogue of protected attributes and their possible values.</p>
+<p>Two-party components are then generated independently for each of these optionally specified attributes. For each selected attribute (attribute_name) and applicant-selected value (attribute_value), the third party generates a random secret RS, which is an integer (positive or negative). Two components are then generated: remote_secret_component = (attribute_value - RS) is being sent to the service provider to be stored together with the applicant ID, while local_secret_component = (attribute_value + RS) is being stored locally by the third party together with the applicant ID and the service provider ID.</p>
+<p>The library supports two attribute deposit methods, including (1) back-end distribution: the third party generates and splits encrypted components after receiving user-donated sensitive data. The method is easy to implement, but has stronger trust assumptions in the third party, i.e., the third party is reliable and would not store the raw value before generating the two-party components; and (2) front-end distribution: the two secret components are generated on the front-end and immediately distributed to the service provider and the third party. This method ensures that the third party never accesses the raw sensitive data, but it necessitates more complex coordination.</p>
+</section>
+<section id="protocol-stage-3-fairness-measurement">
+<h2>Protocol Stage 3: Fairness measurement<a class="headerlink" href="#protocol-stage-3-fairness-measurement" title="Link to this heading"></a></h2>
+<p>A service provider wishes to measure fairness of their data, system outputs, or hiring decisions. Currently, the library offers an implementation of two-party computations for measuring input fairness, output fairness and outcome fairness.</p>
+</section>
+<section id="fairness-metrics">
+<h2>Fairness Metrics<a class="headerlink" href="#fairness-metrics" title="Link to this heading"></a></h2>
+<p>The library offers two-party computations of the following fairness metrics. These metrics allow service providers to measure fairness in data, rankings, or hiring decisions without revealing sensitive attributes, using secure computation via secret sharing with a trusted third party.</p>
+<p>Input Fairness (diversity)</p>
+<ul>
+<li><p><strong>Pool diversity</strong>: measuring what fraction of the job applicant pool includes members from a given protected group.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>For instance, if we have a pool of 100 candidates, with 40 women and 60 men, the pool diversity with regard to female candidates is 40/100.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p>Output Fairness (fair ranking)</p>
+<ul>
+<li><p><strong>Group exposure</strong>: measuring what fraction of recruiter attention (or exposure) members of different protected groups receive. In the protocol, the exposure can be specified using theoretical models (e.g., inverse-logarithmic or exponential decay) or manually set based on empirical observations.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>For example, assume recruiters inspect candidates at the first rank 60% of the time, second rank 30%, third rank 10%, and not at all below that. A recruitment system produces a ranking: man, woman, woman, man, woman. The exposure of men is 0.6 (from the first position). The exposure of women is 0.3 (second) + 0.1 (third) = 0.4.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>Top-k fairness</strong>: measuring whether members of different protected groups are fairly represented among the top <em>k</em> candidates in a ranking. In the protocol, the top-k fairness can be measured either through group proportion comparisons (e.g., Skew&#64;k) or group exposure comparisons that account for rank position (e.g., Discounted Representation Difference&#64;k).</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>For example, suppose the full pool has 5 candidates: man, man, woman, woman, woman (2 men, 3 women). Suppose <em>k</em> = 3, and the top 3 by the recruitment system are: man, man, woman. The proportion of women in top 3 is 1/3 = 33.3%, but in the full pool is 3/5 = 60%. This underrepresentation yields a negative skew&#64;k for women.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p>Outcome Fairness (fair classification)</p>
+<ul>
+<li><p><strong>Demographic parity</strong>: measuring what fraction of applicants from different protected groups receive positive outcomes (e.g., interview or hire), regardless of qualifications.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>For instance, consider a pool of 300 candidates: 100 women and 200 men. If 50 women are hired (50%) and 120 men are hired (60%), then the demographic parity scores are 0.5 for women and 0.6 for men. Therefore, the hiring process does not satisfy demographic parity.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>Equal opportunity</strong>: measuring what fraction of <em>qualified</em> applicants from different protected groups receive positive outcomes. Qualifications can be determined by human evaluation (e.g., HR professionals).</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>For instance, from the above pool, suppose 80 women and 150 men are qualified. If 50 of the 80 qualified women are hired (62.5%) and 100 of the 150 qualified men are hired (66.7%), then the equal opportunity scores are 0.625 for women and 0.667 for men. Despite equal demographic parity score (50% hired in each group), the system does not satisfy equal opportunity.</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p>All the above metrics support <strong>intersectional fairness</strong> analysis, allowing for evaluations across combinations of protected attributes (e.g., gender + age, or ethnicity + disability). This type of analysis helps identify fairness issues that may affect individuals belonging to multiple protected categories and result in intersectional discrimination.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>For example, in a pool of 200 candidates, there are 40 older workers (aged 50+), consisting of 10 older women and 30 older men. The pool diversity score for older women is 10/200 = 5%, and for older men is 30/200 = 15%. Comparing these values can reveal disparities affecting individuals who belong to multiple protected groups.</p></li>
+</ul>
+</div></blockquote>
+</section>
+<section id="two-party-fairness-measurement">
+<h2>Two-Party Fairness Measurement<a class="headerlink" href="#two-party-fairness-measurement" title="Link to this heading"></a></h2>
+<p>The library offers both pseudo two-party computation and strict two-party computation to accommodate different real-world needs.</p>
+<ol class="arabic simple">
+<li><p>Pseudo two-party computation: The service provider identifies itself using an API key. It then sends the data for which they want to evaluate fairness: an unordered list of candidates for input fairness measurement, a ranked list of candidates for output fairness measurement, or an unordered list of candidates with hiring decisions for outcome fairness measurement. Each list consists of pairs (user_ID, remote_secret_component), where user_ID is the unique user identifier created at the data deposit time, and remote_secret_component is the two-party component of the protected attribute stored by the service provider. Before computing the fairness metric, the third party recreates the protected attributes of applicants by computing: (remote_secret_component + local_secret_component) / 2. Afterwards, fairness metrics are computed as usual. It balances privacy and usability, but has stronger trust assumptions for the third party, i.e., the third party does not store the raw values of protected attributes after they are recreated.</p></li>
+<li><p>Strict two-party computation: It shares the same computation logic as pseudo two-party computation. However, instead of directly sharing secret components for the reconstruction of protected attributes, the computation of fairness metrics is carried out jointly using two-party computation techniques without recreating protected attributes. It offers a higher level of privacy protection, as no single party ever reconstructs the raw sensitive attribute. However, it requires tight coordination and synchronization between the two parties during the computation process.</p></li>
+</ol>
+</section>
+<section id="third-party-trust-assumptions">
+<h2>Third Party Trust Assumptions<a class="headerlink" href="#third-party-trust-assumptions" title="Link to this heading"></a></h2>
+<p>Note that both remote_secret_component = (attribute_value - RS) and local_secret_component = (attribute_value + RS) are random numbers. Thus, neither the service provider nor the third party store the raw values of the applicant’s protected attributes. The parties can however cooperate: the service provider can send the remote_secret_component to the third party who can recreate the protected attributes by summing remote_secret_component and local_secret_component:  attribute_value - RS + attribute_value + RS = 2 * attribute_value. As a result, raw values of protected attributes pass through the computation executed by the third party.</p>
+<p>The third party has to be trusted:</p>
+<ul class="simple">
+<li><p>At the data deposit time: We need to assume that the third party generates the randomized two-party components from the protected attribute, and then discards the raw value of the attribute.</p></li>
+<li><p>After the data deposit time: We need to assume that the third party does not secretly communicate with the service provider to recreate the protected attributes based on the two-party components.</p></li>
+</ul>
+</section>
+<section id="implementation-of-the-third-party">
+<h2>Implementation of the third party<a class="headerlink" href="#implementation-of-the-third-party" title="Link to this heading"></a></h2>
+<p>This library provides implementations of the core fairness monitoring protocol function (two-party fairness metrics, computation of protected attribute multiparty components), as well as empty placeholders for other operational functions that need to be implemented by an actual third party service by inheriting the handler classes provided in the library. These operational functions include: local storage and retrieval of protected attribute components for a given service provider and user (e.g., using a database), and sending protected attribute components to the remote service provider. At the moment, we provide examples implementations using CSV files.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="fairness.html" class="btn btn-neutral float-left" title="Fairness Intervention for Fair Rankings" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="xai.html" class="btn btn-neutral float-right" title="eXplainable AI (XAI)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, findhr project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

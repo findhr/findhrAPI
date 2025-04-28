@@ -1,0 +1,201 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>findhr.preprocess.metadata &mdash; findhrAPI 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-codeautolink.css?v=b2176991" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="findhr.preprocess.mapping" href="findhr.preprocess.mapping.html" />
+    <link rel="prev" title="API" href="../api.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            findhrAPI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../input_data_format.html">Input Data Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../preprocess.html">Feature Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fairness.html">Fairness Intervention for Fair Rankings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Fairness Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../xai.html">eXplainable AI (XAI)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#preprocess-api">Preprocess API</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">findhr.preprocess.metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.preprocess.mapping.html">findhr.preprocess.mapping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="findhr.preprocess.example_mappings.html">findhr.preprocess.example_mappings</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#fair-interventions-api">Fair Interventions API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#fairness-monitoring-api">Fairness Monitoring API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#explainability-api">Explainability API</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">findhrAPI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API</a></li>
+      <li class="breadcrumb-item active">findhr.preprocess.metadata</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/generated/findhr.preprocess.metadata.rst" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-findhr.preprocess.metadata">
+<span id="findhr-preprocess-metadata"></span><h1>findhr.preprocess.metadata<a class="headerlink" href="#module-findhr.preprocess.metadata" title="Link to this heading"></a></h1>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#findhr.preprocess.metadata.validate_schema" title="findhr.preprocess.metadata.validate_schema"><code class="xref py py-obj docutils literal notranslate"><span class="pre">validate_schema</span></code></a>(df, metadata_dict)</p></td>
+<td><p>Validate the schema of the columns of the dataframe according to the metadata_dict.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#findhr.preprocess.metadata.JSONMetadata" title="findhr.preprocess.metadata.JSONMetadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">JSONMetadata</span></code></a>(schema[, attr_usage, ...])</p></td>
+<td><p>Store the attribute metadata of CVs or job descriptions in JSON format.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="findhr.preprocess.metadata.JSONMetadata">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">findhr.preprocess.metadata.</span></span><span class="sig-name descname"><span class="pre">JSONMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">schema</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr_usage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'object'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">knowledge_base</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.preprocess.metadata.JSONMetadata" title="Link to this definition"></a></dt>
+<dd><p>Store the attribute metadata of CVs or job descriptions in JSON format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>schema</strong><span class="classifier">dict</span></dt><dd><p>JSon schema of the attribute according to <a class="reference external" href="https://json-schema.org/">https://json-schema.org/</a></p>
+</dd>
+<dt><strong>attr_usage</strong><span class="classifier">str</span></dt><dd><dl class="simple">
+<dt>description of the usage of the attribute. Possible values:</dt><dd><p>‘default’ (default, predictive attribute, hard constraint),
+‘optional’ (predictive attribute, soft constraint)
+‘protected’ (fairness, protected attribute),
+‘sensitive’ (privacy, sensitive attribute),
+‘target’ (predictive attribute, target attribute)</p>
+</dd>
+</dl>
+</dd>
+<dt><strong>attr_type</strong><span class="classifier">str, optional</span></dt><dd><dl class="simple">
+<dt>description of the type of the attribute. Possible values:</dt><dd><p>‘category’ (categorical attribute, target=classification),
+‘ordinal’ (ordered attribute, target=ranking),
+‘numeric’ (numerical attribute, target=scoring),
+‘object’ (structured attribute, not target),</p>
+</dd>
+</dl>
+</dd>
+<dt><strong>knowledge_base</strong><span class="classifier">str, optional</span></dt><dd><p>additional information about the attribute to be used in the pipeline for processing and deriving fitness values</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="findhr.preprocess.metadata.validate_schema">
+<span class="sig-prename descclassname"><span class="pre">findhr.preprocess.metadata.</span></span><span class="sig-name descname"><span class="pre">validate_schema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.preprocess.metadata.validate_schema" title="Link to this definition"></a></dt>
+<dd><p>Validate the schema of the columns of the dataframe according to the metadata_dict.</p>
+<p>If a column is not present in the dataframe, it is ignored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>df</strong><span class="classifier">pandas.DataFrame</span></dt><dd><p>dataframe to be validated</p>
+</dd>
+<dt><strong>metadata_dict: dict,</strong></dt><dd><p>dictionary with the schema of the columns</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>errors: list</dt><dd><p>list of errors found in the validation</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../api.html" class="btn btn-neutral float-left" title="API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="findhr.preprocess.mapping.html" class="btn btn-neutral float-right" title="findhr.preprocess.mapping" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, findhr project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

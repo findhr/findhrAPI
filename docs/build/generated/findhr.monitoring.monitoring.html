@@ -1,0 +1,747 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>findhr.monitoring.monitoring &mdash; findhrAPI 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-codeautolink.css?v=b2176991" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=f9c1cefe"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="findhr.xai.factual.examples_factual" href="findhr.xai.factual.examples_factual.html" />
+    <link rel="prev" title="findhr.fairness.fairness_method_gFair" href="findhr.fairness.fairness_method_gFair.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            findhrAPI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../input_data_format.html">Input Data Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../preprocess.html">Feature Preprocessing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fairness.html">Fairness Intervention for Fair Rankings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../monitoring.html">Fairness Monitoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../xai.html">eXplainable AI (XAI)</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../api.html#preprocess-api">Preprocess API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#fair-interventions-api">Fair Interventions API</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#fairness-monitoring-api">Fairness Monitoring API</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">findhr.monitoring.monitoring</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#explainability-api">Explainability API</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">findhrAPI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API</a></li>
+      <li class="breadcrumb-item active">findhr.monitoring.monitoring</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/generated/findhr.monitoring.monitoring.rst" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-findhr.monitoring.monitoring">
+<span id="findhr-monitoring-monitoring"></span><h1>findhr.monitoring.monitoring<a class="headerlink" href="#module-findhr.monitoring.monitoring" title="Link to this heading"></a></h1>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#findhr.monitoring.monitoring.MultipartyDataCollection" title="findhr.monitoring.monitoring.MultipartyDataCollection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultipartyDataCollection</span></code></a>()</p></td>
+<td><p>Base handler for managing the collection and multiparty storage of protected attributes.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#findhr.monitoring.monitoring.MultipartyDataHandlerCSV" title="findhr.monitoring.monitoring.MultipartyDataHandlerCSV"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultipartyDataHandlerCSV</span></code></a>(local_filename)</p></td>
+<td><p>Example handler for managing the collection and multiparty storage of protected attributes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#findhr.monitoring.monitoring.MultipartyFairnessMeasurement" title="findhr.monitoring.monitoring.MultipartyFairnessMeasurement"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultipartyFairnessMeasurement</span></code></a>(api_key, ...)</p></td>
+<td><p>Handler for managing the the measurement of fairness in a multi-party regime.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#findhr.monitoring.monitoring.MultipartyFairnessMeasurementMPYC" title="findhr.monitoring.monitoring.MultipartyFairnessMeasurementMPYC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultipartyFairnessMeasurementMPYC</span></code></a>(api_key, ...)</p></td>
+<td><p>Handler for managing the the measurement of fairness in a multi-party regime supported by mpyc library.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#findhr.monitoring.monitoring.ServiceProviderHandlerCSV" title="findhr.monitoring.monitoring.ServiceProviderHandlerCSV"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ServiceProviderHandlerCSV</span></code></a>(local_filename)</p></td>
+<td><p>Example handler for managing the storage of secret protected attribute components by a service provider.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.MultipartyDataCollection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">findhr.monitoring.monitoring.</span></span><span class="sig-name descname"><span class="pre">MultipartyDataCollection</span></span><a class="headerlink" href="#findhr.monitoring.monitoring.MultipartyDataCollection" title="Link to this definition"></a></dt>
+<dd><p>Base handler for managing the collection and multiparty storage of protected attributes.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.MultipartyDataCollection.generate_multiparty_data">
+<span class="sig-name descname"><span class="pre">generate_multiparty_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.MultipartyDataCollection.generate_multiparty_data" title="Link to this definition"></a></dt>
+<dd><p>Generate two secret multiparty components of a protected attribute.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>provider_id</strong><span class="classifier">string</span></dt><dd><p>The identifier of the service provider</p>
+</dd>
+<dt><strong>user_id</strong><span class="classifier">string</span></dt><dd><p>The identifier of the user generated by the service provider
+when the user is redirected from a succesful job application to optional attribute donation</p>
+</dd>
+<dt><strong>attribute_name</strong><span class="classifier">string</span></dt><dd><p>The name of the attribute to measure diversity for, as specified in the third party’s SENSITIVE_ATTRIBUTE_CATALOGUE</p>
+</dd>
+<dt><strong>attribute_value</strong><span class="classifier">string</span></dt><dd><p>The value of the selected attribute_name, as specified in the third party’s SENSITIVE_ATTRIBUTE_CATALOGUE</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>protected_attribute_components: (int, int)</dt><dd><p>Multiparty components of the protected attribute (remote, local).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.MultipartyDataCollection.send_to_model_owner">
+<span class="sig-name descname"><span class="pre">send_to_model_owner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secret_protected_attribute</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.MultipartyDataCollection.send_to_model_owner" title="Link to this definition"></a></dt>
+<dd><p>This is an empty placeholder: the third party needs to reimplement it 
+to send the secret attribute component to the remote service provider</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.MultipartyDataCollection.store">
+<span class="sig-name descname"><span class="pre">store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secret_protected_attribute</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.MultipartyDataCollection.store" title="Link to this definition"></a></dt>
+<dd><p>This is an empty placeholder: the third party should reimplement it 
+to save the secret attribute component in their local storage (e.g., a database)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.MultipartyDataHandlerCSV">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">findhr.monitoring.monitoring.</span></span><span class="sig-name descname"><span class="pre">MultipartyDataHandlerCSV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">local_filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.MultipartyDataHandlerCSV" title="Link to this definition"></a></dt>
+<dd><p>Example handler for managing the collection and multiparty storage of protected attributes. 
+Uses CSV files for local data storage.</p>
+<p>After a session of data updates, save_session_data needs to be called to save the changes the drive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>local_filename</strong><span class="classifier">string</span></dt><dd><p>Name of a csv file to load data from, and save data to.
+The file contains rows of the following comma-separated values: provider id, user id, attribute name, secret value.</p>
+</dd>
+<dt><strong>local_data</strong><span class="classifier">defaultdict[defaultdict[defaultdict[int]]</span></dt><dd><p>A temporary dictionary for handling the local data. Has the following levels: local_data[provider_id][user_id][attribute_value] = secret_value.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.MultipartyDataHandlerCSV.decrypt_data">
+<span class="sig-name descname"><span class="pre">decrypt_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encrypted_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">private_key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.MultipartyDataHandlerCSV.decrypt_data" title="Link to this definition"></a></dt>
+<dd><p>RSA decryption and decoding to dictionary.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.MultipartyDataHandlerCSV.generate_multiparty_data">
+<span class="sig-name descname"><span class="pre">generate_multiparty_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.MultipartyDataHandlerCSV.generate_multiparty_data" title="Link to this definition"></a></dt>
+<dd><p>Generate two secret multiparty components of a protected attribute.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>provider_id</strong><span class="classifier">string</span></dt><dd><p>The identifier of the service provider</p>
+</dd>
+<dt><strong>user_id</strong><span class="classifier">string</span></dt><dd><p>The identifier of the user generated by the service provider
+when the user is redirected from a succesful job application to optional attribute donation</p>
+</dd>
+<dt><strong>attribute_name</strong><span class="classifier">string</span></dt><dd><p>The name of the attribute to measure diversity for, as specified in the third party’s SENSITIVE_ATTRIBUTE_CATALOGUE</p>
+</dd>
+<dt><strong>attribute_value</strong><span class="classifier">string</span></dt><dd><p>The value of the selected attribute_name, as specified in the third party’s SENSITIVE_ATTRIBUTE_CATALOGUE</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>protected_attribute_components: (int, int)</dt><dd><p>Multiparty components of the protected attribute (remote, local).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.MultipartyDataHandlerCSV.load_data">
+<span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">local_filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.MultipartyDataHandlerCSV.load_data" title="Link to this definition"></a></dt>
+<dd><p>Loads data from the local_filename csv file into self.local_data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>local_filename</strong><span class="classifier">string</span></dt><dd><p>Name of a csv file to load data from.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.MultipartyDataHandlerCSV.save_session_data">
+<span class="sig-name descname"><span class="pre">save_session_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.MultipartyDataHandlerCSV.save_session_data" title="Link to this definition"></a></dt>
+<dd><p>Writes data from self.local_data dictionary to the self.local_filename csv file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.MultipartyDataHandlerCSV.send_to_model_owner">
+<span class="sig-name descname"><span class="pre">send_to_model_owner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secret_protected_attribute</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">provider_handler</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.MultipartyDataHandlerCSV.send_to_model_owner" title="Link to this definition"></a></dt>
+<dd><blockquote>
+<div><p>This is an example placeholder: the third party needs to reimplement it 
+to send the secret attribute component to the remote service provider.
+Current example immplementation: calls the ‘receive’ function of an instantiated service provider handler (ServiceProviderHandlerCSV)</p>
+</div></blockquote>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>provider_id</strong><span class="classifier">string</span></dt><dd><blockquote>
+<div><p>The identifier of the service provider</p>
+</div></blockquote>
+<dl class="simple">
+<dt>user_id<span class="classifier">string</span></dt><dd><p>The identifier of the user generated by the service provider
+when the user is redirected from a succesful job application to optional attribute donation</p>
+</dd>
+</dl>
+</dd>
+<dt><strong>attribute_name</strong><span class="classifier">string</span></dt><dd><blockquote>
+<div><p>The name of the attribute to measure diversity for, as specified in the third party’s SENSITIVE_ATTRIBUTE_CATALOGUE</p>
+</div></blockquote>
+<dl class="simple">
+<dt>secret_protected_attribute<span class="classifier">int</span></dt><dd><p>Randomized component of the protected attribute value</p>
+</dd>
+<dt>provider_handler<span class="classifier">ServiceProviderHandlerCSV instance</span></dt><dd><p>instance of a service provider data handler (e.g., ServiceProviderHandlerCSV)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.MultipartyDataHandlerCSV.store">
+<span class="sig-name descname"><span class="pre">store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secret_protected_attribute</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.MultipartyDataHandlerCSV.store" title="Link to this definition"></a></dt>
+<dd><blockquote>
+<div><p>Store the local component of the secret attribute into the temporary self.local_data dictionary.</p>
+</div></blockquote>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>provider_id</strong><span class="classifier">string</span></dt><dd><blockquote>
+<div><p>The identifier of the service provider</p>
+</div></blockquote>
+<dl class="simple">
+<dt>user_id<span class="classifier">string</span></dt><dd><p>The identifier of the user generated by the service provider
+when the user is redirected from a succesful job application to optional attribute donation</p>
+</dd>
+</dl>
+</dd>
+<dt><strong>attribute_name</strong><span class="classifier">string</span></dt><dd><blockquote>
+<div><p>The name of the attribute to measure diversity for, as specified in the third party’s SENSITIVE_ATTRIBUTE_CATALOGUE</p>
+</div></blockquote>
+<dl class="simple">
+<dt>secret_protected_attribute<span class="classifier">int</span></dt><dd><p>Randomized component of the protected attribute value</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.MultipartyDataHandlerCSV.store_encrypted_data">
+<span class="sig-name descname"><span class="pre">store_encrypted_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encrypted_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">private_key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.MultipartyDataHandlerCSV.store_encrypted_data" title="Link to this definition"></a></dt>
+<dd><p>decrypt and decode data and save session data</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.MultipartyFairnessMeasurement">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">findhr.monitoring.monitoring.</span></span><span class="sig-name descname"><span class="pre">MultipartyFairnessMeasurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_handler</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.MultipartyFairnessMeasurement" title="Link to this definition"></a></dt>
+<dd><p>Handler for managing the the measurement of fairness in a multi-party regime. 
+The protected attribute components are stored in two places: locally with the third party, and remotely with the service provider.
+Summing the two components allows the third party to recreate the value of the sensitive attribute.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_accept_rate">
+<span class="sig-name descname"><span class="pre">measure_accept_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pool_stage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conditionals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_accept_rate" title="Link to this definition"></a></dt>
+<dd><p>Outcome fairnss metric. 
+For demographic parity, measure the proportion of individuals from a given protected group who are finally accepted (accept rate).
+For equal opportunity, measure the proportion of qualified individuals from a given protected group who are correctly classified (true positive rate).</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>pool</strong><span class="classifier">[(string, int)]</span></dt><dd><p>A list of candidates: an unordered list of pairs (user_id, secret_attribute_remote), 
+where the user_id is the user ID generated by the service provider during attribute donation,
+and secret_attribute_remote is the protected attribute component stored by the service provider.</p>
+</dd>
+<dt><strong>pool_stage</strong><span class="classifier">[(string, bool, bool)]</span></dt><dd><p>A pool of candidates: an unordered list of pairs (user_id, targeted, accepted), 
+where the user_id is the user ID corresponding to the pool,
+targeted is True/False indicating whether the candidate is selected as a target, 
+and accepted is True/False indicating whether the candidate actually receives positive outcomes.
+Example for demographic parity:</p>
+<blockquote>
+<div><p>targeted: all set 1, to include all potential candidates; 
+accepted: final interview or recruitment decisions.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>Example for equal opportunity: </dt><dd><p>targeted: whether the candidate is qualified or not, e.g., based on evaluations by a group of experts; 
+accepted: final interview or recruitment decisions.</p>
+</dd>
+</dl>
+</dd>
+<dt><strong>attribute_names</strong><span class="classifier">[string] | (string) | string</span></dt><dd><p>The names/name of the attributes/attribute to measure outcome fairness for, as specified in the third party’s SENSITIVE_ATTRIBUTE_CATALOGUE</p>
+</dd>
+<dt><strong>attribute_values</strong><span class="classifier">[string] | (string) | string</span></dt><dd><p>The values/value of the selected attributes in attribute_names in the same order, as specified in the third party’s SENSITIVE_ATTRIBUTE_CATALOGUE</p>
+</dd>
+<dt><strong>conditionals</strong><span class="classifier">[bool], optional</span></dt><dd><p>(Optional) A list indicating whether individuals at a given position in the pool should be included in the computation. 
+The implementation assumes that len(pool) == len(conditionals).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>accept rate</strong><span class="classifier">float</span></dt><dd><p>The fraction of the members of a selected group who receive positive outcomes. 
+A float number in the [0,1] range.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_group_exposure">
+<span class="sig-name descname"><span class="pre">measure_group_exposure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">browsing_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conditionals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">browsing_param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_group_exposure" title="Link to this definition"></a></dt>
+<dd><p>Output fairness metric. 
+Measures the exposure of members of a given protected group in a given ranking under a selected browsing model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>pool</strong><span class="classifier">[(string, int)]</span></dt><dd><p>A ranked list of candidates: an ordered list of pairs (user_id, secret_attribute_remote), 
+where the user_id is the user ID generated by the service provider during attribute donation,
+and secret_attribute_remote is the protected attribute component stored by the service provider.</p>
+</dd>
+<dt><strong>attribute_names</strong><span class="classifier">[string] | (string) | string</span></dt><dd><p>The names/name of the attributes/attribute to measure group exposure for, as specified in the third party’s SENSITIVE_ATTRIBUTE_CATALOGUE</p>
+</dd>
+<dt><strong>attribute_values</strong><span class="classifier">[string] | (string) | string</span></dt><dd><p>The values/value of the selected attributes in attribute_names in the same order, as specified in the third party’s SENSITIVE_ATTRIBUTE_CATALOGUE</p>
+</dd>
+<dt><strong>browsing_model</strong><span class="classifier">[float] or string</span></dt><dd><dl class="simple">
+<dt>A browsing behavior model indicating the exposure weights across ranking positions (will be normalized to sum to 1). This can be:</dt><dd><ul class="simple">
+<li><p>A list of floats, where each value represents the exposure weight at a given position</p></li>
+<li><dl class="simple">
+<dt>A string specifying a predefined model:</dt><dd><p>‘inverse_log’ — assigns exposure proportionally to 1 / log2(position + 2)
+‘exp_decay’ — assigns exposure proportionally to gamma^position (gamma is specified via <cite>browsing_param</cite>, default 0.8)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt><strong>conditionals</strong><span class="classifier">[bool], optional</span></dt><dd><p>(Optional) A list indicating whether individuals at a given position in the pool should be included in the computation. 
+The implementation assumes that len(pool) == len(conditionals).</p>
+</dd>
+<dt><strong>browsing_param</strong><span class="classifier">float, optional</span></dt><dd><p>(Optional) parameter to customize browsing model, such as gamma for exp_decay</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>group_exposure</strong><span class="classifier">float</span></dt><dd><p>The fraction of exposure the members of a selected group in the candidate pool get in a given ranking. 
+A float number in the [0,1] range.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_pool_diversity">
+<span class="sig-name descname"><span class="pre">measure_pool_diversity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conditionals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_pool_diversity" title="Link to this definition"></a></dt>
+<dd><p>Input fairness metric.
+Measures the fraction of members of a given protected group in a candidate pool (pool diversity).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>pool</strong><span class="classifier">[(string, int)]</span></dt><dd><p>A list of candidates: an unordered list of pairs (user_id, secret_attribute_remote), 
+where the user_id is the user ID generated by the service provider during attribute donation,
+and secret_attribute_remote is the protected attribute component stored by the service provider.</p>
+</dd>
+<dt><strong>attribute_names</strong><span class="classifier">[string] | (string) | string</span></dt><dd><p>The names/name of the attributes/attribute to measure diversity for, as specified in the third party’s SENSITIVE_ATTRIBUTE_CATALOGUE</p>
+</dd>
+<dt><strong>attribute_values</strong><span class="classifier">[string] | (string) | string</span></dt><dd><p>The values/value of the selected attributes in attribute_names in the same order, as specified in the third party’s SENSITIVE_ATTRIBUTE_CATALOGUE</p>
+</dd>
+<dt><strong>conditionals</strong><span class="classifier">[bool], optional</span></dt><dd><p>(Optional) A list indicating whether individuals at a given position in the pool should be included in the computation. 
+The implementation assumes that len(pool) == len(conditionals).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>pool_diversity</strong><span class="classifier">float</span></dt><dd><p>The fraction of the members of a selected group in the candidate pool. 
+A float number in the [0,1] range.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_topk_fairness">
+<span class="sig-name descname"><span class="pre">measure_topk_fairness</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'skew'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conditionals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.MultipartyFairnessMeasurement.measure_topk_fairness" title="Link to this definition"></a></dt>
+<dd><p>Output fairness metric.
+Supports top-k group fairness metrics including skew and discounted representation difference.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>pool</strong><span class="classifier">[(string, int)]</span></dt><dd><p>A ranked list of candidates: an ordered list of pairs (user_id, secret_attribute_remote), 
+where the user_id is the user ID generated by the service provider during attribute donation,
+and secret_attribute_remote is the protected attribute component stored by the service provider.</p>
+</dd>
+<dt><strong>attribute_names</strong><span class="classifier">[string] | (string) | string</span></dt><dd><p>The names/name of the attributes/attribute to measure top-k fairness for, as specified in the third party’s SENSITIVE_ATTRIBUTE_CATALOGUE</p>
+</dd>
+<dt><strong>attribute_values</strong><span class="classifier">[string] | (string) | string</span></dt><dd><p>The values/value of the selected attributes in attribute_names in the same order, as specified in the third party’s SENSITIVE_ATTRIBUTE_CATALOGUE</p>
+</dd>
+<dt><strong>k</strong><span class="classifier">int</span></dt><dd><p>The cutoff rank (e.g., top-10 means k=10).</p>
+</dd>
+<dt><strong>method</strong><span class="classifier">string</span></dt><dd><dl class="simple">
+<dt>The fairness metric to compute. Supported options:</dt><dd><ul class="simple">
+<li><p>“skew” : Log ratio between group representation in top-k and expected distribution.</p></li>
+<li><p>“discounted_rep_diff” : Difference in discounted representation across ranks.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt><strong>conditionals</strong><span class="classifier">[bool], optional</span></dt><dd><p>(Optional) A list indicating whether individuals at a given position in the pool should be included in the computation. 
+The implementation assumes that len(pool) == len(conditionals).</p>
+</dd>
+<dt><strong>epsilon</strong><span class="classifier">float, optional</span></dt><dd><p>(Optional) Small value to avoid division by zero or log(0).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>topk_fairness</strong><span class="classifier">float</span></dt><dd><p>The top-k fairness metric for the specified method.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.MultipartyFairnessMeasurementMPYC">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">findhr.monitoring.monitoring.</span></span><span class="sig-name descname"><span class="pre">MultipartyFairnessMeasurementMPYC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">api_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_handler</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.MultipartyFairnessMeasurementMPYC" title="Link to this definition"></a></dt>
+<dd><p>Handler for managing the the measurement of fairness in a multi-party regime supported by mpyc library. 
+The protected attribute components are stored in two parties.
+Two-party computation enables the monitoring of fairness metrics without reconstructing sensitive attributes.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.MultipartyFairnessMeasurementMPYC.measure_accept_rate">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">measure_accept_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pool_stage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conditionals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.MultipartyFairnessMeasurementMPYC.measure_accept_rate" title="Link to this definition"></a></dt>
+<dd><p>Outcome fairnss metric. 
+For demographic parity, measure the proportion of individuals from a given protected group who are finally accepted (accept rate).
+For equal opportunity, measure the proportion of qualified individuals from a given protected group who are correctly classified (true positive rate).</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>pool</strong><span class="classifier">[string]</span></dt><dd><p>A pool of candidates: an unordered list of user IDs generated by the service provider during attribute donation.</p>
+</dd>
+<dt><strong>pool_stage</strong><span class="classifier">[(string, bool, bool)]</span></dt><dd><p>A pool of candidates: an unordered list of pairs (user_id, targeted, accepted), 
+where the user_id is the user ID corresponding to the pool,
+targeted is True/False indicating whether the candidate is selected as a target, 
+and accepted is True/False indicating whether the candidate actually receives positive outcomes.
+Example for demographic parity:</p>
+<blockquote>
+<div><p>targeted: all set 1, to include all potential candidates; 
+accepted: final interview or recruitment decisions.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>Example for equal opportunity: </dt><dd><p>targeted: whether the candidate is qualified or not, e.g., based on evaluations by a group of experts; 
+accepted: final interview or recruitment decisions.</p>
+</dd>
+</dl>
+</dd>
+<dt><strong>attribute_names</strong><span class="classifier">[string] | (string) | string</span></dt><dd><p>The names/name of the attributes/attribute to measure outcome fairness for, as specified in the third party’s SENSITIVE_ATTRIBUTE_CATALOGUE</p>
+</dd>
+<dt><strong>attribute_values</strong><span class="classifier">[string] | (string) | string</span></dt><dd><p>The values/value of the selected attributes in attribute_names in the same order, as specified in the third party’s SENSITIVE_ATTRIBUTE_CATALOGUE</p>
+</dd>
+<dt><strong>conditionals</strong><span class="classifier">[bool], optional</span></dt><dd><p>(Optional) A list indicating whether individuals at a given position in the pool should be included in the computation. 
+The implementation assumes that len(pool) == len(conditionals).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>accept rate</strong><span class="classifier">float</span></dt><dd><p>The fraction of the members of a selected group who receive positive outcomes. 
+A float number in the [0,1] range.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.MultipartyFairnessMeasurementMPYC.measure_group_exposure">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">measure_group_exposure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">browsing_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">browsing_param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.MultipartyFairnessMeasurementMPYC.measure_group_exposure" title="Link to this definition"></a></dt>
+<dd><p>Output fairness metric. 
+Measures the exposure of members of a given protected group in a given ranking under a selected browsing model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>pool</strong><span class="classifier">[string]</span></dt><dd><p>A ranked list of candidates: an ordered list of user ID generated by the service provider during attribute donation</p>
+</dd>
+<dt><strong>attribute_names</strong><span class="classifier">[string] | (string) | string</span></dt><dd><p>The names/name of the attributes/attribute to measure group exposure for, as specified in the third party’s SENSITIVE_ATTRIBUTE_CATALOGUE</p>
+</dd>
+<dt><strong>attribute_values</strong><span class="classifier">[string] | (string) | string</span></dt><dd><p>The values/value of the selected attributes in attribute_names in the same order, as specified in the third party’s SENSITIVE_ATTRIBUTE_CATALOGUE</p>
+</dd>
+<dt><strong>browsing_model</strong><span class="classifier">[float] or string</span></dt><dd><dl class="simple">
+<dt>A browsing behavior model indicating the exposure weights across ranking positions (will be normalized to sum to 1). This can be:</dt><dd><ul class="simple">
+<li><p>A list of floats, where each value represents the exposure weight at a given position</p></li>
+<li><dl class="simple">
+<dt>A string specifying a predefined model:</dt><dd><p>‘inverse_log’ — assigns exposure proportionally to 1 / log2(position + 2)
+‘exp_decay’ — assigns exposure proportionally to gamma^position (gamma is specified via <cite>browsing_param</cite>, default 0.8)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt><strong>conditionals</strong><span class="classifier">[bool], optional</span></dt><dd><p>(Optional) A list indicating whether individuals at a given position in the pool should be included in the computation. 
+The implementation assumes that len(pool) == len(conditionals).</p>
+</dd>
+<dt><strong>browsing_param</strong><span class="classifier">float, optional</span></dt><dd><p>(Optional) parameter to customize browsing model, such as gamma for exp_decay</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>group_exposure</strong><span class="classifier">float</span></dt><dd><p>The fraction of exposure the members of a selected group in the candidate pool get in a given ranking. 
+A float number in the [0,1] range.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.MultipartyFairnessMeasurementMPYC.measure_pool_diversity">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">measure_pool_diversity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conditionals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.MultipartyFairnessMeasurementMPYC.measure_pool_diversity" title="Link to this definition"></a></dt>
+<dd><p>Input fairness metric.
+Measures the fraction of members of a given protected group in a candidate pool (pool diversity).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>pool</strong><span class="classifier">[string]</span></dt><dd><p>A list of candidates: an unordered list of user IDs generated by the service provider during attribute donation.</p>
+</dd>
+<dt><strong>attribute_names</strong><span class="classifier">[string] | (string) | string</span></dt><dd><p>The names/name of the attributes/attribute to measure diversity for, as specified in the third party’s SENSITIVE_ATTRIBUTE_CATALOGUE</p>
+</dd>
+<dt><strong>attribute_values</strong><span class="classifier">[string] | (string) | string</span></dt><dd><p>The values/value of the selected attributes in attribute_names in the same order, as specified in the third party’s SENSITIVE_ATTRIBUTE_CATALOGUE</p>
+</dd>
+<dt><strong>conditionals</strong><span class="classifier">[bool], optional</span></dt><dd><p>(Optional) A list indicating whether individuals at a given position in the pool should be included in the computation. 
+The implementation assumes that len(pool) == len(conditionals).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>pool_diversity</strong><span class="classifier">float</span></dt><dd><p>The fraction of the members of a selected group in the candidate pool. 
+A float number in the [0,1] range.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.MultipartyFairnessMeasurementMPYC.measure_topk_fairness">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">measure_topk_fairness</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'skew'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conditionals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.MultipartyFairnessMeasurementMPYC.measure_topk_fairness" title="Link to this definition"></a></dt>
+<dd><p>Output fairness metric.
+Supports top-k group fairness metrics including skew and discounted representation difference.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>pool</strong><span class="classifier">[string]</span></dt><dd><p>A ranked list of candidates: an ordered list of (user_id, secret_attribute_remote).</p>
+</dd>
+<dt><strong>attribute_names</strong><span class="classifier">[string] | (string) | string</span></dt><dd><p>The names/name of the attributes/attribute to measure top-k fairness for.</p>
+</dd>
+<dt><strong>attribute_values</strong><span class="classifier">[string] | (string) | string</span></dt><dd><p>The values/value of the selected attributes in attribute_names.</p>
+</dd>
+<dt><strong>k</strong><span class="classifier">int</span></dt><dd><p>The cutoff rank (e.g., top-10 means k=10).</p>
+</dd>
+<dt><strong>method</strong><span class="classifier">string</span></dt><dd><dl class="simple">
+<dt>The fairness metric to compute. Supported options:</dt><dd><ul class="simple">
+<li><p>“skew” : Log ratio between group representation in top-k and expected distribution.</p></li>
+<li><p>“discounted_rep_diff” : Difference in discounted representation across ranks.</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt><strong>conditionals</strong><span class="classifier">[bool], optional</span></dt><dd><p>(Optional) A list indicating whether individuals at a given position in the pool should be included in the computation. 
+The implementation assumes that len(pool) == len(conditionals).</p>
+</dd>
+<dt><strong>epsilon</strong><span class="classifier">float, optional</span></dt><dd><p>(Optional) Small value to avoid division by zero or log(0).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>topk_fairness</strong><span class="classifier">float</span></dt><dd><p>The top-k fairness metric for the specified method.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.ServiceProviderHandlerCSV">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">findhr.monitoring.monitoring.</span></span><span class="sig-name descname"><span class="pre">ServiceProviderHandlerCSV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">local_filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.ServiceProviderHandlerCSV" title="Link to this definition"></a></dt>
+<dd><p>Example handler for managing the storage of secret protected attribute components by a service provider. 
+Uses CSV files for local data storage.</p>
+<p>After a session of data updates, save_session_data needs to be called to save the changes the drive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>local_filename</strong><span class="classifier">string</span></dt><dd><p>Name of a csv file to load data from, and save data to.
+The file contains rows of the following comma-separated values: provider id, user id, attribute name, secret value.</p>
+</dd>
+<dt><strong>local_data</strong><span class="classifier">defaultdict[defaultdict[defaultdict[int]]</span></dt><dd><p>A temporary dictionary for handling the local data. Has the following levels: local_data[provider_id][user_id][attribute_value] = secret_value.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.ServiceProviderHandlerCSV.decrypt_data">
+<span class="sig-name descname"><span class="pre">decrypt_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encrypted_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">private_key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.ServiceProviderHandlerCSV.decrypt_data" title="Link to this definition"></a></dt>
+<dd><p>RSA decryption and decoding to dictionary.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.ServiceProviderHandlerCSV.receive">
+<span class="sig-name descname"><span class="pre">receive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">provider_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribute_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secret_protected_attribute</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.ServiceProviderHandlerCSV.receive" title="Link to this definition"></a></dt>
+<dd><blockquote>
+<div><p>This is an example placeholder: the service provider needs to reimplement it 
+to handle the receipt of the radomized sensitive attribute component within their infrastructure.</p>
+</div></blockquote>
+<dl class="field-list">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl>
+<dt><strong>provider_id</strong><span class="classifier">string</span></dt><dd><blockquote>
+<div><p>The identifier of the service provider</p>
+</div></blockquote>
+<dl class="simple">
+<dt>user_id<span class="classifier">string</span></dt><dd><p>The identifier of the user generated by the service provider
+when the user is redirected from a succesful job application to optional attribute donation</p>
+</dd>
+</dl>
+</dd>
+<dt><strong>attribute_name</strong><span class="classifier">string</span></dt><dd><blockquote>
+<div><p>The name of the attribute to measure diversity for, as specified in the third party’s SENSITIVE_ATTRIBUTE_CATALOGUE</p>
+</div></blockquote>
+<dl class="simple">
+<dt>secret_protected_attribute<span class="classifier">int</span></dt><dd><p>Randomized component of the protected attribute value</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.ServiceProviderHandlerCSV.save_session_data">
+<span class="sig-name descname"><span class="pre">save_session_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.ServiceProviderHandlerCSV.save_session_data" title="Link to this definition"></a></dt>
+<dd><p>Writes data from self.local_data dictionary to the self.local_filename csv file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="findhr.monitoring.monitoring.ServiceProviderHandlerCSV.store_encrypted_data">
+<span class="sig-name descname"><span class="pre">store_encrypted_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encrypted_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">private_key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#findhr.monitoring.monitoring.ServiceProviderHandlerCSV.store_encrypted_data" title="Link to this definition"></a></dt>
+<dd><p>decrypt and decode data and save session data</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="findhr.fairness.fairness_method_gFair.html" class="btn btn-neutral float-left" title="findhr.fairness.fairness_method_gFair" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="findhr.xai.factual.examples_factual.html" class="btn btn-neutral float-right" title="findhr.xai.factual.examples_factual" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, findhr project.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
